@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id                String              @id @default(uuid())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  username          String              @unique
+  slug              String              @unique
+  passwordHash      String
+  seasons           Season[]
+  players           Player[]
+  role              Role                @default(USER)
+  Punishment        Punishment[]
+  PlayerPayments    PlayerPayments[]
+  PlayerPunishments PlayerPunishments[]
+}
+
+model Season {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  timePeriod String   @unique
+  userId     String
+  createdBy  User     @relation(fields: [userId], references: [id])
+  slug       String   @unique
+}
+
+enum Position {
+  PLAYER
+  COACH
+  ASSISTANT
+}
+
+model Player {
+  id                String              @id @default(uuid())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  firstName         String
+  lastName          String
+  position          Position            @default(PLAYER)
+  slug              String              @unique
+  userId            String
+  createdBy         User                @relation(fields: [userId], references: [id])
+  PlayerPayments    PlayerPayments[]
+  PlayerPunishments PlayerPunishments[]
+}
+
+enum PunishmentType {
+  MONEY
+  BEER
+}
+
+model Punishment {
+  id                String              @id @default(uuid())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  name              String              @unique
+  slug              String              @unique
+  amount            Int
+  type              PunishmentType
+  userId            String
+  createdBy         User                @relation(fields: [userId], references: [id])
+  playerPunishments PlayerPunishments[]
+}
+
+model PlayerPayments {
+  id        String         @id @default(uuid())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  userId    String
+  createdBy User           @relation(fields: [userId], references: [id])
+  playerId  String
+  player    Player         @relation(fields: [playerId], references: [id])
+  amount    Int
+  type      PunishmentType
+}
+
+model PlayerPunishments {
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  userId       String
+  createdBy    User       @relation(fields: [userId], references: [id])
+  playerId     String
+  player       Player     @relation(fields: [playerId], references: [id])
+  punishmentId String
+  punishment   Punishment @relation(fields: [punishmentId], references: [id])
+  amount       Int
+}
