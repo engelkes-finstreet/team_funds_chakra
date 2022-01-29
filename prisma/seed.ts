@@ -10,7 +10,6 @@ async function seed() {
         "$2b$10$PdAAoqzdvzLEWmNQUzyate1muvEpxBcUipRNj7n8Go4IxVsN6KkX.",
     },
   });
-
 }
 
 seed();

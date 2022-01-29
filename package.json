@@ -30,7 +30,6 @@
     "remix": "^1.1.1",
     "remix-validated-form": "^3.4.2",
     "zod": "^3.11.6",
-
   },
   "devDependencies": {
     "@remix-run/dev": "^1.1.3",
