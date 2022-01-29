@@ -5,7 +5,7 @@ async function seed() {
   const testUser = await db.user.create({
     data: {
       username: "test@test.de",
-      // this is a hashed version of "twixrox"
+      slug: "test@test.de",
       passwordHash:
         "$2b$10$PdAAoqzdvzLEWmNQUzyate1muvEpxBcUipRNj7n8Go4IxVsN6KkX.",
     },

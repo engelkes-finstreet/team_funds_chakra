@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:10.7-alpine
+    volumes:
+      - data-team_funds_chakra:/var/lib/postgresql/data
+    env_file: ./.env.db
+    ports:
+      - "5432:5432"
+
+
+volumes:
+  data-team_funds_chakra:
