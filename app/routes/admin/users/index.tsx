@@ -33,7 +33,6 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export default function UsersIndexRoute() {
   const data = useLoaderData<LoaderData>();
   const navigate = useNavigate();
-  console.log("user", data.users);
 
   return (
     <PageWrapper heading={"Alle User"}>

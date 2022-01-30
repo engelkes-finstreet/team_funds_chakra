@@ -6,6 +6,12 @@ import { playerValidator } from "~/validations/playerValidations";
 import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
+import {
+  commitFlashSession,
+  getFlashSession,
+  setFlashContent,
+} from "~/utils/flashMessage.server";
+import { getPlayerName } from "~/utils/functions";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -23,7 +29,14 @@ export const action: ActionFunction = async ({ request }) => {
     },
   });
 
-  return redirect(`/admin/players/${player.id}`);
+  const { headers } = await setFlashContent(
+    request,
+    "Erfolg",
+    `Spieler ${getPlayerName(player)} angelegt`,
+    "success"
+  );
+
+  return redirect(`/admin/players/${player.id}`, headers);
 };
 
 export default function NewPlayerRoute() {

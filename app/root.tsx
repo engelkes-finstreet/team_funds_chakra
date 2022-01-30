@@ -1,4 +1,5 @@
 import {
+  json,
   Links,
   LiveReload,
   Meta,
@@ -6,17 +7,38 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
+  useLoaderData,
 } from "remix";
 import type { MetaFunction } from "remix";
-import React from "react";
-import { Box, ChakraProvider, Divider, Heading, Text } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import {
+  AlertStatus,
+  Box,
+  ChakraProvider,
+  Divider,
+  Heading,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
 import ServerStyleContext from "~/chakra/context.server";
 import ClientStyleContext from "./chakra/context.client";
 import { theme } from "./chakra/theme";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
+import {
+  commitFlashSession,
+  getFlashContent,
+  getFlashSession,
+} from "~/utils/flashMessage.server";
 
 export const meta: MetaFunction = () => {
   return { title: "Remix + Chakra UI App" };
+};
+
+export let loader = async ({ request, params }: DataFunctionArgs) => {
+  const { title, description, status, header } = await getFlashContent(request);
+
+  return json({ title, description, status }, header);
 };
 
 export function ErrorBoundary({ error }: { error: Error }) {
@@ -81,6 +103,7 @@ const Document = withEmotionCache(
   ({ children, title }: DocumentProps, emotionCache) => {
     const serverSyleData = React.useContext(ServerStyleContext);
     const clientStyleData = React.useContext(ClientStyleContext);
+    const data = useLoaderData();
 
     // Only executed on client
     React.useEffect(() => {
@@ -114,7 +137,14 @@ const Document = withEmotionCache(
           ))}
         </head>
         <body>
-          <ChakraProvider theme={theme}>{children}</ChakraProvider>
+          <ChakraProvider theme={theme}>
+            <Toast
+              title={data?.title}
+              description={data?.description}
+              status={data?.status}
+            />
+            {children}
+          </ChakraProvider>
           <ScrollRestoration />
           <Scripts />
           {process.env.NODE_ENV === "development" && <LiveReload />}
@@ -123,6 +153,31 @@ const Document = withEmotionCache(
     );
   }
 );
+
+type ToastProps = {
+  title: string | null;
+  description: string | null;
+  status: AlertStatus | null;
+};
+
+function Toast({ title, description, status }: ToastProps) {
+  const toast = useToast();
+
+  useEffect(() => {
+    if (title && description && status) {
+      toast({
+        title,
+        description,
+        status,
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+  }, [title, description, status]);
+
+  return null;
+}
 
 export default function App() {
   return (

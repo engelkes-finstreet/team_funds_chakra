@@ -10,7 +10,6 @@ import { db } from "~/utils/db.server";
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
   const data = punishmentValidator.validate(await request.formData());
-  console.log({ data });
   if (data.error) return validationError(data.error);
   const { punishmentName, punishmentType, amount } = data.data;
 
@@ -23,8 +22,6 @@ export const action: ActionFunction = async ({ request }) => {
       userId,
     },
   });
-
-  console.log({ punishment });
 
   return redirect(`/admin/punishments/${punishment.slug}`);
 };
