@@ -164,7 +164,7 @@ function Toast({ title, description, status }: ToastProps) {
   const toast = useToast();
 
   useEffect(() => {
-    if (title && description && status) {
+    if (title && status) {
       toast({
         title,
         description,

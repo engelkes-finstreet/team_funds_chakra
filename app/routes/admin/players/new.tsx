@@ -31,7 +31,6 @@ export const action: ActionFunction = async ({ request }) => {
 
   const { headers } = await setFlashContent(
     request,
-    "Erfolg",
     `Spieler ${getPlayerName(player)} angelegt`,
     "success"
   );
