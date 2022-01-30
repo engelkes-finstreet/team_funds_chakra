@@ -12,7 +12,7 @@ export const RegisterForm = () => {
         name="redirectTo"
         value={searchParams.get("redirectTo") ?? "/"}
       />
-      <TextField name={"email"} label={"E-Mail"} />
+      <TextField name={"email"} label={"E-Mail"} autoFocus={true} />
       <PasswordField label={"Passwort"} name={"password"} />
       <PasswordField
         label={"Passwort Bestätigen"}

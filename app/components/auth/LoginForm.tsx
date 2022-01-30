@@ -13,7 +13,7 @@ export const LoginForm = () => {
         name="redirectTo"
         value={searchParams.get("redirectTo") ?? "/"}
       />
-      <TextField label={"E-Mail"} name={"email"} />
+      <TextField label={"E-Mail"} name={"email"} autoFocus={true} />
       <PasswordField label={"Passwort"} name={"password"} />
     </>
   );

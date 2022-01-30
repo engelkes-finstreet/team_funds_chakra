@@ -6,9 +6,13 @@ import { NumberField } from "~/components/form/NumberField";
 export default function PunishmentForm() {
   return (
     <>
-      <TextField name={"punishmentName"} label={"Strafenname"} />
+      <TextField
+        name={"punishmentName"}
+        label={"Strafenname"}
+        autoFocus={true}
+      />
       <NumberField name={"amount"} label={"Höhe der Strafe"} />
-      <Select name={"punishmentType"}>
+      <Select name={"punishmentType"} label={"Typ der Strafe"}>
         {Object.keys(PunishmentType).map((punishmentType) => (
           <option key={punishmentType} value={punishmentType}>
             {punishmentType}
