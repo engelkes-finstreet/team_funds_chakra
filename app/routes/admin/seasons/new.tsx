@@ -6,6 +6,7 @@ import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
 import { seasonValidator } from "~/validations/seasonValidations";
 import { SeasonForm } from "~/components/season/SeasonForm";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -16,6 +17,12 @@ export const action: ActionFunction = async ({ request }) => {
   const season = await db.season.create({
     data: { timePeriod, userId, slug: timePeriod },
   });
+
+  const { headers } = await setFlashContent(
+    request,
+    `Strafe ${season.timePeriod} erfolgreich angelegt`,
+    "success"
+  );
 
   return redirect(`/admin/seasons/${season.slug}`);
 };

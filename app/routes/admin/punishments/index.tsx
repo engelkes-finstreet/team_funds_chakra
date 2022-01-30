@@ -27,6 +27,7 @@ import {
 import { Punishment } from "@prisma/client";
 import { ValidatedForm } from "remix-validated-form/";
 import { TextField } from "~/components/form/TextField";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 const deleteValidator = withZod(
   z.object({
@@ -58,7 +59,14 @@ export const action: ActionFunction = async ({ request }) => {
     }
 
     await db.punishment.delete({ where: { id: _punishmentId } });
-    return redirect("/admin/punishments");
+
+    const { headers } = await setFlashContent(
+      request,
+      `Strafe ${punishment.name} erfolgreich gelöscht`,
+      "success"
+    );
+
+    return redirect("/admin/punishments", headers);
   }
 };
 

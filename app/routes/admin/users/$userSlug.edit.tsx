@@ -8,6 +8,7 @@ import * as z from "zod";
 import { UserForm } from "~/components/user/UserForm";
 import { validationError } from "remix-validated-form";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 const userValidator = withZod(
   z.object({
@@ -42,7 +43,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const user = await db.user.findUnique({
     where: { id: params.userId },
-    select: { id: true },
+    select: { id: true, username: true },
   });
 
   if (!user) {
@@ -56,7 +57,13 @@ export const action: ActionFunction = async ({ request, params }) => {
     data: { role },
   });
 
-  return redirect(`/admin/users`);
+  const { headers } = await setFlashContent(
+    request,
+    `Strafe ${user.username} erfolgreich bearbeitet`,
+    "success"
+  );
+
+  return redirect(`/admin/users`, headers);
 };
 
 export default function EditUserRoute() {

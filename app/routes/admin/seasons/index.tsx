@@ -27,6 +27,7 @@ import * as z from "zod";
 import { withZod } from "@remix-validated-form/with-zod";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 const deleteValidator = withZod(
   z.object({
@@ -59,7 +60,14 @@ export let action: ActionFunction = async ({ request }) => {
     }
 
     await db.season.delete({ where: { id: _seasonId } });
-    return redirect("/admin/seasons");
+
+    const { headers } = await setFlashContent(
+      request,
+      `Strafe ${season.timePeriod} erfolgreich gelöscht`,
+      "success"
+    );
+
+    return redirect("/admin/seasons", headers);
   }
 };
 

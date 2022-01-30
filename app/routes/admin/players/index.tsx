@@ -25,6 +25,8 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
 import { TextField } from "~/components/form/TextField";
+import { setFlashContent } from "~/utils/flashMessage.server";
+import { getPlayerName } from "~/utils/functions";
 
 const deleteValidator = withZod(
   z.object({
@@ -59,6 +61,13 @@ export const action: ActionFunction = async ({ request }) => {
     }
 
     await db.player.delete({ where: { id: _playerId } });
+
+    const { headers } = await setFlashContent(
+      request,
+      `Spieler ${getPlayerName(player)} erfolgreich gelöscht`,
+      "success"
+    );
+
     return redirect("/admin/players");
   }
 };

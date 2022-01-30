@@ -6,6 +6,7 @@ import { ActionFunction, redirect } from "remix";
 import { validationError } from "remix-validated-form";
 import { requireUserId } from "~/utils/session.server";
 import { db } from "~/utils/db.server";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -23,7 +24,13 @@ export const action: ActionFunction = async ({ request }) => {
     },
   });
 
-  return redirect(`/admin/punishments/${punishment.slug}`);
+  const { headers } = await setFlashContent(
+    request,
+    `Strafe ${punishment.name} erfolgreich angelegt`,
+    "success"
+  );
+
+  return redirect(`/admin/punishments/${punishment.slug}`, headers);
 };
 
 export default function NewPunishmentRoute() {

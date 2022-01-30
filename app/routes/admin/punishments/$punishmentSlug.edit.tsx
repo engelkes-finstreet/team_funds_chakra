@@ -6,6 +6,8 @@ import { punishmentValidator } from "~/validations/punishmentValidation";
 import { validationError } from "remix-validated-form";
 import { Form } from "~/components/form/Form";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
+import { setFlashContent } from "~/utils/flashMessage.server";
+import { getPlayerName } from "~/utils/functions";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const punishment = await db.punishment.findUnique({
@@ -42,7 +44,13 @@ export const action: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  return redirect(`/admin/punishments/${punishment.slug}`);
+  const { headers } = await setFlashContent(
+    request,
+    `Strafe ${punishment.name} erfolgreich bearbeitet`,
+    "success"
+  );
+
+  return redirect(`/admin/punishments/${punishment.slug}`, headers);
 };
 
 export default function EditPunishmentRoute() {

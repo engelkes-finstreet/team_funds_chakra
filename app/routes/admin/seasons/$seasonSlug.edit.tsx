@@ -6,6 +6,7 @@ import { seasonValidator } from "~/validations/seasonValidations";
 import { SeasonForm } from "~/components/season/SeasonForm";
 import { Form } from "~/components/form/Form";
 import { validationError } from "remix-validated-form";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 type LoaderData = { season: Season };
 export let loader: LoaderFunction = async ({ request, params }) => {
@@ -43,7 +44,13 @@ export const action: ActionFunction = async ({ request, params }) => {
     data: { timePeriod, slug: timePeriod },
   });
 
-  return redirect(`/admin/seasons/${season.slug}`);
+  const { headers } = await setFlashContent(
+    request,
+    `Strafe ${season.timePeriod} erfolgreich bearbeitet`,
+    "success"
+  );
+
+  return redirect(`/admin/seasons/${season.slug}`, headers);
 };
 
 export default function EditSeasonRoute() {

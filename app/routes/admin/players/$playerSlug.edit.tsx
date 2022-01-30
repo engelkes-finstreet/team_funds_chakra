@@ -6,6 +6,8 @@ import { validationError } from "remix-validated-form";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
+import { setFlashContent } from "~/utils/flashMessage.server";
+import { getPlayerName } from "~/utils/functions";
 
 type LoaderData = { player: Player };
 export let loader: LoaderFunction = async ({ request, params }) => {
@@ -40,7 +42,13 @@ export const action: ActionFunction = async ({ request, params }) => {
     data: { firstName, lastName, position, slug: `${firstName}-${lastName}` },
   });
 
-  return redirect(`/admin/players/${player.slug}`);
+  const { headers } = await setFlashContent(
+    request,
+    `Spieler ${getPlayerName(player)} erfolgreich bearbeitet`,
+    "success"
+  );
+
+  return redirect(`/admin/players/${player.slug}`, headers);
 };
 
 export default function PlayerEditRoute() {
