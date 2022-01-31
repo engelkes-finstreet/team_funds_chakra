@@ -171,7 +171,7 @@ function Toast({ title, description, status }: ToastProps) {
         status,
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top",
       });
     }
   }, [title, description, status]);

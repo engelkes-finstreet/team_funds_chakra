@@ -68,7 +68,7 @@ export const action: ActionFunction = async ({ request }) => {
       "success"
     );
 
-    return redirect("/admin/players");
+    return redirect("/admin/players", headers);
   }
 };
 
