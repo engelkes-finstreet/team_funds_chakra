@@ -12,6 +12,8 @@ import { useState } from "react";
 import { Player } from "@prisma/client";
 import { getPlayerName } from "~/utils/functions";
 import { PlayerPunishmentDialog } from "~/components/player-punishment/PlayerPunishmentDialog";
+import { useAfterTransition } from "~/hooks/useAfterTransition";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -24,6 +26,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 export const playerPunishmentValidator = withZod(
   z.object({
     _playerId: z.string(),
+    _playerName: z.string(),
     _userId: z.string(),
     punishments: z.array(
       z.object({
@@ -39,7 +42,7 @@ export const playerPunishmentValidator = withZod(
 export const action: ActionFunction = async ({ request }) => {
   const data = playerPunishmentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { _userId, _playerId, punishments } = data.data;
+  const { _userId, _playerId, _playerName, punishments } = data.data;
 
   for (let punishment of punishments) {
     await db.playerPunishments.create({
@@ -52,7 +55,13 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
-  return redirect("/admin/player-punishments");
+  const { headers } = await setFlashContent(
+    request,
+    `Strafen für ${_playerName} erfolgreich hinzugefügt`,
+    "success"
+  );
+
+  return redirect("/admin/player-punishments", headers);
 };
 
 export default function () {
@@ -61,6 +70,8 @@ export default function () {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(
     undefined
   );
+
+  useAfterTransition(onClose);
 
   return (
     <PageWrapper heading={"Spieler bestrafen"}>

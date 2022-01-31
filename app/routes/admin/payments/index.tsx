@@ -14,7 +14,7 @@ import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { db } from "~/utils/db.server";
 import { ActionFunction, redirect, useLoaderData } from "remix";
 import { getPlayerName } from "~/utils/functions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Player, PunishmentType } from "@prisma/client";
 import { PaymentDialog } from "~/components/payment/PaymentDialog";
 import { validationError } from "remix-validated-form";
@@ -22,6 +22,10 @@ import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
 import { stringToNumberValidation } from "~/validations/utils";
 import { getUserId, requireUserId } from "~/utils/session.server";
+import { useTransition } from "@remix-run/react";
+import { usePrevious } from "~/hooks/usePrevious";
+import { useAfterTransition } from "~/hooks/useAfterTransition";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -33,6 +37,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 export const paymentValidator = withZod(
   z.object({
     _playerId: z.string(),
+    _playerName: z.string(),
     _userId: z.string(),
     payments: z.array(
       z.object({
@@ -48,7 +53,7 @@ export const paymentValidator = withZod(
 export const action: ActionFunction = async ({ request }) => {
   const data = paymentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { _userId, _playerId, payments } = data.data;
+  const { _userId, _playerId, _playerName, payments } = data.data;
 
   for (let payment of payments) {
     await db.playerPayments.create({
@@ -61,7 +66,13 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
-  return redirect("/admin/payments");
+  const { headers } = await setFlashContent(
+    request,
+    `Bezahlung für ${_playerName} erfolgreich hinzugefügt`,
+    "success"
+  );
+
+  return redirect("/admin/payments", headers);
 };
 
 export default function PaymentsIndexRoute() {
@@ -70,6 +81,8 @@ export default function PaymentsIndexRoute() {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(
     undefined
   );
+
+  useAfterTransition(onClose);
 
   return (
     <PageWrapper heading={"Bezahlen"}>

@@ -15,7 +15,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { getPlayerName } from "~/utils/functions";
-import { ValidatedForm } from "remix-validated-form";
+import { useIsSubmitting, ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
 import { useState } from "react";
 import { NumberField } from "~/components/form/NumberField";
@@ -32,6 +32,7 @@ type Props = {
 
 export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
   const [payments, setPayments] = useState([0]);
+  const isSubmitting = useIsSubmitting();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -44,10 +45,15 @@ export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
             validator={paymentValidator}
             method={"post"}
             id={"paymentForm"}
-            defaultValues={{ _userId: userId, _playerId: player?.id }}
+            defaultValues={{
+              _userId: userId,
+              _playerId: player?.id,
+              _playerName: getPlayerName(player),
+            }}
           >
             <TextField name={"_userId"} hidden={true} />
             <TextField name={"_playerId"} hidden={true} />
+            <TextField name={"_playerName"} hidden={true} />
             <VStack spacing={4} w={"full"}>
               {payments.map((payment, index) => (
                 <Flex
@@ -60,6 +66,7 @@ export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
                   <Select
                     name={`payments[${index}].paymentType`}
                     label={"Strafe"}
+                    autoFocus={true}
                   >
                     {Object.keys(PunishmentType).map((punishmentType) => (
                       <option key={punishmentType} value={punishmentType}>
@@ -108,13 +115,8 @@ export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
               <Button variant={"ghost"} onClick={onClose}>
                 Schließen
               </Button>
-              <Button
-                colorScheme={"blue"}
-                type={"submit"}
-                form={"paymentForm"}
-                onClick={onClose}
-              >
-                Bezahlen
+              <Button colorScheme={"blue"} type={"submit"} form={"paymentForm"}>
+                {isSubmitting ? "In Bearbeitung..." : "Bezahlen"}
               </Button>
             </Flex>
           </HStack>

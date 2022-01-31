@@ -22,6 +22,7 @@ import { TextField } from "~/components/form/TextField";
 import { Select } from "~/components/form/Select";
 import { NumberField } from "~/components/form/NumberField";
 import { HiX } from "react-icons/hi";
+import { useIsSubmitting } from "remix-validated-form";
 
 type Props = {
   player: Player | undefined;
@@ -39,6 +40,7 @@ export function PlayerPunishmentDialog({
   isOpen,
 }: Props) {
   const [playerPunishments, setPlayerPunishments] = useState([0]);
+  const isSubmitting = useIsSubmitting();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -51,10 +53,15 @@ export function PlayerPunishmentDialog({
             validator={playerPunishmentValidator}
             method={"post"}
             id={"playerPunishmentForm"}
-            defaultValues={{ _userId: userId, _playerId: player?.id }}
+            defaultValues={{
+              _userId: userId,
+              _playerId: player?.id,
+              _playerName: getPlayerName(player),
+            }}
           >
-            <TextField name={"_userId"} />
-            <TextField name={"_playerId"} />
+            <TextField name={"_userId"} hidden={true} />
+            <TextField name={"_playerId"} hidden={true} />
+            <TextField name={"_playerName"} hidden={true} />
             <VStack spacing={4} w={"full"}>
               {playerPunishments.map((playerPunishment, index) => (
                 <Flex
@@ -67,6 +74,7 @@ export function PlayerPunishmentDialog({
                   <Select
                     name={`punishments[${index}].punishmentId`}
                     label={"Strafe"}
+                    autoFocus={true}
                   >
                     {punishments.map((punishment) => (
                       <option key={punishment.id} value={punishment.id}>
@@ -123,9 +131,8 @@ export function PlayerPunishmentDialog({
                 colorScheme={"blue"}
                 type={"submit"}
                 form={"playerPunishmentForm"}
-                onClick={onClose}
               >
-                Bezahlen
+                {isSubmitting ? "Wird bestraft...." : "Strafe hinzufügen"}
               </Button>
             </Flex>
           </HStack>
