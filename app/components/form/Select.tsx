@@ -3,18 +3,18 @@ import {
   FormControl,
   FormLabel,
   Select as ChakraSelect,
-  SelectProps,
+  SelectProps as ChakraSelectProps,
 } from "@chakra-ui/react";
 import React from "react";
 import { FormError } from "~/components/form/FormError";
 
-type Props = {
+export type SelectProps = {
   name: string;
   children: React.ReactNode;
   label: string;
-} & SelectProps;
+} & ChakraSelectProps;
 
-export const Select = ({ name, label, children, ...rest }: Props) => {
+export const Select = ({ name, label, children, ...rest }: SelectProps) => {
   const { validate, clearError, defaultValue, error } = useField(name);
 
   return (

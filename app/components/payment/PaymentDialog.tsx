@@ -1,4 +1,4 @@
-import { Player, Punishment, PunishmentType } from "@prisma/client";
+import { Player } from "@prisma/client";
 import {
   Button,
   Divider,
@@ -19,9 +19,9 @@ import { useIsSubmitting, ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
 import { useState } from "react";
 import { NumberField } from "~/components/form/NumberField";
-import { Select } from "../form/Select";
 import { HiX } from "react-icons/hi";
 import { paymentValidator } from "~/routes/admin/payments";
+import { PunishmentTypeSelect } from "~/components/punishment/PunishmentTypeSelect";
 
 type Props = {
   player: Player | undefined;
@@ -63,17 +63,11 @@ export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
                   w={"full"}
                   alignItems={"flex-end"}
                 >
-                  <Select
+                  <PunishmentTypeSelect
                     name={`payments[${index}].paymentType`}
                     label={"Strafe"}
                     autoFocus={true}
-                  >
-                    {Object.keys(PunishmentType).map((punishmentType) => (
-                      <option key={punishmentType} value={punishmentType}>
-                        {punishmentType}
-                      </option>
-                    ))}
-                  </Select>
+                  />
                   <NumberField
                     name={`payments[${index}].amount`}
                     label={"Zahlhöhe"}

@@ -1,5 +1,6 @@
 import { Select } from "../form/Select";
 import { Role } from "@prisma/client";
+import { getRoleMapping, RoleType } from "~/utils/enumMappings";
 
 export function UserForm() {
   return (
@@ -7,7 +8,7 @@ export function UserForm() {
       <Select name={"role"} label={"Rolle"} autoFocus={true}>
         {Object.keys(Role).map((role) => (
           <option key={role} value={role}>
-            {role}
+            {getRoleMapping(role as RoleType)}
           </option>
         ))}
       </Select>

@@ -13,25 +13,18 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import * as React from "react";
-
-async function getUsers() {
-  return await db.user.findMany({
-    select: { id: true, username: true, role: true, slug: true },
-  });
-}
-
-type LoaderData = { users: Prisma.PromiseReturnType<typeof getUsers> };
+import { getRoleMapping } from "~/utils/enumMappings";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-  const users = await getUsers();
+  const users = await db.user.findMany({
+    select: { id: true, username: true, role: true, slug: true },
+  });
 
-  const data: LoaderData = { users };
-
-  return data;
+  return { users };
 };
 
 export default function UsersIndexRoute() {
-  const data = useLoaderData<LoaderData>();
+  const data = useLoaderData<Awaited<ReturnType<typeof loader>>>();
   const navigate = useNavigate();
 
   return (
@@ -56,13 +49,13 @@ export default function UsersIndexRoute() {
               >
                 <Td>{index}</Td>
                 <Td>{user.username}</Td>
-                <Td>{user.role}</Td>
+                <Td>{getRoleMapping(user.role)}</Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       ) : (
-        <Center>Es wurden noch keine Usesr angelegt</Center>
+        <Center>Es wurden noch keine User angelegt</Center>
       )}
     </PageWrapper>
   );

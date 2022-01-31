@@ -28,6 +28,7 @@ import { Punishment } from "@prisma/client";
 import { ValidatedForm } from "remix-validated-form/";
 import { TextField } from "~/components/form/TextField";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { getPunishmentTypeMapping } from "~/utils/enumMappings";
 
 const deleteValidator = withZod(
   z.object({
@@ -114,7 +115,7 @@ export default function PunishmentsIndexRoute() {
                   {punishment.amount}
                 </Td>
                 <Td onClick={() => handleClick(punishment)} cursor={"pointer"}>
-                  {punishment.type}
+                  {getPunishmentTypeMapping(punishment.type)}
                 </Td>
                 {isDesktop ? (
                   <>
