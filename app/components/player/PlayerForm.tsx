@@ -6,8 +6,17 @@ import { getPositionMapping, PositionType } from "~/utils/enumMappings";
 export function PlayerForm() {
   return (
     <>
-      <TextField label={"Vorname"} name={"firstName"} autoFocus={true} />
-      <TextField label={"Nachname"} name={"lastName"} />
+      <TextField
+        label={"Vorname"}
+        placeholder={"Vorname des Spielers"}
+        name={"firstName"}
+        autoFocus={true}
+      />
+      <TextField
+        label={"Nachname"}
+        placeholder={"Nachname des Spielers"}
+        name={"lastName"}
+      />
       <Select name={"position"} label={"Position"}>
         {Object.keys(Position).map((position) => (
           <option key={position} value={position}>

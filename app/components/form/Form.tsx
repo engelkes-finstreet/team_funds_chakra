@@ -47,7 +47,7 @@ const ExtendedForm = ({ children, submitText }: ExtendedFormProps) => {
         </Alert>
       )}
 
-      <Stack spacing={2}>{children}</Stack>
+      <Stack spacing={4}>{children}</Stack>
 
       <Button
         type="submit"

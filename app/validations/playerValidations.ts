@@ -4,8 +4,8 @@ import { Position } from "@prisma/client";
 
 export const playerValidator = withZod(
   z.object({
-    firstName: z.string().nonempty("Ein Vorname muss angegeben werden"),
-    lastName: z.string().nonempty("Ein Nachname muss angegeben werden"),
+    firstName: z.string().nonempty("Erforderlich"),
+    lastName: z.string().nonempty("Erforderlich"),
     position: z.nativeEnum(Position),
   })
 );

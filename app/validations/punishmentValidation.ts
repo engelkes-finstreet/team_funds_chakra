@@ -5,8 +5,8 @@ import { stringToNumberValidation } from "~/validations/utils";
 
 export const punishmentValidator = withZod(
   z.object({
-    punishmentName: z.string().nonempty("Name muss angegeben werden"),
-    amount: stringToNumberValidation("Höhe der Strafe muss angegeben werden"),
+    punishmentName: z.string().nonempty("Erforderlich"),
+    amount: stringToNumberValidation("Erforderlich"),
     punishmentType: z.nativeEnum(PunishmentType),
   })
 );

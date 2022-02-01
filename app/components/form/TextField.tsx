@@ -1,4 +1,5 @@
 import {
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -11,22 +12,27 @@ import { FormError } from "~/components/form/FormError";
 
 type Props = {
   label?: string;
+  placeholder?: string;
   name: string;
 } & InputProps;
 
 export const TextField = React.forwardRef<
   HTMLInputElement,
   InputProps & { label?: string; name: string }
->(({ id, label, name, type, ...props }, ref) => {
+>(({ id, label, placeholder, name, type, ...props }, ref) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const mergeRef = useMergeRefs(inputRef, ref);
   const { validate, clearError, defaultValue, error } = useField(name);
 
   return (
     <FormControl id={name} isInvalid={Boolean(error)}>
-      <FormLabel>{label}</FormLabel>
+      <Flex justifyContent={"space-between"} alignItems={"baseline"}>
+        <FormLabel>{label}</FormLabel>
+        <FormError name={name} />
+      </Flex>
       <Input
         ref={mergeRef}
+        placeholder={placeholder ? placeholder : label}
         name={name}
         type={type}
         onBlur={validate}
@@ -34,7 +40,6 @@ export const TextField = React.forwardRef<
         defaultValue={defaultValue}
         {...props}
       />
-      <FormError name={name} />
     </FormControl>
   );
 });

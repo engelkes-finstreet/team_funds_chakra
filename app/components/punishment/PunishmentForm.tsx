@@ -8,6 +8,7 @@ export default function PunishmentForm() {
       <TextField
         name={"punishmentName"}
         label={"Strafenname"}
+        placeholder={"Name der Strafe"}
         autoFocus={true}
       />
       <NumberField name={"amount"} label={"Höhe der Strafe"} />

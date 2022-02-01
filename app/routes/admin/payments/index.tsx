@@ -42,9 +42,7 @@ export const paymentValidator = withZod(
     payments: z.array(
       z.object({
         paymentType: z.nativeEnum(PunishmentType),
-        amount: stringToNumberValidation(
-          "Höhe der Strafe muss angegeben werden"
-        ),
+        amount: stringToNumberValidation("Erforderlich"),
       })
     ),
   })

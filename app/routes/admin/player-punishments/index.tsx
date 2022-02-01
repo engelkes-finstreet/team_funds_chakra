@@ -31,9 +31,7 @@ export const playerPunishmentValidator = withZod(
     punishments: z.array(
       z.object({
         punishmentId: z.string(),
-        amount: stringToNumberValidation(
-          "Anzahl an Strafen muss angegeben werden"
-        ),
+        amount: stringToNumberValidation("Erforderlich"),
       })
     ),
   })
