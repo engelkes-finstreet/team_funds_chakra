@@ -1,33 +1,17 @@
-import {
-  Avatar,
-  Box,
-  Flex,
-  Stack,
-  Text,
-  useColorModeValue as mode,
-} from "@chakra-ui/react";
+import { Box, Flex, Stack, useColorModeValue as mode } from "@chakra-ui/react";
 import * as React from "react";
-import {
-  BsFillBookmarksFill,
-  BsFillInboxFill,
-  BsPencilSquare,
-  BsSearch,
-} from "react-icons/bs";
-import { Outlet, useLocation, useResolvedPath } from "remix";
+import { Outlet } from "remix";
 import { MobileMenuButton } from "./MobileMenuButton";
-import { NavBreadcrumb } from "./NavBreadcrumb";
-import { NavSectionTitle } from "./NavSectionTitle";
 import { ScrollArea } from "./ScrollArea";
-import { SearchInput } from "./SearchInput";
 import { SidebarLink } from "./SidebarLink";
 import { useMobileMenuState } from "./useMobileMenuState";
 import { UserInfo } from "./UserInfo";
-import { data } from "./_data";
 import { UserWithoutPassword } from "~/utils/session.server";
-import { GiPayMoney, GiSoccerKick } from "react-icons/gi";
+import { Gi3DHammer, GiPayMoney, GiSoccerKick } from "react-icons/gi";
 import { BiTimeFive } from "react-icons/bi";
 import { AiOutlineUser } from "react-icons/ai";
 import { Breadcrumb } from "~/components/Layout/Breadcrumb";
+import { NavGroup } from "~/components/Layout/NavGroup";
 
 type Props = {
   user: UserWithoutPassword;
@@ -68,21 +52,31 @@ export function Layout({ user }: Props) {
           </Box>
           <ScrollArea pt="5" pb="6">
             <Stack pb="6">
-              <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
-                Users
-              </SidebarLink>
-              <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
-                Saisons
-              </SidebarLink>
-              <SidebarLink icon={<GiSoccerKick />} to={"/admin/players"}>
-                Spieler
-              </SidebarLink>
-              <SidebarLink icon={<GiSoccerKick />} to={"/admin/punishments"}>
-                Strafen
-              </SidebarLink>
-              <SidebarLink icon={<GiPayMoney />} to={"/admin/payments"}>
-                Zahlungen
-              </SidebarLink>
+              <NavGroup label={"Kasse"}>
+                <SidebarLink
+                  to={"/admin/player-punishments"}
+                  icon={<Gi3DHammer />}
+                >
+                  Strafe hinzufügen
+                </SidebarLink>
+                <SidebarLink icon={<GiPayMoney />} to={"/admin/payments"}>
+                  Zahlungen
+                </SidebarLink>
+              </NavGroup>
+              <NavGroup label={"Admin"}>
+                <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
+                  Users
+                </SidebarLink>
+                <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
+                  Saisons
+                </SidebarLink>
+                <SidebarLink icon={<GiSoccerKick />} to={"/admin/players"}>
+                  Spieler
+                </SidebarLink>
+                <SidebarLink icon={<GiSoccerKick />} to={"/admin/punishments"}>
+                  Strafen
+                </SidebarLink>
+              </NavGroup>
             </Stack>
           </ScrollArea>
         </Box>
