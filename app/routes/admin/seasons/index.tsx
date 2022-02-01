@@ -84,10 +84,14 @@ export default function SeasonsIndexRoute() {
       linkTo={"new"}
     >
       {data.seasons.length > 0 ? (
-        <Table variant={"striped"} colorScheme={"blue"}>
+        <Table
+          variant={"striped"}
+          colorScheme={"blue"}
+          maxW={"full"}
+          __css={{ tableLayout: "fixed" }}
+        >
           <Thead>
             <Tr>
-              <Th w={"10%"}>#</Th>
               <Th w={"90%"}>Zeitraum</Th>
               {isDesktop ? (
                 <>
@@ -98,14 +102,8 @@ export default function SeasonsIndexRoute() {
             </Tr>
           </Thead>
           <Tbody>
-            {data.seasons.map((season, index) => (
+            {data.seasons.map((season) => (
               <Tr key={season.id}>
-                <Td
-                  onClick={() => navigate(`${season.slug}`)}
-                  cursor={"pointer"}
-                >
-                  {index}
-                </Td>
                 <Td
                   onClick={() => navigate(`${season.slug}`)}
                   cursor={"pointer"}

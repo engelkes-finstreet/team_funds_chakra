@@ -30,16 +30,20 @@ export default function UsersIndexRoute() {
   return (
     <PageWrapper heading={"Alle User"}>
       {data.users.length > 0 ? (
-        <Table variant={"striped"} colorScheme={"blue"}>
+        <Table
+          variant={"striped"}
+          colorScheme={"blue"}
+          maxW={"full"}
+          __css={{ tableLayout: "fixed" }}
+        >
           <Thead>
             <Tr>
-              <Th w={"10%"}>#</Th>
               <Th w={"90%"}>Username</Th>
               <Th>Rolle</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {data.users.map((user, index) => (
+            {data.users.map((user) => (
               <Tr
                 key={user.id}
                 onClick={() => {
@@ -47,7 +51,6 @@ export default function UsersIndexRoute() {
                 }}
                 cursor={"pointer"}
               >
-                <Td>{index}</Td>
                 <Td>{user.username}</Td>
                 <Td>{getRoleMapping(user.role)}</Td>
               </Tr>

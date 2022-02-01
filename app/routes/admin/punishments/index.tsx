@@ -88,10 +88,14 @@ export default function PunishmentsIndexRoute() {
       linkTo={"new"}
     >
       {data.punishments.length > 0 ? (
-        <Table variant={"striped"} colorScheme={"blue"}>
+        <Table
+          variant={"striped"}
+          colorScheme={"blue"}
+          maxW={"full"}
+          __css={{ tableLayout: "fixed" }}
+        >
           <Thead>
             <Tr>
-              <Th w={"10%"}>#</Th>
               <Th w={"33%"}>Name</Th>
               <Th w={"33%"}>Menge</Th>
               <Th w={"33%"}>Typ</Th>
@@ -104,11 +108,8 @@ export default function PunishmentsIndexRoute() {
             </Tr>
           </Thead>
           <Tbody>
-            {data.punishments.map((punishment, index) => (
+            {data.punishments.map((punishment) => (
               <Tr key={punishment.id}>
-                <Td onClick={() => handleClick(punishment)} cursor={"pointer"}>
-                  {index}
-                </Td>
                 <Td onClick={() => handleClick(punishment)} cursor={"pointer"}>
                   {punishment.name}
                 </Td>

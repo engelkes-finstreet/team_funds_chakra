@@ -89,10 +89,14 @@ export default function PlayerIndexRoute() {
       linkTo={"new"}
     >
       {data.players.length > 0 ? (
-        <Table variant={"striped"} colorScheme={"blue"}>
+        <Table
+          variant={"striped"}
+          colorScheme={"blue"}
+          maxW={"full"}
+          __css={{ tableLayout: "fixed" }}
+        >
           <Thead>
             <Tr>
-              <Th w={"10%"}>#</Th>
               <Th w={"45%"}>Vorname</Th>
               <Th w={"45%"}>Nachname</Th>
               {isDesktop ? (
@@ -104,11 +108,8 @@ export default function PlayerIndexRoute() {
             </Tr>
           </Thead>
           <Tbody>
-            {data.players.map((player, index) => (
+            {data.players.map((player) => (
               <Tr key={player.id}>
-                <Td onClick={() => handleClick(player)} cursor={"pointer"}>
-                  {index}
-                </Td>
                 <Td onClick={() => handleClick(player)} cursor={"pointer"}>
                   {player.firstName}
                 </Td>
