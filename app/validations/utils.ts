@@ -1,10 +1,11 @@
 import * as z from "zod";
 
-export function stringToNumberValidation(message: string) {
+export function stringToNumberValidation(nonEmptyMessage: string) {
   return z
     .string()
+    .nonempty(nonEmptyMessage)
     .refine((value) => !isNaN(Number(value)), {
-      message,
+      message: "Es dürfen nur Zahlen eingegeben werden",
     })
     .transform((value) => Number(value));
 }
