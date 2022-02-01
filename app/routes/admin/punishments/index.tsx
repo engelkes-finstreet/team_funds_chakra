@@ -5,6 +5,7 @@ import {
   ActionFunction,
   Link,
   redirect,
+  useFetcher,
   useLoaderData,
   useNavigate,
 } from "remix";
@@ -126,22 +127,7 @@ export default function PunishmentsIndexRoute() {
                         Bearbeiten
                       </Button>
                     </Td>
-                    <Td>
-                      <ValidatedForm
-                        validator={deleteValidator}
-                        method={"post"}
-                        defaultValues={{
-                          _method: "delete",
-                          _punishmentId: punishment.id,
-                        }}
-                      >
-                        <TextField hidden={true} name={"_method"} />
-                        <TextField hidden={true} name={"_punishmentId"} />
-                        <Button type={"submit"} colorScheme={"red"}>
-                          Löschen
-                        </Button>
-                      </ValidatedForm>
-                    </Td>
+                    <DeletePunishment punishmentId={punishment.id} />
                   </>
                 ) : null}
               </Tr>
@@ -159,5 +145,31 @@ export default function PunishmentsIndexRoute() {
         </Center>
       )}
     </PageWrapper>
+  );
+}
+
+function DeletePunishment({ punishmentId }: { punishmentId: string }) {
+  const fetcher = useFetcher();
+  const isDeleting =
+    fetcher.submission?.formData.get("_punishmentId") === punishmentId;
+
+  return (
+    <Td hidden={isDeleting}>
+      <ValidatedForm
+        fetcher={fetcher}
+        validator={deleteValidator}
+        method={"post"}
+        defaultValues={{
+          _method: "delete",
+          _punishmentId: punishmentId,
+        }}
+      >
+        <TextField hidden={true} name={"_method"} />
+        <TextField hidden={true} name={"_punishmentId"} />
+        <Button type={"submit"} colorScheme={"red"}>
+          Löschen
+        </Button>
+      </ValidatedForm>
+    </Td>
   );
 }

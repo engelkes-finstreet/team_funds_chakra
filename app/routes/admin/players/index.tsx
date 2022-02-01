@@ -2,6 +2,7 @@ import {
   ActionFunction,
   LoaderFunction,
   redirect,
+  useFetcher,
   useLoaderData,
   useNavigate,
 } from "remix";
@@ -121,22 +122,7 @@ export default function PlayerIndexRoute() {
                         Bearbeiten
                       </Button>
                     </Td>
-                    <Td>
-                      <ValidatedForm
-                        validator={deleteValidator}
-                        method={"post"}
-                        defaultValues={{
-                          _method: "delete",
-                          _playerId: player.id,
-                        }}
-                      >
-                        <TextField hidden={true} name={"_method"} />
-                        <TextField hidden={true} name={"_seasonId"} />
-                        <Button type={"submit"} colorScheme={"red"}>
-                          Löschen
-                        </Button>
-                      </ValidatedForm>
-                    </Td>
+                    <DeletePlayer playerId={player.id} />
                   </>
                 ) : null}
               </Tr>
@@ -154,5 +140,29 @@ export default function PlayerIndexRoute() {
         </Center>
       )}
     </PageWrapper>
+  );
+}
+
+function DeletePlayer({ playerId }: { playerId: string }) {
+  const fetcher = useFetcher();
+  const isDeleting = fetcher.submission?.formData.get("_playerId") === playerId;
+
+  return (
+    <Td hidden={isDeleting}>
+      <ValidatedForm
+        validator={deleteValidator}
+        method={"post"}
+        defaultValues={{
+          _method: "delete",
+          _playerId: playerId,
+        }}
+      >
+        <TextField hidden={true} name={"_method"} />
+        <TextField hidden={true} name={"_playerId"} />
+        <Button type={"submit"} colorScheme={"red"}>
+          Löschen
+        </Button>
+      </ValidatedForm>
+    </Td>
   );
 }

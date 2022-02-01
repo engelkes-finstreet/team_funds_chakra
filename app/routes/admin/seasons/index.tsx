@@ -4,6 +4,7 @@ import {
   Form,
   LoaderFunction,
   redirect,
+  useFetcher,
   useLoaderData,
   useNavigate,
 } from "remix";
@@ -118,26 +119,7 @@ export default function SeasonsIndexRoute() {
                         Bearbeiten
                       </Button>
                     </Td>
-                    <Td>
-                      <ValidatedForm
-                        validator={deleteValidator}
-                        method="post"
-                        defaultValues={{
-                          _method: "delete",
-                          _seasonId: season.id,
-                        }}
-                      >
-                        <TextField hidden={true} name="_method" />
-                        <TextField hidden={true} name="_seasonId" />
-                        <Button
-                          type="submit"
-                          className="button"
-                          colorScheme={"red"}
-                        >
-                          Löschen
-                        </Button>
-                      </ValidatedForm>
-                    </Td>
+                    <DeleteSeason seasonId={season.id} />
                   </>
                 ) : null}
               </Tr>
@@ -158,5 +140,29 @@ export default function SeasonsIndexRoute() {
         </Center>
       )}
     </PageWrapper>
+  );
+}
+
+function DeleteSeason({ seasonId }: { seasonId: string }) {
+  const fetcher = useFetcher();
+  const isDeleting = fetcher.submission?.formData.get("_seasonId") === seasonId;
+
+  return (
+    <Td hidden={isDeleting}>
+      <ValidatedForm
+        validator={deleteValidator}
+        method="post"
+        defaultValues={{
+          _method: "delete",
+          _seasonId: seasonId,
+        }}
+      >
+        <TextField hidden={true} name="_method" />
+        <TextField hidden={true} name="_seasonId" />
+        <Button type="submit" className="button" colorScheme={"red"}>
+          Löschen
+        </Button>
+      </ValidatedForm>
+    </Td>
   );
 }
