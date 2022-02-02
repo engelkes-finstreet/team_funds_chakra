@@ -29,13 +29,12 @@ export const action: ActionFunction = async ({ request }) => {
     },
   });
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    `/admin/players/${player.id}`,
     request,
     `Spieler ${getPlayerName(player)} erfolgreich angelegt`,
     "success"
   );
-
-  return redirect(`/admin/players/${player.id}`, headers);
 };
 
 export default function NewPlayerRoute() {

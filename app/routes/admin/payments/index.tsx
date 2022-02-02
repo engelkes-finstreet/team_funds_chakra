@@ -64,13 +64,12 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    "/admin/payments",
     request,
     `Bezahlung für ${_playerName} erfolgreich hinzugefügt`,
     "success"
   );
-
-  return redirect("/admin/payments", headers);
 };
 
 export default function PaymentsIndexRoute() {

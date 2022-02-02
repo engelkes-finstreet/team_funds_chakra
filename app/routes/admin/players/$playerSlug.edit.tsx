@@ -42,13 +42,12 @@ export const action: ActionFunction = async ({ request, params }) => {
     data: { firstName, lastName, position, slug: `${firstName}-${lastName}` },
   });
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    `/admin/players/${player.slug}`,
     request,
     `Spieler ${getPlayerName(player)} erfolgreich bearbeitet`,
     "success"
   );
-
-  return redirect(`/admin/players/${player.slug}`, headers);
 };
 
 export default function PlayerEditRoute() {

@@ -18,13 +18,12 @@ export const action: ActionFunction = async ({ request }) => {
     data: { timePeriod, userId, slug: timePeriod },
   });
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    `/admin/seasons/${season.slug}`,
     request,
     `Strafe ${season.timePeriod} erfolgreich angelegt`,
     "success"
   );
-
-  return redirect(`/admin/seasons/${season.slug}`);
 };
 
 export default function NewSeasonRoute() {

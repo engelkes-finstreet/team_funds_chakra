@@ -2,11 +2,12 @@ import {
   ActionFunction,
   LoaderFunction,
   redirect,
+  useCatch,
   useFetcher,
   useLoaderData,
   useNavigate,
 } from "remix";
-import { Player } from "@prisma/client";
+import { Player, Prisma } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import {
   Button,
@@ -22,14 +23,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
-import { ValidatedForm, validationError } from "remix-validated-form";
+import { validationError } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
-import { TextField } from "~/components/form/TextField";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
+import { DeletePlayer } from "~/components/player/DeletePlayer";
 
-const deleteValidator = withZod(
+export const deletePlayerValidator = withZod(
   z.object({
     _playerId: z.string(),
     _method: z.string(),
@@ -46,7 +47,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = deleteValidator.validate(await request.formData());
+  const data = deletePlayerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { _method, _playerId } = data.data;
 
@@ -61,15 +62,28 @@ export const action: ActionFunction = async ({ request }) => {
       });
     }
 
-    await db.player.delete({ where: { id: _playerId } });
+    try {
+      await db.player.delete({ where: { id: _playerId } });
 
-    const { headers } = await setFlashContent(
-      request,
-      `Spieler ${getPlayerName(player)} erfolgreich gelöscht`,
-      "success"
-    );
-
-    return redirect("/admin/players", headers);
+      return await setFlashContent(
+        "admin/players",
+        request,
+        `Spieler ${getPlayerName(player)} erfolgreich gelöscht`,
+        "success"
+      );
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2003") {
+          return await setFlashContent(
+            "/admin/players",
+            request,
+            "Spieler kann nicht gelöscht werden",
+            "error",
+            "Ihm wurden schon Strafen hinzugefügt"
+          );
+        }
+      }
+    }
   }
 };
 
@@ -144,26 +158,15 @@ export default function PlayerIndexRoute() {
   );
 }
 
-function DeletePlayer({ playerId }: { playerId: string }) {
-  const fetcher = useFetcher();
-  const isDeleting = fetcher.submission?.formData.get("_playerId") === playerId;
+export function CatchBoundary() {
+  const caught = useCatch();
+  console.log({ caught });
 
-  return (
-    <Td hidden={isDeleting}>
-      <ValidatedForm
-        validator={deleteValidator}
-        method={"post"}
-        defaultValues={{
-          _method: "delete",
-          _playerId: playerId,
-        }}
-      >
-        <TextField hidden={true} name={"_method"} />
-        <TextField hidden={true} name={"_playerId"} />
-        <Button type={"submit"} colorScheme={"red"}>
-          Löschen
-        </Button>
-      </ValidatedForm>
-    </Td>
-  );
+  return <div>This is a catch</div>;
+}
+
+export function ErrorBoundary({ error }: any) {
+  console.log({ error });
+
+  return <div>This is an error</div>;
 }

@@ -53,13 +53,12 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    "/admin/player-punishments",
     request,
     `Strafen für ${_playerName} erfolgreich hinzugefügt`,
     "success"
   );
-
-  return redirect("/admin/player-punishments", headers);
 };
 
 export default function () {

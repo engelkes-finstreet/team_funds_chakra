@@ -62,13 +62,12 @@ export let action: ActionFunction = async ({ request }) => {
 
     await db.season.delete({ where: { id: _seasonId } });
 
-    const { headers } = await setFlashContent(
+    return await setFlashContent(
+      "/admin/seasons",
       request,
       `Strafe ${season.timePeriod} erfolgreich gelöscht`,
       "success"
     );
-
-    return redirect("/admin/seasons", headers);
   }
 };
 

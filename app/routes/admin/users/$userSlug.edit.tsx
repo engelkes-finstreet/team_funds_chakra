@@ -57,13 +57,12 @@ export const action: ActionFunction = async ({ request, params }) => {
     data: { role },
   });
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    `/admin/users`,
     request,
     `Strafe ${user.username} erfolgreich bearbeitet`,
     "success"
   );
-
-  return redirect(`/admin/users`, headers);
 };
 
 export default function EditUserRoute() {

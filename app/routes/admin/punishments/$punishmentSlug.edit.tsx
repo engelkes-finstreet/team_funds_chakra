@@ -44,13 +44,12 @@ export const action: ActionFunction = async ({ request, params }) => {
     },
   });
 
-  const { headers } = await setFlashContent(
+  return await setFlashContent(
+    `/admin/punishments/${punishment.slug}`,
     request,
     `Strafe ${punishment.name} erfolgreich bearbeitet`,
     "success"
   );
-
-  return redirect(`/admin/punishments/${punishment.slug}`, headers);
 };
 
 export default function EditPunishmentRoute() {

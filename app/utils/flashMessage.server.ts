@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "remix";
+import { createCookieSessionStorage, redirect } from "remix";
 import { getPlayerName } from "~/utils/functions";
 import { AlertStatus } from "@chakra-ui/react";
 
@@ -36,6 +36,7 @@ export const getFlashContent = async (request: Request) => {
 };
 
 export const setFlashContent = async (
+  redirectTo: string,
   request: Request,
   title: string,
   status: AlertStatus,
@@ -52,5 +53,5 @@ export const setFlashContent = async (
     },
   };
 
-  return { headers };
+  return redirect(redirectTo, headers);
 };

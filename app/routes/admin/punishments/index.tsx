@@ -25,7 +25,7 @@ import {
   Tbody,
   Td,
 } from "@chakra-ui/react";
-import { Punishment } from "@prisma/client";
+import { Prisma, Punishment } from "@prisma/client";
 import { ValidatedForm } from "remix-validated-form/";
 import { TextField } from "~/components/form/TextField";
 import { setFlashContent } from "~/utils/flashMessage.server";
@@ -60,15 +60,28 @@ export const action: ActionFunction = async ({ request }) => {
       });
     }
 
-    await db.punishment.delete({ where: { id: _punishmentId } });
+    try {
+      await db.punishment.delete({ where: { id: _punishmentId } });
 
-    const { headers } = await setFlashContent(
-      request,
-      `Strafe ${punishment.name} erfolgreich gelöscht`,
-      "success"
-    );
-
-    return redirect("/admin/punishments", headers);
+      return await setFlashContent(
+        "admin/punishments",
+        request,
+        `Strafe ${punishment.name} erfolgreich gelöscht`,
+        "success"
+      );
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2003") {
+          return await setFlashContent(
+            "/admin/players",
+            request,
+            "Strafe kann nicht gelöscht werden",
+            "error",
+            "Sie wurde schon einem Spieler hinzugefügt"
+          );
+        }
+      }
+    }
   }
 };
 
