@@ -22,6 +22,8 @@ import { NumberField } from "~/components/form/NumberField";
 import { HiX } from "react-icons/hi";
 import { paymentValidator } from "~/routes/admin/payments";
 import { PunishmentTypeSelect } from "~/components/punishment/PunishmentTypeSelect";
+import { MdEuroSymbol } from "react-icons/md";
+import { IoMdBeer } from "react-icons/io";
 
 type Props = {
   player: Player | undefined;
@@ -32,6 +34,7 @@ type Props = {
 
 export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
   const [payments, setPayments] = useState([0]);
+  const [punishmentType, setPunishmentType] = useState("MONEY");
   const isSubmitting = useIsSubmitting();
 
   return (
@@ -67,10 +70,18 @@ export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
                     name={`payments[${index}].paymentType`}
                     label={"Strafe"}
                     autoFocus={true}
+                    setPunishmentType={setPunishmentType}
                   />
                   <NumberField
                     name={`payments[${index}].amount`}
                     label={"Zahlhöhe"}
+                    icon={
+                      punishmentType === "MONEY" ? (
+                        <MdEuroSymbol />
+                      ) : (
+                        <IoMdBeer />
+                      )
+                    }
                   />
                   <IconButton
                     onClick={() => {
