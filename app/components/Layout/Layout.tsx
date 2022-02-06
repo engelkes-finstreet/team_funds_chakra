@@ -1,6 +1,6 @@
 import { Box, Flex, Stack, useColorModeValue as mode } from "@chakra-ui/react";
 import * as React from "react";
-import { Outlet } from "remix";
+import { Outlet, useLoaderData } from "remix";
 import { MobileMenuButton } from "./MobileMenuButton";
 import { ScrollArea } from "./ScrollArea";
 import { SidebarLink } from "./SidebarLink";
@@ -19,6 +19,8 @@ type Props = {
 
 export function Layout({ user }: Props) {
   const { isOpen, toggle } = useMobileMenuState();
+  const isAdmin = user.role === "ADMIN";
+
   return (
     <Flex
       height="100vh"
@@ -52,31 +54,46 @@ export function Layout({ user }: Props) {
           </Box>
           <ScrollArea pt="5" pb="6">
             <Stack pb="6">
-              <NavGroup label={"Kasse"}>
-                <SidebarLink
-                  to={"/admin/player-punishments"}
-                  icon={<Gi3DHammer />}
-                >
-                  Strafe hinzufügen
-                </SidebarLink>
-                <SidebarLink icon={<GiPayMoney />} to={"/admin/payments"}>
-                  Zahlungen
-                </SidebarLink>
-              </NavGroup>
-              <NavGroup label={"Admin"}>
-                <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
-                  Users
-                </SidebarLink>
-                <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
-                  Saisons
-                </SidebarLink>
-                <SidebarLink icon={<GiSoccerKick />} to={"/admin/players"}>
+              <NavGroup label={""}>
+                <SidebarLink icon={<GiSoccerKick />} to={"/players"}>
                   Spieler
                 </SidebarLink>
-                <SidebarLink icon={<GiSoccerKick />} to={"/admin/punishments"}>
+                <SidebarLink icon={<Gi3DHammer />} to={"/punishments"}>
                   Strafen
                 </SidebarLink>
               </NavGroup>
+              {isAdmin ? (
+                <>
+                  <NavGroup label={"Kasse"}>
+                    <SidebarLink
+                      to={"/admin/player-punishments"}
+                      icon={<Gi3DHammer />}
+                    >
+                      Strafe hinzufügen
+                    </SidebarLink>
+                    <SidebarLink icon={<GiPayMoney />} to={"/admin/payments"}>
+                      Zahlungen
+                    </SidebarLink>
+                  </NavGroup>
+                  <NavGroup label={"Admin"}>
+                    <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
+                      Saisons
+                    </SidebarLink>
+                    <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
+                      Users
+                    </SidebarLink>
+                    <SidebarLink icon={<GiSoccerKick />} to={"/admin/players"}>
+                      Spieler
+                    </SidebarLink>
+                    <SidebarLink
+                      icon={<Gi3DHammer />}
+                      to={"/admin/punishments"}
+                    >
+                      Strafen
+                    </SidebarLink>
+                  </NavGroup>
+                </>
+              ) : null}
             </Stack>
           </ScrollArea>
         </Box>

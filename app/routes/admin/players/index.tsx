@@ -29,6 +29,12 @@ import * as z from "zod";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
 import { DeletePlayer } from "~/components/player/DeletePlayer";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
+import {
+  getAllPlayers,
+  GetAllPlayersType,
+} from "~/backend/player/getAllPlayers";
+import { AllPlayersTable } from "~/components/player/AllPlayersTable";
 
 export const deletePlayerValidator = withZod(
   z.object({
@@ -37,13 +43,8 @@ export const deletePlayerValidator = withZod(
   })
 );
 
-type LoaderData = { players: Player[] };
-export let loader: LoaderFunction = async ({ request, params }) => {
-  const players = await db.player.findMany();
-
-  const data: LoaderData = { players };
-
-  return data;
+export let loader = async ({ request, params }: DataFunctionArgs) => {
+  return await getAllPlayers();
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -88,13 +89,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function PlayerIndexRoute() {
-  const data = useLoaderData<LoaderData>();
-  const navigate = useNavigate();
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
-
-  function handleClick(player: Player) {
-    navigate(`${player.slug}`);
-  }
+  const { players } = useLoaderData<GetAllPlayersType>();
 
   return (
     <PageWrapper
@@ -102,65 +97,13 @@ export default function PlayerIndexRoute() {
       buttonText={"Neuen Spieler erstellen"}
       linkTo={"new"}
     >
-      {data.players.length > 0 ? (
-        <Table
-          variant={"striped"}
-          colorScheme={"blue"}
-          maxW={"full"}
-          __css={{ tableLayout: "fixed" }}
-        >
-          <Thead>
-            <Tr>
-              <Th w={"45%"}>Vorname</Th>
-              <Th w={"45%"}>Nachname</Th>
-              {isDesktop ? (
-                <>
-                  <Th>Bearbeiten</Th>
-                  <Th>Löschen</Th>
-                </>
-              ) : null}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.players.map((player) => (
-              <Tr key={player.id}>
-                <Td onClick={() => handleClick(player)} cursor={"pointer"}>
-                  {player.firstName}
-                </Td>
-                <Td onClick={() => handleClick(player)} cursor={"pointer"}>
-                  {player.lastName}
-                </Td>
-                {isDesktop ? (
-                  <>
-                    <Td>
-                      <Button onClick={() => navigate(`${player.slug}/edit`)}>
-                        Bearbeiten
-                      </Button>
-                    </Td>
-                    <DeletePlayer playerId={player.id} />
-                  </>
-                ) : null}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      ) : (
-        <Center>
-          <VStack>
-            <Text>Es wurde noch kein Spieler angelegt</Text>
-            <Button colorScheme={"blue"} onClick={() => navigate("new")}>
-              Neuen Spieler erstellen
-            </Button>
-          </VStack>
-        </Center>
-      )}
+      <AllPlayersTable isAdmin={true} players={players} />
     </PageWrapper>
   );
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
-  console.log({ caught });
 
   return <div>This is a catch</div>;
 }

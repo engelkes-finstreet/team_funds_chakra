@@ -13,7 +13,6 @@ import * as React from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useField } from "remix-validated-form";
 import { FormError } from "~/components/form/FormError";
-import { registerValidator } from "~/validation/auth";
 
 type Props = {
   label: string;
@@ -61,6 +60,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, Props>(
             onBlur={validate}
             onChange={clearError}
             defaultValue={defaultValue}
+            placeholder={label}
             {...props}
           />
         </InputGroup>

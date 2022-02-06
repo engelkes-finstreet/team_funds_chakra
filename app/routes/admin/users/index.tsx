@@ -33,7 +33,7 @@ export default function UsersIndexRoute() {
         <Table
           variant={"striped"}
           colorScheme={"blue"}
-          maxW={"full"}
+          w={"full"}
           __css={{ tableLayout: "fixed" }}
         >
           <Thead>

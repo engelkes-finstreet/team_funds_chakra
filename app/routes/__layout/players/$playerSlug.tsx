@@ -1,40 +1,30 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { db } from "~/utils/db.server";
-import { Player, Prisma, Punishment, PunishmentType } from "@prisma/client";
-import { useLoaderData } from "remix";
-import {
-  Divider,
-  Heading,
-  SimpleGrid,
-  Tab,
-  Table,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { Stat } from "~/components/player/Stat";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
-import { formatCurrency, getPlayerName } from "~/utils/functions";
-import { PlayerPunishmentsTable } from "~/components/player/PlayerPunishmentsTable";
-import { PlayerPaymentsTable } from "~/components/player/PlayerPaymentsTable";
+import { requireAdmin, requireUser } from "~/utils/session.server";
 import {
   getPlayerDetails,
   GetPlayerDetailsType,
 } from "~/backend/player/getPlayerDetails";
+import { useLoaderData } from "remix";
+import { PageWrapper } from "~/components/Layout/PageWrapper";
+import { getPlayerName } from "~/utils/functions";
 import { PlayerStats } from "~/components/player/PlayerStats";
+import {
+  Divider,
+  Heading,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
+import { PlayerPunishmentsTable } from "~/components/player/PlayerPunishmentsTable";
+import { PlayerPaymentsTable } from "~/components/player/PlayerPaymentsTable";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   return await getPlayerDetails(params);
 };
 
-export default function PlayerDetailRoute() {
+export default function PlayerDetailsRoute() {
   const { player } = useLoaderData<GetPlayerDetailsType>();
 
   return (

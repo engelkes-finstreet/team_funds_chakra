@@ -25,14 +25,11 @@ import ServerStyleContext from "~/chakra/context.server";
 import ClientStyleContext from "./chakra/context.client";
 import { theme } from "./chakra/theme";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import {
-  commitFlashSession,
-  getFlashContent,
-  getFlashSession,
-} from "~/utils/flashMessage.server";
+import { getFlashContent } from "~/utils/flashMessage.server";
+import { getUserSession, requireAndReturnUser } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => {
-  return { title: "Remix + Chakra UI App" };
+  return { title: "Mannschaftskasse SkiClub" };
 };
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {

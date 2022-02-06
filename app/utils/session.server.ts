@@ -3,6 +3,7 @@ import { db } from "~/utils/db.server";
 import { createCookieSessionStorage, redirect } from "remix";
 import { User } from "@prisma/client";
 import { URLSearchParams } from "url";
+import { setFlashContent } from "~/utils/flashMessage.server";
 
 export async function register(username: string, password: string) {
   const passwordHash = await bcrypt.hash(password, 10);
@@ -64,13 +65,33 @@ export async function requireUserId(
   return userId;
 }
 
+export async function requireUser(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+
+  if (!userId || typeof userId !== "string") {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/login?${searchParams}`);
+  }
+}
+
 export async function requireAndReturnUser(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
 ) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
+
+  if (!userId || typeof userId !== "string") {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/login?${searchParams}`);
+  }
+
   const user = await db.user.findUnique({ where: { id: userId } });
+
   if (!user) {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
     throw redirect(`/login?${searchParams}`);
@@ -114,7 +135,13 @@ export async function logout(request: Request) {
 
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
   session.set("userId", userId);
+  session.set("role", user?.role);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
