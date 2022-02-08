@@ -28,13 +28,17 @@ model User {
 }
 
 model Season {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  timePeriod String   @unique
-  userId     String
-  createdBy  User     @relation(fields: [userId], references: [id])
-  slug       String   @unique
+  id                String              @id @default(uuid())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  startDate         DateTime
+  endDate           DateTime
+  userId            String
+  createdBy         User                @relation(fields: [userId], references: [id])
+  slug              String              @unique
+  punishments       Punishment[]
+  PlayerPayments    PlayerPayments[]
+  PlayerPunishments PlayerPunishments[]
 }
 
 enum Position {
@@ -72,6 +76,8 @@ model Punishment {
   type              PunishmentType
   userId            String
   createdBy         User                @relation(fields: [userId], references: [id])
+  seasonId          String
+  season            Season              @relation(fields: [seasonId], references: [id])
   playerPunishments PlayerPunishments[]
 }
 
@@ -85,6 +91,8 @@ model PlayerPayments {
   player    Player         @relation(fields: [playerId], references: [id])
   amount    Int
   type      PunishmentType
+  seasonId  String
+  season    Season         @relation(fields: [seasonId], references: [id])
 }
 
 model PlayerPunishments {
@@ -97,5 +105,7 @@ model PlayerPunishments {
   player       Player     @relation(fields: [playerId], references: [id])
   punishmentId String
   punishment   Punishment @relation(fields: [punishmentId], references: [id])
+  seasonId     String
+  season       Season     @relation(fields: [seasonId], references: [id])
   amount       Int
 }

@@ -1,11 +1,12 @@
 import { db } from "~/utils/db.server";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { Params } from "react-router";
+import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 
-export async function getPunishmentDetails(params: Params) {
+async function getPunishment(slug: string | undefined) {
   const punishment = await db.punishment.findUnique({
     where: {
-      slug: params.punishmentSlug,
+      slug,
     },
   });
 
@@ -13,48 +14,86 @@ export async function getPunishmentDetails(params: Params) {
     throw new Response("Strafe wurde nicht gefunden", { status: 404 });
   }
 
+  return punishment;
+}
+
+async function getPunishmentList(punishmentId: string, seasonId: string) {
+  return db.playerPunishments.findMany({
+    where: {
+      punishmentId,
+      seasonId,
+    },
+    include: {
+      player: true,
+    },
+  });
+}
+
+async function getTotalAmountOfPunishment(
+  punishmentId: string,
+  seasonId: string
+) {
+  const totalCosts = await db.playerPunishments.aggregate({
+    where: {
+      punishmentId,
+      seasonId,
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  return totalCosts._sum.amount;
+}
+
+async function getPlayerWithHighestPunishmentAmount(
+  punishmentId: string,
+  seasonId: string
+) {
   const highestPunishmentAmount = await db.playerPunishments.groupBy({
     by: ["playerId"],
     where: {
-      punishmentId: punishment.id,
+      punishmentId,
+      seasonId,
     },
     _max: {
       amount: true,
     },
   });
 
-  const playerWithHighestPunishment = await db.player.findUnique({
-    where: {
-      id: highestPunishmentAmount[0].playerId,
-    },
-  });
+  if (highestPunishmentAmount.length > 0) {
+    const playerWithHighestPunishment = await db.player.findUnique({
+      where: {
+        id: highestPunishmentAmount[0].playerId,
+      },
+    });
 
-  const playerWithHighestPunishmentAmount = {
-    player: playerWithHighestPunishment,
-    amount: highestPunishmentAmount[0]._max.amount,
-  };
+    return {
+      player: playerWithHighestPunishment,
+      amount: highestPunishmentAmount[0]._max.amount,
+    };
+  }
 
-  const totalAmountOfPunishment = await db.playerPunishments.groupBy({
-    by: ["punishmentId"],
-    _sum: {
-      amount: true,
-    },
-  });
+  return undefined;
+}
 
-  const allPunishmentsByType = await db.playerPunishments.findMany({
-    where: {
-      punishmentId: punishment.id,
-    },
-    include: {
-      player: true,
-    },
-  });
+export async function getPunishmentDetails(params: Params) {
+  const { id: seasonId } = await getCurrentSeason();
+  const punishment = await getPunishment(params.punishmentSlug);
+
+  const totalAmountOfPunishment = await getTotalAmountOfPunishment(
+    punishment.id,
+    seasonId
+  );
+  const punishmentList = await getPunishmentList(punishment.id, seasonId);
+  const playerWithHighestPunishmentAmount =
+    await getPlayerWithHighestPunishmentAmount(punishment.id, seasonId);
 
   return {
     playerWithHighestPunishmentAmount,
     totalAmountOfPunishment,
     punishment,
-    allPunishmentsByType,
+    punishmentList,
   };
 }
 

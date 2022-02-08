@@ -20,27 +20,41 @@ export function PlayerStats() {
       columns={{ base: 1, md: 3 }}
     >
       <Stat
-        title="noch zu zahlen"
-        value={formatCurrency(openMoneyPunishments)}
+        title={openMoneyPunishments ? "noch zu zahlen" : "nichts offen"}
+        value={openMoneyPunishments ? formatCurrency(openMoneyPunishments) : ""}
         accentColor={useColorModeValue("teal.500", "teal.300")}
       >
-        Dieser Betrag muss von {getPlayerName(player)} bis zum Ende des Monats
-        bezahlt werden
+        {openMoneyPunishments
+          ? `Dieser Betrag muss von ${getPlayerName(
+              player
+            )} bis zum Ende des Monats
+          bezahlt werden`
+          : "Noch keine Geldbeträge offen"}
       </Stat>
       <Stat
-        title="noch zu schmeißen"
-        value={`${openBeerPunishments} Kisten`}
+        title={openBeerPunishments ? "noch zu schmeißen" : "nichts offen"}
+        value={openBeerPunishments ? `${openBeerPunishments} Kisten` : ""}
         accentColor={useColorModeValue("blue.500", "blue.300")}
       >
-        Bei der nächsten Mannschaftsfeier gibt es von {getPlayerName(player)}{" "}
-        einige Kisten
+        {openBeerPunishments
+          ? `Bei der nächsten Mannschaftsfeier gibt es von ${getPlayerName(
+              player
+            )}{" "}
+          einige Kisten`
+          : "Noch keine Bierstrafen offen"}
       </Stat>
       <Stat
-        title={mostCommonPunishment.punishment.name}
-        value={`${mostCommonPunishment.amount} Mal`}
+        title={
+          mostCommonPunishment
+            ? mostCommonPunishment.punishment.name
+            : "keine Strafen"
+        }
+        value={mostCommonPunishment ? `${mostCommonPunishment.amount} Mal` : ""}
         accentColor={useColorModeValue("red.500", "red.300")}
       >
-        Häufigste Strafe
+        {mostCommonPunishment
+          ? "Häufigste Strafe"
+          : "Noch keine Strafe erhalten"}
       </Stat>
     </SimpleGrid>
   );

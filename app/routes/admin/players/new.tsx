@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
   });
 
   return await setFlashContent(
-    `/admin/players/${player.id}`,
+    `/admin/players/${player.slug}`,
     request,
     `Spieler ${getPlayerName(player)} erfolgreich angelegt`,
     "success"

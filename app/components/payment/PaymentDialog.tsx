@@ -1,4 +1,4 @@
-import { Player } from "@prisma/client";
+import { Player, Season } from "@prisma/client";
 import {
   Button,
   Divider,
@@ -27,12 +27,19 @@ import { IoMdBeer } from "react-icons/io";
 
 type Props = {
   player: Player | undefined;
+  currentSeasonId: string;
   userId: string;
   onClose: any;
   isOpen: boolean;
 };
 
-export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
+export function PaymentDialog({
+  player,
+  userId,
+  onClose,
+  isOpen,
+  currentSeasonId,
+}: Props) {
   const [payments, setPayments] = useState([0]);
   const [punishmentType, setPunishmentType] = useState("MONEY");
   const isSubmitting = useIsSubmitting();
@@ -52,11 +59,13 @@ export function PaymentDialog({ player, userId, onClose, isOpen }: Props) {
               _userId: userId,
               _playerId: player?.id,
               _playerName: getPlayerName(player),
+              _seasonId: currentSeasonId,
             }}
           >
             <TextField name={"_userId"} hidden={true} />
             <TextField name={"_playerId"} hidden={true} />
             <TextField name={"_playerName"} hidden={true} />
+            <TextField name={"_seasonId"} hidden={true} />
             <VStack spacing={4} w={"full"}>
               {payments.map((payment, index) => (
                 <Flex

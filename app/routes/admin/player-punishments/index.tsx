@@ -14,13 +14,15 @@ import { getPlayerName } from "~/utils/functions";
 import { PlayerPunishmentDialog } from "~/components/player-punishment/PlayerPunishmentDialog";
 import { useAfterTransition } from "~/hooks/useAfterTransition";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
+  const season = await getCurrentSeason();
   const userId = await requireUserId(request);
   const players = await db.player.findMany();
   const punishments = await db.punishment.findMany();
 
-  return { players, punishments, userId };
+  return { players, punishments, userId, season };
 };
 
 export const playerPunishmentValidator = withZod(
@@ -28,6 +30,7 @@ export const playerPunishmentValidator = withZod(
     _playerId: z.string(),
     _playerName: z.string(),
     _userId: z.string(),
+    _seasonId: z.string(),
     punishments: z.array(
       z.object({
         punishmentId: z.string(),
@@ -40,13 +43,14 @@ export const playerPunishmentValidator = withZod(
 export const action: ActionFunction = async ({ request }) => {
   const data = playerPunishmentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { _userId, _playerId, _playerName, punishments } = data.data;
+  const { _userId, _playerId, _playerName, _seasonId, punishments } = data.data;
 
   for (let punishment of punishments) {
     await db.playerPunishments.create({
       data: {
         userId: _userId,
         playerId: _playerId,
+        seasonId: _seasonId,
         amount: punishment.amount,
         punishmentId: punishment.punishmentId,
       },
@@ -76,6 +80,7 @@ export default function () {
         player={selectedPlayer}
         punishments={data.punishments}
         userId={data.userId}
+        currentSeasonId={data.season.id}
         onClose={onClose}
         isOpen={isOpen}
       />

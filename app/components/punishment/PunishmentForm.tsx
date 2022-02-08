@@ -4,8 +4,12 @@ import { PunishmentTypeSelect } from "~/components/punishment/PunishmentTypeSele
 import { useState } from "react";
 import { IoMdBeer } from "react-icons/io";
 import { MdEuroSymbol } from "react-icons/md";
+import { useLoaderData } from "remix";
+import { GetAllSeasonsType } from "~/backend/season/getAllSeasons";
+import { Select } from "~/components/form/Select";
 
 export default function PunishmentForm() {
+  const { seasons } = useLoaderData<GetAllSeasonsType>();
   const [punishmentType, setPunishmentType] = useState("MONEY");
 
   return (
@@ -16,16 +20,23 @@ export default function PunishmentForm() {
         placeholder={"Name der Strafe"}
         autoFocus={true}
       />
-      <NumberField
-        name={"amount"}
-        label={"Höhe der Strafe"}
-        icon={punishmentType === "MONEY" ? <MdEuroSymbol /> : <IoMdBeer />}
-      />
       <PunishmentTypeSelect
         name={"punishmentType"}
         label={"Typ der Strafe"}
         setPunishmentType={setPunishmentType}
       />
+      <NumberField
+        name={"amount"}
+        label={"Höhe der Strafe"}
+        icon={punishmentType === "MONEY" ? <MdEuroSymbol /> : <IoMdBeer />}
+      />
+      <Select name={"seasonId"} label={"Saison"}>
+        {seasons.map((season) => (
+          <option key={season.id} value={season.id}>
+            {season.slug}
+          </option>
+        ))}
+      </Select>
     </>
   );
 }

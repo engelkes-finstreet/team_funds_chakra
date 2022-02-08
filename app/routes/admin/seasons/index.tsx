@@ -1,10 +1,7 @@
 import { Season } from "@prisma/client";
 import {
   ActionFunction,
-  Form,
   LoaderFunction,
-  redirect,
-  useFetcher,
   useLoaderData,
   useNavigate,
 } from "remix";
@@ -26,8 +23,7 @@ import { PageWrapper } from "~/components/Layout/PageWrapper";
 import * as React from "react";
 import * as z from "zod";
 import { withZod } from "@remix-validated-form/with-zod";
-import { ValidatedForm, validationError } from "remix-validated-form";
-import { TextField } from "~/components/form/TextField";
+import { validationError } from "remix-validated-form";
 import { setFlashContent } from "~/utils/flashMessage.server";
 
 const deleteValidator = withZod(
@@ -65,7 +61,7 @@ export let action: ActionFunction = async ({ request }) => {
     return await setFlashContent(
       "/admin/seasons",
       request,
-      `Strafe ${season.timePeriod} erfolgreich gelöscht`,
+      `Strafe ${season.slug} erfolgreich gelöscht`,
       "success"
     );
   }
@@ -86,18 +82,12 @@ export default function SeasonsIndexRoute() {
         <Table
           variant={"striped"}
           colorScheme={"blue"}
-          maxW={"full"}
+          w={"full"}
           __css={{ tableLayout: "fixed" }}
         >
           <Thead>
             <Tr>
-              <Th w={"90%"}>Zeitraum</Th>
-              {isDesktop ? (
-                <>
-                  <Th>Bearbeiten</Th>
-                  <Th>Löschen</Th>
-                </>
-              ) : null}
+              <Th>Zeitraum</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -107,18 +97,8 @@ export default function SeasonsIndexRoute() {
                   onClick={() => navigate(`${season.slug}`)}
                   cursor={"pointer"}
                 >
-                  {season.timePeriod}
+                  {season.slug}
                 </Td>
-                {isDesktop ? (
-                  <>
-                    <Td>
-                      <Button onClick={() => navigate(`${season.slug}/edit`)}>
-                        Bearbeiten
-                      </Button>
-                    </Td>
-                    <DeleteSeason seasonId={season.id} />
-                  </>
-                ) : null}
               </Tr>
             ))}
           </Tbody>
@@ -137,29 +117,5 @@ export default function SeasonsIndexRoute() {
         </Center>
       )}
     </PageWrapper>
-  );
-}
-
-function DeleteSeason({ seasonId }: { seasonId: string }) {
-  const fetcher = useFetcher();
-  const isDeleting = fetcher.submission?.formData.get("_seasonId") === seasonId;
-
-  return (
-    <Td hidden={isDeleting}>
-      <ValidatedForm
-        validator={deleteValidator}
-        method="post"
-        defaultValues={{
-          _method: "delete",
-          _seasonId: seasonId,
-        }}
-      >
-        <TextField hidden={true} name="_method" />
-        <TextField hidden={true} name="_seasonId" />
-        <Button type="submit" className="button" colorScheme={"red"}>
-          Löschen
-        </Button>
-      </ValidatedForm>
-    </Td>
   );
 }

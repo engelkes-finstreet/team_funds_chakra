@@ -25,7 +25,7 @@ export default function SeasonRoute() {
 
   return (
     <PageWrapper
-      heading={`Saison ${season.timePeriod}`}
+      heading={`Saison ${season.slug}`}
       linkTo={`edit`}
       buttonText={"Bearbeiten"}
     >

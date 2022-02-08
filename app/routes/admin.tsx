@@ -25,8 +25,6 @@ export let loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireAndReturnUser(request);
 
   const data: LoaderData = { user };
-
-  console.log("DO THIS!");
   return data;
 };
 

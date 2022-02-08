@@ -21,17 +21,17 @@ import { validationError } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
 import { stringToNumberValidation } from "~/validations/utils";
-import { getUserId, requireUserId } from "~/utils/session.server";
-import { useTransition } from "@remix-run/react";
-import { usePrevious } from "~/hooks/usePrevious";
+import { requireUserId } from "~/utils/session.server";
 import { useAfterTransition } from "~/hooks/useAfterTransition";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
+  const season = await getCurrentSeason();
   const userId = await requireUserId(request);
   const players = await db.player.findMany();
 
-  return { players, userId };
+  return { players, userId, season };
 };
 
 export const paymentValidator = withZod(
@@ -39,6 +39,7 @@ export const paymentValidator = withZod(
     _playerId: z.string(),
     _playerName: z.string(),
     _userId: z.string(),
+    _seasonId: z.string(),
     payments: z.array(
       z.object({
         paymentType: z.nativeEnum(PunishmentType),
@@ -51,13 +52,14 @@ export const paymentValidator = withZod(
 export const action: ActionFunction = async ({ request }) => {
   const data = paymentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { _userId, _playerId, _playerName, payments } = data.data;
+  const { _userId, _playerId, _playerName, _seasonId, payments } = data.data;
 
   for (let payment of payments) {
     await db.playerPayments.create({
       data: {
         userId: _userId,
         playerId: _playerId,
+        seasonId: _seasonId,
         amount: payment.amount,
         type: payment.paymentType,
       },
@@ -88,6 +90,7 @@ export default function PaymentsIndexRoute() {
         onClose={onClose}
         isOpen={isOpen}
         userId={data.userId}
+        currentSeasonId={data.season.id}
       />
       <Text fontSize={"md"} mb={4}>
         Klicke einen Spieler an um Bezahlungen hinzuzufügen

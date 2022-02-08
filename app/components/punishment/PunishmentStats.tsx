@@ -16,19 +16,31 @@ export function PunishmentStats() {
       mb={8}
     >
       <Stat
-        title={"Lieblingsstrafe"}
-        value={`${playerWithHighestPunishmentAmount.amount} X`}
+        title={
+          playerWithHighestPunishmentAmount ? "Lieblingsstrafe" : "0 Spieler"
+        }
+        value={
+          playerWithHighestPunishmentAmount
+            ? `${playerWithHighestPunishmentAmount.amount}x`
+            : ""
+        }
         accentColor={useColorModeValue("teal.500", "teal.300")}
       >
-        {getPlayerName(playerWithHighestPunishmentAmount.player)} mag diese
-        Strafe ganz besonders
+        {playerWithHighestPunishmentAmount
+          ? `${getPlayerName(
+              playerWithHighestPunishmentAmount?.player
+            )} mag diese
+        Strafe ganz besonders`
+          : "Es gibt noch keinen Spieler mit dieser Strafe"}
       </Stat>
       <Stat
-        title={"Insgesamt"}
-        value={`${totalAmountOfPunishment[0]._sum.amount} X`}
+        title={totalAmountOfPunishment ? "Insgesamt" : "Nie begangen"}
+        value={totalAmountOfPunishment ? `${totalAmountOfPunishment}x` : ""}
         accentColor={useColorModeValue("blue.500", "blue.300")}
       >
-        So oft wurde diese Strafe insgesamt schon begangen
+        {totalAmountOfPunishment
+          ? "So oft wurde diese Strafe insgesamt schon begangen"
+          : "Bisher hat noch niemand diese Strafe begangen"}
       </Stat>
     </SimpleGrid>
   );

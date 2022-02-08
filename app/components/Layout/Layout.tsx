@@ -79,9 +79,6 @@ export function Layout({ user }: Props) {
                     <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
                       Saisons
                     </SidebarLink>
-                    <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
-                      Users
-                    </SidebarLink>
                     <SidebarLink icon={<GiSoccerKick />} to={"/admin/players"}>
                       Spieler
                     </SidebarLink>
@@ -91,6 +88,10 @@ export function Layout({ user }: Props) {
                     >
                       Strafen
                     </SidebarLink>
+                    <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
+                      Users
+                    </SidebarLink>
+                    Patric
                   </NavGroup>
                 </>
               ) : null}

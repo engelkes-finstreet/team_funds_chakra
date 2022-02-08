@@ -30,12 +30,14 @@ type Props = {
   userId: string;
   onClose: any;
   isOpen: boolean;
+  currentSeasonId: string;
 };
 
 export function PlayerPunishmentDialog({
   player,
   punishments,
   userId,
+  currentSeasonId,
   onClose,
   isOpen,
 }: Props) {
@@ -57,11 +59,13 @@ export function PlayerPunishmentDialog({
               _userId: userId,
               _playerId: player?.id,
               _playerName: getPlayerName(player),
+              _seasonId: currentSeasonId,
             }}
           >
             <TextField name={"_userId"} hidden={true} />
             <TextField name={"_playerId"} hidden={true} />
             <TextField name={"_playerName"} hidden={true} />
+            <TextField name={"_seasonId"} hidden={true} />
             <VStack spacing={4} w={"full"}>
               {playerPunishments.map((playerPunishment, index) => (
                 <Flex

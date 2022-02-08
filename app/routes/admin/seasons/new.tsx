@@ -1,32 +1,53 @@
 import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
-import { ActionFunction, redirect } from "remix";
+import { ActionFunction, useLoaderData } from "remix";
 import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
 import { seasonValidator } from "~/validations/seasonValidations";
 import { SeasonForm } from "~/components/season/SeasonForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { Prisma } from "@prisma/client";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
   const data = seasonValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { timePeriod } = data.data;
+  const { startYear } = data.data;
 
-  const season = await db.season.create({
-    data: { timePeriod, userId, slug: timePeriod },
-  });
+  try {
+    const season = await db.season.create({
+      data: {
+        startDate: new Date(Number(startYear), 5, 30),
+        endDate: new Date(2022, 6, 1),
+        slug: `${startYear}-${Number(startYear) + 1}`,
+        userId,
+      },
+    });
 
-  return await setFlashContent(
-    `/admin/seasons/${season.slug}`,
-    request,
-    `Strafe ${season.timePeriod} erfolgreich angelegt`,
-    "success"
-  );
+    return await setFlashContent(
+      `/admin/seasons/${season.slug}`,
+      request,
+      `Strafe ${season.slug} erfolgreich angelegt`,
+      "success"
+    );
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        return await setFlashContent(
+          "/admin/seasons/new",
+          request,
+          "Zeitraum belegt",
+          "error",
+          "Es existiert schon eine Saison in diesem Zeitraum"
+        );
+      }
+    }
+  }
 };
 
 export default function NewSeasonRoute() {
+  useLoaderData();
   return (
     <PageWrapper heading={"Neue Saison erstellen"}>
       <Form submitText={"Erstelen"} validator={seasonValidator} method={"post"}>

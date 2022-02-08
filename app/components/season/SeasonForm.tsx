@@ -1,14 +1,25 @@
 import { TextField } from "~/components/form/TextField";
+import { Select } from "~/components/form/Select";
 
 export function SeasonForm() {
+  const currentYear = new Date().getFullYear();
+  const years = [
+    currentYear - 1,
+    currentYear,
+    currentYear + 1,
+    currentYear + 2,
+    currentYear + 3,
+  ];
+
   return (
     <>
-      <TextField
-        label={"Zeitraum"}
-        placeholder={"Zeitraum der Saison z.B. 20-21"}
-        name={"timePeriod"}
-        autoFocus={true}
-      />
+      <Select name={"startYear"} label={"Startjahr der Saison"}>
+        {years.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </Select>
     </>
   );
 }

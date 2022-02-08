@@ -4,7 +4,7 @@ import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { formatCurrency, getPlayerName, toLocaleDate } from "~/utils/functions";
 
 export function PunishmentsTable() {
-  const { allPunishmentsByType } =
+  const { punishmentList } =
     useLoaderData<Awaited<ReturnType<typeof loader>>>();
 
   return (
@@ -17,7 +17,7 @@ export function PunishmentsTable() {
         </Tr>
       </Thead>
       <Tbody>
-        {allPunishmentsByType.map(({ id, createdAt, player, amount }) => (
+        {punishmentList.map(({ id, createdAt, player, amount }) => (
           <Tr key={id}>
             <Td>{toLocaleDate(createdAt)}</Td>
             <Td>{getPlayerName(player)}</Td>

@@ -8,5 +8,6 @@ export const punishmentValidator = withZod(
     punishmentName: z.string().nonempty("Erforderlich"),
     amount: stringToNumberValidation("Erforderlich"),
     punishmentType: z.nativeEnum(PunishmentType),
+    seasonId: z.string(),
   })
 );
