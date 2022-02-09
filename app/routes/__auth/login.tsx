@@ -27,7 +27,7 @@ const loginValidator = withZod(
 );
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = loginValidator.validate(await request.formData());
+  const data = await loginValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { email, password, redirectTo } = data.data;
 

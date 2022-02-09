@@ -48,7 +48,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = deletePlayerValidator.validate(await request.formData());
+  const data = await deletePlayerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { _method, _playerId } = data.data;
 

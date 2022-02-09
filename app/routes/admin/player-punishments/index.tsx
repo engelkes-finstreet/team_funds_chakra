@@ -41,7 +41,9 @@ export const playerPunishmentValidator = withZod(
 );
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = playerPunishmentValidator.validate(await request.formData());
+  const data = await playerPunishmentValidator.validate(
+    await request.formData()
+  );
   if (data.error) return validationError(data.error);
   const { _userId, _playerId, _playerName, _seasonId, punishments } = data.data;
 

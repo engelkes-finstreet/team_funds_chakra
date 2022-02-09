@@ -25,7 +25,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const data = playerValidator.validate(await request.formData());
+  const data = await playerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { firstName, lastName, position } = data.data;
 

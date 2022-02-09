@@ -22,7 +22,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const data = punishmentValidator.validate(await request.formData());
+  const data = await punishmentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { amount, punishmentType, punishmentName } = data.data;
 

@@ -35,7 +35,7 @@ export const registerValidator = withZod(
 );
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = registerValidator.validate(await request.formData());
+  const data = await registerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { email, password, redirectTo } = data.data;
 

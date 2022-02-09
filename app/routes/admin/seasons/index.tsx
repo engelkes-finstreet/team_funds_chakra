@@ -43,7 +43,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export let action: ActionFunction = async ({ request }) => {
-  const data = deleteValidator.validate(await request.formData());
+  const data = await deleteValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { _method, _seasonId } = data.data;
 

@@ -11,7 +11,7 @@ import { Prisma } from "@prisma/client";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
-  const data = seasonValidator.validate(await request.formData());
+  const data = await seasonValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { startYear } = data.data;
 

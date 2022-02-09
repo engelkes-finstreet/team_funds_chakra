@@ -50,7 +50,7 @@ export const paymentValidator = withZod(
 );
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = paymentValidator.validate(await request.formData());
+  const data = await paymentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { _userId, _playerId, _playerName, _seasonId, payments } = data.data;
 

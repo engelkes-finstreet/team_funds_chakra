@@ -23,7 +23,9 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const data = deletePunishmentValidator.validate(await request.formData());
+  const data = await deletePunishmentValidator.validate(
+    await request.formData()
+  );
   if (data.error) return validationError(data.error);
   const { _method, _punishmentId } = data.data;
 
