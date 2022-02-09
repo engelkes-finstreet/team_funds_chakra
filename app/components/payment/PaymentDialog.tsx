@@ -18,7 +18,6 @@ import { getPlayerName } from "~/utils/functions";
 import { useIsSubmitting, ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
 import { useState } from "react";
-import { NumberField } from "~/components/form/NumberField";
 import { HiX } from "react-icons/hi";
 import { paymentValidator } from "~/routes/admin/payments";
 import { PunishmentTypeSelect } from "~/components/punishment/PunishmentTypeSelect";
@@ -81,10 +80,10 @@ export function PaymentDialog({
                     autoFocus={true}
                     setPunishmentType={setPunishmentType}
                   />
-                  <NumberField
+                  <TextField
                     name={`payments[${index}].amount`}
                     label={"Zahlhöhe"}
-                    icon={
+                    inputLeftElement={
                       punishmentType === "MONEY" ? (
                         <MdEuroSymbol />
                       ) : (

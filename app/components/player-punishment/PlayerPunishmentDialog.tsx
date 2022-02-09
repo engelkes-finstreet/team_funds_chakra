@@ -20,7 +20,6 @@ import { ValidatedForm } from "remix-validated-form/";
 import { playerPunishmentValidator } from "~/routes/admin/player-punishments";
 import { TextField } from "~/components/form/TextField";
 import { Select } from "~/components/form/Select";
-import { NumberField } from "~/components/form/NumberField";
 import { HiX } from "react-icons/hi";
 import { useIsSubmitting } from "remix-validated-form";
 
@@ -86,7 +85,7 @@ export function PlayerPunishmentDialog({
                       </option>
                     ))}
                   </Select>
-                  <NumberField
+                  <TextField
                     name={`punishments[${index}].amount`}
                     label={"Anzahl Strafe"}
                   />

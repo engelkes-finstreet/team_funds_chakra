@@ -1,5 +1,4 @@
 import { TextField } from "~/components/form/TextField";
-import { NumberField } from "~/components/form/NumberField";
 import { PunishmentTypeSelect } from "~/components/punishment/PunishmentTypeSelect";
 import React, { useState } from "react";
 import { IoMdBeer } from "react-icons/io";
