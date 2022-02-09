@@ -1,16 +1,31 @@
-import { Alert, AlertIcon, Button, Stack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Checkbox,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  InputProps,
+  Stack,
+  useMergeRefs,
+} from "@chakra-ui/react";
 import React, { ReactNode, PropsWithoutRef } from "react";
 
 import {
   ValidatedForm,
   Validator,
   FormProps as ValidatedFormProps,
+  useField,
 } from "remix-validated-form";
 import { useActionData } from "@remix-run/react";
 import { useFormContext } from "remix-validated-form";
+import { FormError } from "~/components/form/FormError";
 
 export type FormProps<DataType> = {
   submitText: string;
+  additionalSubmits?: ReactNode;
 } & ValidatedFormProps<DataType> &
   Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit">;
 
@@ -18,12 +33,25 @@ export function Form<DataType>({
   children,
   submitText,
   validator,
+  formRef,
+  additionalSubmits,
   method,
   ...props
 }: FormProps<DataType>) {
   return (
-    <ValidatedForm validator={validator} method={method} {...props}>
-      <ExtendedForm submitText={submitText}>{children}</ExtendedForm>
+    <ValidatedForm
+      validator={validator}
+      method={method}
+      formRef={formRef}
+      resetAfterSubmit={true}
+      {...props}
+    >
+      <ExtendedForm
+        submitText={submitText}
+        additionalSubmits={additionalSubmits}
+      >
+        {children}
+      </ExtendedForm>
     </ValidatedForm>
   );
 }
@@ -31,9 +59,14 @@ export function Form<DataType>({
 type ExtendedFormProps = {
   children: ReactNode;
   submitText: string;
+  additionalSubmits?: ReactNode;
 };
 
-const ExtendedForm = ({ children, submitText }: ExtendedFormProps) => {
+export const ExtendedForm = ({
+  children,
+  additionalSubmits,
+  submitText,
+}: ExtendedFormProps) => {
   const data = useActionData();
   const { isValid, isSubmitting } = useFormContext();
   const isDisabled = !isValid || isSubmitting;
@@ -49,15 +82,12 @@ const ExtendedForm = ({ children, submitText }: ExtendedFormProps) => {
 
       <Stack spacing={4}>{children}</Stack>
 
-      <Button
-        type="submit"
-        colorScheme="blue"
-        size="lg"
-        fontSize="md"
-        isDisabled={isDisabled}
-      >
-        {submitText}
-      </Button>
+      <Flex justifyContent={"flex-end"} alignItems={"center"} gap={8}>
+        {additionalSubmits}
+        <Button type="submit" colorScheme="blue" size="lg" fontSize="md">
+          {submitText}
+        </Button>
+      </Flex>
     </Stack>
   );
 };

@@ -2,8 +2,13 @@ import { TextField } from "~/components/form/TextField";
 import { Select } from "~/components/form/Select";
 import { Position } from "@prisma/client";
 import { getPositionMapping, PositionType } from "~/utils/enumMappings";
+import React from "react";
 
-export function PlayerForm() {
+type Props = {
+  firstInputRef?: React.RefObject<HTMLInputElement>;
+};
+
+export function PlayerForm({ firstInputRef }: Props) {
   return (
     <>
       <TextField
@@ -11,6 +16,7 @@ export function PlayerForm() {
         placeholder={"Vorname des Spielers"}
         name={"firstName"}
         autoFocus={true}
+        ref={firstInputRef}
       />
       <TextField
         label={"Nachname"}

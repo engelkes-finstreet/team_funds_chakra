@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "remix";
+import { ActionFunction } from "remix";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
@@ -6,18 +6,16 @@ import { playerValidator } from "~/validations/playerValidations";
 import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
-import {
-  commitFlashSession,
-  getFlashSession,
-  setFlashContent,
-} from "~/utils/flashMessage.server";
+import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
+import { Checkbox } from "~/components/form/Checkbox";
+import { useResetForm } from "~/hooks/useResetForm";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
-  const data = playerValidator.validate(await request.formData());
+  const data = await playerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { firstName, lastName, position } = data.data;
+  const { firstName, lastName, position, createOtherPlayer } = data.data;
 
   const player = await db.player.create({
     data: {
@@ -30,7 +28,7 @@ export const action: ActionFunction = async ({ request }) => {
   });
 
   return await setFlashContent(
-    `/admin/players/${player.slug}`,
+    createOtherPlayer ? "/admin/players/new" : `/admin/players/${player.slug}`,
     request,
     `Spieler ${getPlayerName(player)} erfolgreich angelegt`,
     "success"
@@ -38,14 +36,24 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function NewPlayerRoute() {
+  const { formRef, inputRef } = useResetForm();
+
   return (
     <PageWrapper heading={"Neuen Spieler erstellen"}>
       <Form
         submitText={"Erstellen"}
         validator={playerValidator}
         method={"post"}
+        formRef={formRef}
+        additionalSubmits={
+          <Checkbox
+            label={"Weiteren Spieler hinzufügen"}
+            name={"createOtherPlayer"}
+            value={"createOtherPlayer"}
+          />
+        }
       >
-        <PlayerForm />
+        <PlayerForm firstInputRef={inputRef} />
       </Form>
     </PageWrapper>
   );

@@ -9,3 +9,7 @@ export function stringToNumberValidation(nonEmptyMessage: string) {
     })
     .transform((value) => Number(value));
 }
+
+export function checkbox() {
+  return z.any().transform((value) => value !== undefined);
+}
