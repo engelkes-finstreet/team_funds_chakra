@@ -68,8 +68,7 @@ export const ExtendedForm = ({
   submitText,
 }: ExtendedFormProps) => {
   const data = useActionData();
-  const { isValid, isSubmitting } = useFormContext();
-  const isDisabled = !isValid || isSubmitting;
+  const { isSubmitting } = useFormContext();
 
   return (
     <Stack spacing={6}>
@@ -84,7 +83,14 @@ export const ExtendedForm = ({
 
       <Flex justifyContent={"flex-end"} alignItems={"center"} gap={8}>
         {additionalSubmits}
-        <Button type="submit" colorScheme="blue" size="lg" fontSize="md">
+        <Button
+          type="submit"
+          colorScheme="blue"
+          size="lg"
+          fontSize="md"
+          isLoading={isSubmitting}
+          loadingText={submitText}
+        >
           {submitText}
         </Button>
       </Flex>
