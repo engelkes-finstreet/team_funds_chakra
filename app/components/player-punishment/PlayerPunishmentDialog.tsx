@@ -21,7 +21,6 @@ import { playerPunishmentValidator } from "~/routes/admin/player-punishments";
 import { TextField } from "~/components/form/TextField";
 import { Select } from "~/components/form/Select";
 import { HiX } from "react-icons/hi";
-import { useIsSubmitting } from "remix-validated-form";
 
 type Props = {
   player: Player | undefined;
