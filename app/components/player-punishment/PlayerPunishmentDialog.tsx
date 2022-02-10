@@ -41,7 +41,6 @@ export function PlayerPunishmentDialog({
   isOpen,
 }: Props) {
   const [playerPunishments, setPlayerPunishments] = useState([0]);
-  const isSubmitting = useIsSubmitting();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -135,7 +134,7 @@ export function PlayerPunishmentDialog({
                 type={"submit"}
                 form={"playerPunishmentForm"}
               >
-                {isSubmitting ? "Wird bestraft...." : "Strafe hinzufügen"}
+                Strafe hinzufügen
               </Button>
             </Flex>
           </HStack>

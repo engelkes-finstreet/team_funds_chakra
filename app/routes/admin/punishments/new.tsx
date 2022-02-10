@@ -28,25 +28,27 @@ export const action: ActionFunction = async ({ request }) => {
     createOtherPunishment,
   } = data.data;
 
-  const punishment = await db.punishment.create({
-    data: {
-      name: punishmentName,
-      type: punishmentType,
-      amount: amount,
-      slug: punishmentName,
-      userId,
-      seasonId,
-    },
-  });
+  // const punishment = await db.punishment.create({
+  //   data: {
+  //     name: punishmentName,
+  //     type: punishmentType,
+  //     amount: amount,
+  //     slug: punishmentName,
+  //     userId,
+  //     seasonId,
+  //   },
+  // });
 
-  return await setFlashContent(
-    createOtherPunishment
-      ? "/admin/punishments/new"
-      : `/admin/punishments/${punishment.slug}`,
-    request,
-    `Strafe ${punishment.name} erfolgreich angelegt`,
-    "success"
-  );
+  // return await setFlashContent(
+  //   createOtherPunishment
+  //     ? "/admin/punishments/new"
+  //     : `/admin/punishments/${punishment.slug}`,
+  //   request,
+  //   `Strafe ${punishment.name} erfolgreich angelegt`,
+  //   "success"
+  // );
+
+  return null;
 };
 
 export default function NewPunishmentRoute() {

@@ -4,11 +4,11 @@ import { useEffect } from "react";
 
 export function useAfterTransition(callback: () => any) {
   const transition = useTransition();
-  const prevTransition = usePrevious(transition.state);
+  const isAdding = transition.state === "submitting";
 
   useEffect(() => {
-    if (transition.state === "idle" && prevTransition === "loading") {
+    if (!isAdding) {
       callback();
     }
-  }, [transition, prevTransition]);
+  }, [isAdding]);
 }
