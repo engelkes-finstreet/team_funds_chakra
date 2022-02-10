@@ -2,26 +2,17 @@ import {
   Alert,
   AlertIcon,
   Button,
-  Checkbox,
   Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  InputProps,
   Stack,
-  useMergeRefs,
 } from "@chakra-ui/react";
 import React, { ReactNode, PropsWithoutRef } from "react";
 
 import {
   ValidatedForm,
-  Validator,
   FormProps as ValidatedFormProps,
-  useField,
 } from "remix-validated-form";
 import { useActionData } from "@remix-run/react";
 import { useFormContext } from "remix-validated-form";
-import { FormError } from "~/components/form/FormError";
 
 export type FormProps<DataType> = {
   submitText: string;

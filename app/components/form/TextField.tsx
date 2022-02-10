@@ -23,7 +23,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>(
   ({ id, label, placeholder, name, type, inputLeftElement, ...props }, ref) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const mergeRef = useMergeRefs(inputRef, ref);
-    const { validate, clearError, getInputProps, defaultValue, error } =
+    const { validate, clearError, defaultValue, error } =
       useField(name);
 
     return (
