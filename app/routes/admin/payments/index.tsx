@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { db } from "~/utils/db.server";
-import { ActionFunction, redirect, useLoaderData } from "remix";
+import { ActionFunction, redirect, useLoaderData, useNavigate } from "remix";
 import { getPlayerName } from "~/utils/functions";
 import { useEffect, useState } from "react";
 import { Player, PunishmentType } from "@prisma/client";
@@ -49,37 +49,13 @@ export const paymentValidator = withZod(
   })
 );
 
-export const action: ActionFunction = async ({ request }) => {
-  const data = await paymentValidator.validate(await request.formData());
-  if (data.error) return validationError(data.error);
-  const { _userId, _playerId, _playerName, _seasonId, payments } = data.data;
-
-  for (let payment of payments) {
-    await db.playerPayments.create({
-      data: {
-        userId: _userId,
-        playerId: _playerId,
-        seasonId: _seasonId,
-        amount: payment.amount,
-        type: payment.paymentType,
-      },
-    });
-  }
-
-  return await setFlashContent(
-    "/admin/payments",
-    request,
-    `Bezahlung für ${_playerName} erfolgreich hinzugefügt`,
-    "success"
-  );
-};
-
 export default function PaymentsIndexRoute() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const data = useLoaderData<Awaited<ReturnType<typeof loader>>>();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>(
     undefined
   );
+  const navigate = useNavigate();
 
   useAfterTransition(onClose);
 
@@ -102,8 +78,7 @@ export default function PaymentsIndexRoute() {
               key={player.id}
               _hover={{ cursor: "pointer", opacity: 0.8 }}
               onClick={() => {
-                setSelectedPlayer(player);
-                onOpen();
+                navigate(`${player.slug}`);
               }}
             >
               <Td>{getPlayerName(player)}</Td>

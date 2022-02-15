@@ -22,3 +22,10 @@ export function formatCurrency(value: number) {
 export function toLocaleDate(value: string | Date) {
   return new Date(value).toLocaleDateString("de-DE");
 }
+
+export function playerNameFromSlug(slug: string) {
+  return slug
+    .split("-")
+    .map((name) => capitalize(name))
+    .join(" ");
+}

@@ -1,4 +1,4 @@
-import { capitalize } from "~/utils/functions";
+import { capitalize, playerNameFromSlug } from "~/utils/functions";
 import { BreadcrumbTransformer } from "./index";
 
 export const playerTransformer: Array<BreadcrumbTransformer> = [
@@ -14,12 +14,8 @@ export const playerTransformer: Array<BreadcrumbTransformer> = [
           name: "Erstellen",
         };
       } else {
-        const fromSlug = slug
-          .split("-")
-          .map((name) => capitalize(name))
-          .join(" ");
         return {
-          name: fromSlug,
+          name: playerNameFromSlug(slug),
         };
       }
     },
