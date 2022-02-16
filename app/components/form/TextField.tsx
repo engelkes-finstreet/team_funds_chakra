@@ -20,14 +20,16 @@ type Props = {
 } & InputProps;
 
 export const TextField = React.forwardRef<HTMLInputElement, Props>(
-  ({ id, label, placeholder, name, type, inputLeftElement, ...props }, ref) => {
+  (
+    { id, label, placeholder, name, type, inputLeftElement, hidden, ...props },
+    ref
+  ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const mergeRef = useMergeRefs(inputRef, ref);
-    const { validate, clearError, defaultValue, error } =
-      useField(name);
+    const { validate, clearError, defaultValue, error } = useField(name);
 
     return (
-      <FormControl id={name} isInvalid={Boolean(error)}>
+      <FormControl id={name} isInvalid={Boolean(error)} hidden={hidden}>
         <Flex justifyContent={"space-between"} alignItems={"baseline"}>
           <FormLabel>{label}</FormLabel>
           <FormError name={name} />
