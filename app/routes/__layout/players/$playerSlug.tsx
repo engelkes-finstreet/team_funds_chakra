@@ -1,5 +1,4 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { requireAdmin, requireUser } from "~/utils/session.server";
 import {
   getPlayerDetails,
   GetPlayerDetailsType,

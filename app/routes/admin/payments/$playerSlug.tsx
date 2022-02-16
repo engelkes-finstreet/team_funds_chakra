@@ -1,24 +1,23 @@
 import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import {
-  getPlayerDetails,
-  GetPlayerDetailsType,
-} from "~/backend/player/getPlayerDetails";
 import { ActionFunction, useLoaderData } from "remix";
-import { getPlayer, GetPlayerType } from "~/backend/player/getPlayer";
+import { getPlayer } from "~/backend/player/getPlayer";
 import { getPlayerName } from "~/utils/functions";
-import { paymentValidator } from "~/routes/admin/payments/index";
 import { TextField } from "~/components/form/TextField";
 import { Button, Flex, IconButton, VStack } from "@chakra-ui/react";
 import { PunishmentTypeComponent } from "~/components/punishment/PunishmentTypeSelect";
 import { HiX } from "react-icons/hi";
-import { ValidatedForm, validationError } from "remix-validated-form";
+import { validationError } from "remix-validated-form";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { useState } from "react";
 import { requireUserId } from "~/utils/session.server";
 import { Form } from "~/components/form/Form";
 import { db } from "~/utils/db.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { withZod } from "@remix-validated-form/with-zod";
+import { stringToNumberValidation } from "~/validations/utils";
+import { PunishmentType } from "@prisma/client";
+import * as z from "zod";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -27,6 +26,21 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 
   return { userId, player, season };
 };
+
+const paymentValidator = withZod(
+  z.object({
+    _playerId: z.string(),
+    _playerName: z.string(),
+    _userId: z.string(),
+    _seasonId: z.string(),
+    payments: z.array(
+      z.object({
+        paymentType: z.nativeEnum(PunishmentType),
+        amount: stringToNumberValidation("Erforderlich"),
+      })
+    ),
+  })
+);
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await paymentValidator.validate(await request.formData());

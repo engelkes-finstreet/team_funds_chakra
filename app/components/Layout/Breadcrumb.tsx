@@ -12,6 +12,7 @@ import { playerTransformer } from "~/breadcrumbs/playerTransformer";
 import { userTransformer } from "~/breadcrumbs/userTransformer";
 import { punishmentTransformer } from "~/breadcrumbs/punishmentTransformer";
 import { paymentTransformer } from "~/breadcrumbs/paymentTransformer";
+import { playerPunishmentTransformer } from "~/breadcrumbs/playerPunishmentTransformer";
 
 export function Breadcrumb() {
   const breadcrumbs = useBreadcrumb();
@@ -57,6 +58,7 @@ const transformers: { [key: string]: Array<BreadcrumbTransformer> } = {
   users: userTransformer,
   punishments: punishmentTransformer,
   payments: paymentTransformer,
+  "player-punishments": playerPunishmentTransformer,
 };
 
 function useBreadcrumb() {
