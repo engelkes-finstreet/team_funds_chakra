@@ -46,18 +46,7 @@ export function Layout({ user }: Props) {
         position="fixed"
       >
         <Box fontSize="sm" lineHeight="tall">
-          <Box
-            as="a"
-            href="#"
-            p="3"
-            display="block"
-            transition="background 0.1s"
-            rounded="xl"
-            _hover={{ bg: "whiteAlpha.200" }}
-            whiteSpace="nowrap"
-          >
-            <UserInfo user={user} />
-          </Box>
+          <UserInfo user={user} />
           <ScrollArea pt="5" pb="6">
             <Flex
               flexDirection={"column"}
@@ -110,16 +99,6 @@ export function Layout({ user }: Props) {
                   </>
                 ) : null}
               </Stack>
-              <Form action="/logout" method="post">
-                <Button
-                  type={"submit"}
-                  colorScheme={"blue"}
-                  w={"full"}
-                  variant={"outline"}
-                >
-                  Logout
-                </Button>
-              </Form>
             </Flex>
           </ScrollArea>
         </Box>
