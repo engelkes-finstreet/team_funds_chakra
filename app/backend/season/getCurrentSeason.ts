@@ -1,6 +1,7 @@
 import { db } from "~/utils/db.server";
 
 export async function getCurrentSeason() {
+  //TODO: What can we do without a season yet?
   const now = new Date();
   const seasons = await db.season.findMany({
     where: {

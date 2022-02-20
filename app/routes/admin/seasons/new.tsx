@@ -10,7 +10,7 @@ import { setFlashContent } from "~/utils/flashMessage.server";
 import { Prisma } from "@prisma/client";
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
+  const adminUserId = await requireUserId(request);
   const data = await seasonValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { startYear } = data.data;
@@ -21,7 +21,7 @@ export const action: ActionFunction = async ({ request }) => {
         startDate: new Date(Number(startYear), 5, 30),
         endDate: new Date(2022, 6, 1),
         slug: `${startYear}-${Number(startYear) + 1}`,
-        userId,
+        adminUserId,
       },
     });
 

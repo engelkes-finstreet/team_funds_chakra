@@ -1,6 +1,7 @@
 import { useField } from "remix-validated-form";
 import {
   FormControl,
+  FormControlProps,
   FormLabel,
   Select as ChakraSelect,
   SelectProps as ChakraSelectProps,
@@ -11,21 +12,20 @@ import { FormError } from "~/components/form/FormError";
 export type SelectProps = {
   name: string;
   children: React.ReactNode;
-  label: string;
-} & ChakraSelectProps;
+  label?: string;
+} & FormControlProps;
 
 export const Select = ({ name, label, children, ...rest }: SelectProps) => {
   const { validate, clearError, defaultValue, error } = useField(name);
 
   return (
-    <FormControl id={name} isInvalid={Boolean(error)}>
-      <FormLabel>{label}</FormLabel>
+    <FormControl id={name} isInvalid={Boolean(error)} {...rest}>
+      {label ? <FormLabel>{label}</FormLabel> : null}
       <ChakraSelect
         name={name}
         onChange={clearError}
         onBlur={validate}
         defaultValue={defaultValue}
-        {...rest}
       >
         {children}
       </ChakraSelect>

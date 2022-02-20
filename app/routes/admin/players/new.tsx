@@ -12,7 +12,7 @@ import { Checkbox } from "~/components/form/Checkbox";
 import { useResetForm } from "~/hooks/useResetForm";
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
+  const adminUserId = await requireUserId(request);
   const data = await playerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { firstName, lastName, position, createOtherPlayer } = data.data;
@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
       firstName,
       lastName,
       position,
-      userId,
+      adminUserId,
       slug: `${firstName}-${lastName}`,
     },
   });

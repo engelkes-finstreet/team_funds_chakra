@@ -4,6 +4,7 @@ import { Player, Prisma, Punishment, PunishmentType } from "@prisma/client";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 
 export async function getPlayerDetails(params: Params) {
+  console.log({ slug: params.playerSlug });
   const season = await getCurrentSeason();
   const player = await db.player.findUnique({
     where: { slug: params.playerSlug },
