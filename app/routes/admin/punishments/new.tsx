@@ -1,6 +1,6 @@
 import { Form } from "~/components/form/Form";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
-import { punishmentValidator } from "~/validations/punishmentValidation";
+import { punishmentValidator } from "~/utils/validations/punishmentValidation";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
 import { ActionFunction, redirect, useLoaderData } from "remix";
 import { validationError } from "remix-validated-form";

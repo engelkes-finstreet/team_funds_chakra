@@ -109,7 +109,5 @@ export function CatchBoundary() {
 }
 
 export function ErrorBoundary({ error }: any) {
-  console.log({ error });
-
   return <div>This is an error</div>;
 }

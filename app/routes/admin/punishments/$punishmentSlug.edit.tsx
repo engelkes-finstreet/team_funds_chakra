@@ -2,7 +2,7 @@ import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { db } from "~/utils/db.server";
 import { ActionFunction, redirect, useLoaderData } from "remix";
-import { punishmentValidator } from "~/validations/punishmentValidation";
+import { punishmentValidator } from "~/utils/validations/punishmentValidation";
 import { validationError } from "remix-validated-form";
 import { Form } from "~/components/form/Form";
 import PunishmentForm from "~/components/punishment/PunishmentForm";

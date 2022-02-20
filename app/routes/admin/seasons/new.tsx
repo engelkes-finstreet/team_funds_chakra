@@ -4,7 +4,7 @@ import { ActionFunction, useLoaderData } from "remix";
 import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
-import { seasonValidator } from "~/validations/seasonValidations";
+import { seasonValidator } from "~/utils/validations/seasonValidations";
 import { SeasonForm } from "~/components/season/SeasonForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { Prisma } from "@prisma/client";

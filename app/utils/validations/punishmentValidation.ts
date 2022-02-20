@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { withZod } from "@remix-validated-form/with-zod";
 import { PunishmentType } from "@prisma/client";
-import { checkbox, stringToNumberValidation } from "~/validations/utils";
+import { checkbox, stringToNumberValidation } from "~/utils/validations/utils";
 
 export const punishmentValidator = withZod(
   z.object({

@@ -1,23 +1,18 @@
 import {
   Avatar,
   Box,
-  Flex,
-  FlexProps,
   HStack,
-  Img,
   Text,
   useColorModeValue,
   useMenuButton,
 } from "@chakra-ui/react";
 import * as React from "react";
-import { HiSelector } from "react-icons/hi";
-import { UserWithoutPassword } from "~/utils/session.server";
 
 type Props = {
-  user: UserWithoutPassword;
+  email: string;
 };
 
-export const UserInfoButton = ({ user }: Props) => {
+export const UserInfoButton = ({ email }: Props) => {
   const buttonProps = useMenuButton();
   return (
     <HStack
@@ -37,13 +32,13 @@ export const UserInfoButton = ({ user }: Props) => {
       _active={{ bg: "gray.600" }}
       _focus={{ shadow: "outline" }}
     >
-      <Avatar size="sm" name={user?.username} />
+      <Avatar size="sm" name={email} />
       <Box lineHeight="1">
         <Text
           fontSize="md"
           color={useColorModeValue("whiteAlpha.700", "gray.400")}
         >
-          {user?.username}
+          {email}
         </Text>
       </Box>
     </HStack>

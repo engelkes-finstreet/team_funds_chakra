@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
 import { db } from "~/utils/db.server";
 import { createCookieSessionStorage, redirect } from "remix";
-import { User } from "@prisma/client";
+import { AdminUser, User } from "@prisma/client";
 import { URLSearchParams } from "url";
-import { setFlashContent } from "~/utils/flashMessage.server";
 
 export async function register(username: string, password: string) {
   const passwordHash = await bcrypt.hash(password, 10);
@@ -12,8 +11,26 @@ export async function register(username: string, password: string) {
   });
 }
 
-export async function login(username: string, password: string) {
-  const user = await db.user.findUnique({ where: { username } });
+export async function registerAdminUser(email: string, password: string) {
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  return db.adminUser.create({
+    data: { email, passwordHash, slug: email },
+  });
+}
+
+export async function loginAdminUser(email: string, password: string) {
+  const admin = await db.adminUser.findUnique({ where: { email } });
+  if (!admin) return null;
+
+  const isCorrectPassword = await bcrypt.compare(password, admin.passwordHash);
+  if (!isCorrectPassword || !admin.isApproved) return null;
+
+  return admin;
+}
+
+export async function login(email: string, password: string) {
+  const user = await db.user.findUnique({ where: { email } });
   if (!user) return null;
   const isCorrectPassword = await bcrypt.compare(password, user.passwordHash);
   if (!isCorrectPassword) return null;
@@ -78,6 +95,31 @@ export async function requireUser(
   }
 }
 
+export async function requireAndReturnAdminUser(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+
+  if (!userId || typeof userId !== "string") {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/admin/login?${searchParams}`);
+  }
+
+  const admin = await db.adminUser.findUnique({ where: { id: userId } });
+
+  if (!admin) {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/login?${searchParams}`);
+  }
+
+  const { passwordHash, ...userWithoutPassword } = admin;
+  return { admin: userWithoutPassword };
+}
+
+export type AdminWithoutPassword = Omit<AdminUser, "passwordHash">;
+
 export async function requireAndReturnUser(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
@@ -135,13 +177,24 @@ export async function logout(request: Request) {
 
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
+  session.set("userId", userId);
+  session.set("isAdmin", false);
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await storage.commitSession(session),
     },
   });
-  session.set("userId", userId);
-  session.set("role", user?.role);
+}
+
+export async function createAdminSession(
+  adminUserId: string,
+  redirectTo: string
+) {
+  const session = await storage.getSession();
+
+  session.set("userId", adminUserId);
+  session.set("isAdmin", true);
+
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),

@@ -1,18 +1,17 @@
-import { Layout } from "~/components/Layout/Layout";
-import { LoaderFunction, useLoaderData } from "remix";
+import { AdminLayout } from "~/components/Layout/Layout";
+import { useLoaderData } from "remix";
 import {
   getUserSession,
-  requireAndReturnUser,
-  UserWithoutPassword,
+  requireAndReturnAdminUser,
 } from "~/utils/session.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
 
-type LoaderData = { user: UserWithoutPassword };
-export let loader: LoaderFunction = async ({ request, params }) => {
+export let loader = async ({ request, params }: DataFunctionArgs) => {
   const session = await getUserSession(request);
-  const role = session.get("role");
+  const isAdmin = session.get("isAdmin");
 
-  if (role !== "ADMIN") {
+  if (!isAdmin) {
     throw await setFlashContent(
       "/",
       request,
@@ -22,14 +21,11 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     );
   }
 
-  const user = await requireAndReturnUser(request);
-
-  const data: LoaderData = { user };
-  return data;
+  return await requireAndReturnAdminUser(request);
 };
 
 export default function AdminRoute() {
-  const data = useLoaderData<LoaderData>();
+  const { admin } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
 
-  return <Layout user={data.user} />;
+  return <AdminLayout admin={admin} />;
 }

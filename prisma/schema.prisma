@@ -7,24 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  USER
-}
-
-model User {
+model AdminUser {
   id                String              @id @default(uuid())
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-  username          String              @unique
+  email             String              @unique
   slug              String              @unique
   passwordHash      String
+  isApproved        Boolean             @default(false)
   seasons           Season[]
   players           Player[]
-  role              Role                @default(USER)
   Punishment        Punishment[]
   PlayerPayments    PlayerPayments[]
   PlayerPunishments PlayerPunishments[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  email        String   @unique
+  firstName    String   @unique
+  lastName     String   @unique
+  passwordHash String
+  player       Player?
 }
 
 model Season {
@@ -33,8 +39,8 @@ model Season {
   updatedAt         DateTime            @updatedAt
   startDate         DateTime
   endDate           DateTime
-  userId            String
-  createdBy         User                @relation(fields: [userId], references: [id])
+  adminUserId       String
+  createdBy         AdminUser           @relation(fields: [adminUserId], references: [id])
   slug              String              @unique
   punishments       Punishment[]
   PlayerPayments    PlayerPayments[]
@@ -55,8 +61,10 @@ model Player {
   lastName          String
   position          Position            @default(PLAYER)
   slug              String              @unique
-  userId            String
-  createdBy         User                @relation(fields: [userId], references: [id])
+  adminUserId       String
+  createdBy         AdminUser           @relation(fields: [adminUserId], references: [id])
+  userId            String?             @unique
+  connectedUser     User?               @relation(fields: [userId], references: [id])
   PlayerPayments    PlayerPayments[]
   PlayerPunishments PlayerPunishments[]
 }
@@ -74,33 +82,33 @@ model Punishment {
   slug              String              @unique
   amount            Int
   type              PunishmentType
-  userId            String
-  createdBy         User                @relation(fields: [userId], references: [id])
+  adminUserId       String
+  createdBy         AdminUser           @relation(fields: [adminUserId], references: [id])
   seasonId          String
   season            Season              @relation(fields: [seasonId], references: [id])
   playerPunishments PlayerPunishments[]
 }
 
 model PlayerPayments {
-  id        String         @id @default(uuid())
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  userId    String
-  createdBy User           @relation(fields: [userId], references: [id])
-  playerId  String
-  player    Player         @relation(fields: [playerId], references: [id])
-  amount    Int
-  type      PunishmentType
-  seasonId  String
-  season    Season         @relation(fields: [seasonId], references: [id])
+  id          String         @id @default(uuid())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  adminUserId String
+  createdBy   AdminUser      @relation(fields: [adminUserId], references: [id])
+  playerId    String
+  player      Player         @relation(fields: [playerId], references: [id])
+  amount      Int
+  type        PunishmentType
+  seasonId    String
+  season      Season         @relation(fields: [seasonId], references: [id])
 }
 
 model PlayerPunishments {
   id           String     @id @default(uuid())
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
-  userId       String
-  createdBy    User       @relation(fields: [userId], references: [id])
+  adminUserId  String
+  createdBy    AdminUser  @relation(fields: [adminUserId], references: [id])
   playerId     String
   player       Player     @relation(fields: [playerId], references: [id])
   punishmentId String

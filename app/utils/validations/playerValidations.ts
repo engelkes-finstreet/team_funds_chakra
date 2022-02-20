@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { withZod } from "@remix-validated-form/with-zod";
 import { Position } from "@prisma/client";
-import { checkbox } from "~/validations/utils";
+import { checkbox } from "~/utils/validations/utils";
 
 export const playerValidator = withZod(
   z.object({

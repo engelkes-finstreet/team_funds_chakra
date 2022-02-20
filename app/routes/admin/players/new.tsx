@@ -2,7 +2,7 @@ import { ActionFunction } from "remix";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
-import { playerValidator } from "~/validations/playerValidations";
+import { playerValidator } from "~/utils/validations/playerValidations";
 import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";

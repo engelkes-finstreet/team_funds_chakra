@@ -8,7 +8,7 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
 import { PunishmentType } from "@prisma/client";
-import { stringToNumberValidation } from "~/validations/utils";
+import { stringToNumberValidation } from "~/utils/validations/utils";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
 import { TextField } from "~/components/form/TextField";

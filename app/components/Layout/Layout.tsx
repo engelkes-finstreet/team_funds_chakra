@@ -1,36 +1,52 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Stack,
-  useColorModeValue as mode,
-} from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import * as React from "react";
-import { Form, Outlet } from "remix";
-import { MobileMenuButton } from "./MobileMenuButton";
-import { ScrollArea } from "./ScrollArea";
 import { SidebarLink } from "./SidebarLink";
-import { useMobileMenuState } from "./useMobileMenuState";
 import { UserInfo } from "./UserInfo";
-import { UserWithoutPassword } from "~/utils/session.server";
+import {
+  AdminWithoutPassword,
+  UserWithoutPassword,
+} from "~/utils/session.server";
 import { Gi3DHammer, GiPayMoney, GiSoccerKick } from "react-icons/gi";
 import { BiTimeFive } from "react-icons/bi";
-import { AiOutlineUser } from "react-icons/ai";
-import { Breadcrumb } from "~/components/Layout/Breadcrumb";
+import { AiOutlineContacts, AiOutlineUser } from "react-icons/ai";
 import { NavGroup } from "~/components/Layout/NavGroup";
+import { Navigation } from "./Navigation";
+import { Container } from "~/components/Layout/Container";
 
 type Props = {
   user: UserWithoutPassword;
 };
 
 export function Layout({ user }: Props) {
-  const { isOpen, toggle } = useMobileMenuState();
-  const isAdmin = user.role === "ADMIN";
+  return (
+    <Shell email={user.email}>
+      <UserNavigationLinks />
+    </Shell>
+  );
+}
 
+type AdminLayoutProps = {
+  admin: AdminWithoutPassword;
+};
+
+export function AdminLayout({ admin }: AdminLayoutProps) {
+  return (
+    <Shell email={admin.email}>
+      <AdminNavigationLinks />
+    </Shell>
+  );
+}
+
+type ShellProps = {
+  email: string;
+  children: React.ReactNode;
+};
+
+const Shell = ({ email, children }: ShellProps) => {
   return (
     <Flex
       height="100vh"
-      bg={mode("blue.800", "gray.800")}
+      bg={useColorModeValue("blue.800", "gray.800")}
       overflow="hidden"
       sx={{ "--sidebar-width": "16rem" }}
     >
@@ -46,103 +62,58 @@ export function Layout({ user }: Props) {
         position="fixed"
       >
         <Box fontSize="sm" lineHeight="tall">
-          <UserInfo user={user} />
-          <ScrollArea pt="5" pb="6">
-            <Flex
-              flexDirection={"column"}
-              justifyContent={"space-between"}
-              h={"full"}
-            >
-              <Stack pb="6">
-                <NavGroup label={""}>
-                  <SidebarLink icon={<GiSoccerKick />} to={"/players"}>
-                    Spieler
-                  </SidebarLink>
-                  <SidebarLink icon={<Gi3DHammer />} to={"/punishments"}>
-                    Strafen
-                  </SidebarLink>
-                </NavGroup>
-                {isAdmin ? (
-                  <>
-                    <NavGroup label={"Kasse"}>
-                      <SidebarLink
-                        to={"/admin/player-punishments"}
-                        icon={<Gi3DHammer />}
-                      >
-                        Strafe hinzufügen
-                      </SidebarLink>
-                      <SidebarLink icon={<GiPayMoney />} to={"/admin/payments"}>
-                        Zahlungen
-                      </SidebarLink>
-                    </NavGroup>
-                    <NavGroup label={"Admin"}>
-                      <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
-                        Saisons
-                      </SidebarLink>
-                      <SidebarLink
-                        icon={<GiSoccerKick />}
-                        to={"/admin/players"}
-                      >
-                        Spieler
-                      </SidebarLink>
-                      <SidebarLink
-                        icon={<Gi3DHammer />}
-                        to={"/admin/punishments"}
-                      >
-                        Strafen
-                      </SidebarLink>
-                      <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
-                        Users
-                      </SidebarLink>
-                      Patric
-                    </NavGroup>
-                  </>
-                ) : null}
-              </Stack>
-            </Flex>
-          </ScrollArea>
+          <UserInfo email={email} />
+          <Navigation>{children}</Navigation>
         </Box>
       </Box>
-      <Box
-        flex="1"
-        p={{ base: "0", md: "6" }}
-        marginStart={{ md: "var(--sidebar-width)" }}
-        position="relative"
-        left={isOpen ? "var(--sidebar-width)" : "0"}
-        transition="left 0.2s"
-      >
-        <Box
-          maxW="2560px"
-          bg={mode("white", "gray.700")}
-          height="100%"
-          pb="6"
-          rounded={{ md: "lg" }}
-        >
-          <Flex direction="column" height="full">
-            <Flex
-              w="full"
-              py="4"
-              justify="space-between"
-              align="center"
-              px="10"
-            >
-              <Flex
-                align="center"
-                minH="8"
-                justifyContent={"space-between"}
-                w={"full"}
-              >
-                <MobileMenuButton onClick={toggle} isOpen={isOpen} />
-                <Breadcrumb />
-                <div />
-              </Flex>
-            </Flex>
-            <Flex direction="column" flex="1" overflow="auto" px="10" pt="4">
-              <Outlet />
-            </Flex>
-          </Flex>
-        </Box>
-      </Box>
+      <Container />
     </Flex>
   );
-}
+};
+
+const UserNavigationLinks = () => {
+  return (
+    <>
+      <NavGroup label={""}>
+        <SidebarLink icon={<GiSoccerKick />} to={"/players"}>
+          Spieler
+        </SidebarLink>
+        <SidebarLink icon={<Gi3DHammer />} to={"/punishments"}>
+          Strafen
+        </SidebarLink>
+      </NavGroup>
+    </>
+  );
+};
+
+const AdminNavigationLinks = () => {
+  return (
+    <>
+      <NavGroup label={"Kasse"}>
+        <SidebarLink to={"/admin/player-punishments"} icon={<Gi3DHammer />}>
+          Strafe hinzufügen
+        </SidebarLink>
+        <SidebarLink icon={<GiPayMoney />} to={"/admin/payments"}>
+          Zahlungen
+        </SidebarLink>
+      </NavGroup>
+      <NavGroup label={"Admin"}>
+        <SidebarLink icon={<BiTimeFive />} to={"/admin/seasons"}>
+          Saisons
+        </SidebarLink>
+        <SidebarLink icon={<GiSoccerKick />} to={"/admin/players"}>
+          Spieler
+        </SidebarLink>
+        <SidebarLink icon={<Gi3DHammer />} to={"/admin/punishments"}>
+          Strafen
+        </SidebarLink>
+        <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
+          Users
+        </SidebarLink>
+        <SidebarLink icon={<AiOutlineContacts />} to={"/admin/connect-user"}>
+          User verbinden
+        </SidebarLink>
+      </NavGroup>
+    </>
+  );
+};

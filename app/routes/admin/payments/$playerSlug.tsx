@@ -15,7 +15,7 @@ import { Form } from "~/components/form/Form";
 import { db } from "~/utils/db.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { withZod } from "@remix-validated-form/with-zod";
-import { stringToNumberValidation } from "~/validations/utils";
+import { stringToNumberValidation } from "~/utils/validations/utils";
 import { PunishmentType } from "@prisma/client";
 import * as z from "zod";
 

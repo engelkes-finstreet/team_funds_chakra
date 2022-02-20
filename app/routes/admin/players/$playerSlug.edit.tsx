@@ -1,7 +1,7 @@
 import { Player } from "@prisma/client";
 import { ActionFunction, LoaderFunction, redirect, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
-import { playerValidator } from "~/validations/playerValidations";
+import { playerValidator } from "~/utils/validations/playerValidations";
 import { validationError } from "remix-validated-form";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";

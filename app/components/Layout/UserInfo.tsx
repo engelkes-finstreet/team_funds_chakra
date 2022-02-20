@@ -18,16 +18,13 @@ import { UserWithoutPassword } from "~/utils/session.server";
 import { Form, useFetcher } from "remix";
 
 type Props = {
-  user: UserWithoutPassword;
+  email: string;
 };
 
-export const UserInfo = ({ user }: Props) => {
-  const styles = useMultiStyleConfig("Menu", {});
-  console.log({ styles: styles.item });
-
+export const UserInfo = ({ email }: Props) => {
   return (
     <Menu>
-      <UserInfoButton user={user} />
+      <UserInfoButton email={email} />
       <MenuList
         shadow="lg"
         py="4"
