@@ -3,7 +3,7 @@ import { PasswordField } from "../form/PasswordField";
 import { TextField } from "~/components/form/TextField";
 import { useSearchParams } from "remix";
 
-export const RegisterForm = () => {
+export const RegisterAdminForm = () => {
   const [searchParams] = useSearchParams();
   return (
     <>
@@ -13,6 +13,28 @@ export const RegisterForm = () => {
         value={searchParams.get("redirectTo") ?? "/"}
       />
       <TextField name={"email"} label={"E-Mail"} autoFocus={true} />
+      <PasswordField label={"Passwort"} name={"password"} />
+      <PasswordField
+        label={"Passwort Bestätigen"}
+        name={"passwordConfirmation"}
+      />
+    </>
+  );
+};
+
+export const RegisterForm = () => {
+  const [searchParams] = useSearchParams();
+
+  return (
+    <>
+      <input
+        type="hidden"
+        name="redirectTo"
+        value={searchParams.get("redirectTo") ?? "/"}
+      />
+      <TextField name={"email"} label={"E-Mail"} autoFocus={true} />
+      <TextField name={"firstName"} label={"Vorname"} />
+      <TextField name={"lastName"} label={"Nachname"} />
       <PasswordField label={"Passwort"} name={"password"} />
       <PasswordField
         label={"Passwort Bestätigen"}

@@ -6,14 +6,22 @@ import { Form } from "~/components/form/Form";
 import { RegisterForm } from "~/components/auth/RegisterForm";
 import { adminRegisterValidator } from "~/utils/validations/authValidations";
 import { Validator } from "remix-validated-form";
+import React from "react";
 
 type Props = {
   heading: string;
   loginRoute: string;
   validator: Validator<any>;
+  renderRegisterForm: () => React.ReactNode;
 };
 
-export function RegisterPage({ heading, loginRoute, validator }: Props) {
+export function RegisterPage({
+  heading,
+  loginRoute,
+  validator,
+  renderRegisterForm,
+}: Props) {
+  const registerForm = renderRegisterForm();
   return (
     <>
       <Logo mx="auto" h="8" mb={{ base: "10", md: "20" }} />
@@ -26,7 +34,7 @@ export function RegisterPage({ heading, loginRoute, validator }: Props) {
       </Text>
       <Card>
         <Form validator={validator} submitText={"Registrieren"} method={"post"}>
-          <RegisterForm />
+          {registerForm}
         </Form>
       </Card>
     </>

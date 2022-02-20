@@ -4,10 +4,21 @@ import { createCookieSessionStorage, redirect } from "remix";
 import { AdminUser, User } from "@prisma/client";
 import { URLSearchParams } from "url";
 
-export async function register(username: string, password: string) {
+export async function register(
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string
+) {
   const passwordHash = await bcrypt.hash(password, 10);
   return db.user.create({
-    data: { username, passwordHash, slug: username },
+    data: {
+      email,
+      passwordHash,
+      slug: `${firstName}-${lastName}`,
+      firstName,
+      lastName,
+    },
   });
 }
 
@@ -168,6 +179,14 @@ export async function getUser(request: Request) {
 
 export async function logout(request: Request) {
   const session = await storage.getSession(request.headers.get("Cookie"));
+  if (session.get("isAdmin")) {
+    return redirect("/admin/login", {
+      headers: {
+        "Set-Cookie": await storage.destroySession(session),
+      },
+    });
+  }
+
   return redirect("/login", {
     headers: {
       "Set-Cookie": await storage.destroySession(session),

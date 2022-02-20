@@ -4,14 +4,16 @@ import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/requests";
 import { createUserSession, register } from "~/utils/session.server";
 import { RegisterPage } from "~/components/auth/RegisterPage";
+import { registerValidator } from "~/utils/validations/authValidations";
+import { RegisterForm } from "~/components/auth/RegisterForm";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await registerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
-  const { email, password, redirectTo } = data.data;
+  const { email, password, firstName, lastName, redirectTo } = data.data;
 
   const userExists = await db.user.findFirst({
-    where: { username: email },
+    where: { email },
   });
 
   if (userExists) {
@@ -20,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
-  const user = await register(email, password);
+  const user = await register(email, password, firstName, lastName);
   if (!user) {
     return badRequest({
       formError: `Ups, uns ist ein Fehler beim Erstellen deines Users unterlaufen`,
@@ -34,6 +36,8 @@ export default function RegisterRoute() {
     <RegisterPage
       heading={"Registriere deinen Account"}
       loginRoute={"/login"}
+      validator={registerValidator}
+      renderRegisterForm={() => <RegisterForm />}
     />
   );
 }
