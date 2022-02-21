@@ -31,9 +31,6 @@ export const UserInfo = ({ email }: Props) => {
         color={useColorModeValue("gray.600", "gray.200")}
         px="3"
       >
-        <MenuItem rounded="md">Profil</MenuItem>
-        <MenuItem rounded="md">Einstellungen</MenuItem>
-        <MenuDivider />
         <Form action="/logout" method="post">
           <MenuItem rounded={"md"}>
             <button type={"submit"}>Logout</button>

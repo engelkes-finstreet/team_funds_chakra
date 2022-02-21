@@ -6,7 +6,12 @@ import {
   AdminWithoutPassword,
   UserWithoutPassword,
 } from "~/utils/session.server";
-import { Gi3DHammer, GiPayMoney, GiSoccerKick } from "react-icons/gi";
+import {
+  Gi3DHammer,
+  GiPayMoney,
+  GiSettingsKnobs,
+  GiSoccerKick,
+} from "react-icons/gi";
 import { BiTimeFive } from "react-icons/bi";
 import { AiOutlineContacts, AiOutlineUser } from "react-icons/ai";
 import { NavGroup } from "~/components/Layout/NavGroup";
@@ -80,6 +85,17 @@ const UserNavigationLinks = () => {
         </SidebarLink>
         <SidebarLink icon={<Gi3DHammer />} to={"/punishments"}>
           Strafen
+        </SidebarLink>
+      </NavGroup>
+      <NavGroup label={"Profile"}>
+        <SidebarLink to={"/me"} icon={<AiOutlineUser />}>
+          Mein Profil
+        </SidebarLink>
+        <SidebarLink to={"/me/settings"} icon={<GiSettingsKnobs />}>
+          Settings
+        </SidebarLink>
+        <SidebarLink to={"/me/pay"} icon={<GiPayMoney />}>
+          Bezahlen
         </SidebarLink>
       </NavGroup>
     </>
