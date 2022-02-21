@@ -49,6 +49,43 @@ export async function login(email: string, password: string) {
   return user;
 }
 
+export async function resetPassword(
+  userId: string,
+  oldPassword: string,
+  password: string
+) {
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user) return null;
+  const isCorrectPasswort = await bcrypt.compare(
+    oldPassword,
+    user.passwordHash
+  );
+  if (!isCorrectPasswort)
+    throw new Response("Oh Snap, wrong password", { status: 401 });
+  const passwordHash = await bcrypt.hash(password, 10);
+  return db.user.update({
+    where: { id: userId },
+    data: {
+      passwordHash,
+    },
+  });
+}
+
+export async function updateUser(
+  userId: string,
+  firstName: string,
+  lastName: string
+) {
+  return db.user.update({
+    where: { id: userId },
+    data: {
+      firstName,
+      lastName,
+      slug: `${firstName}-${lastName}`,
+    },
+  });
+}
+
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
   throw new Error("SESSION_SECRET must be set");

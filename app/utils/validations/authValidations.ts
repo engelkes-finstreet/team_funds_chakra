@@ -24,14 +24,25 @@ const email = z
   .nonempty("Du musst eine E-Mail eingeben")
   .email("Du musst eine gülte Mail-Adresse eingeben");
 
+const firstName = z.string().nonempty("Vorname muss eingegeben werden");
+const lastName = z.string().nonempty("Nachname muss eingegeben werden");
+
+export const updateProfileValidator = withZod(
+  z.object({
+    _userId: z.string(),
+    firstName,
+    lastName,
+  })
+);
+
 export const registerValidator = withZod(
   z
     .object({
       email: email,
       password: password,
       passwordConfirmation: password,
-      firstName: z.string().nonempty("Vorname muss eingegeben werden"),
-      lastName: z.string().nonempty("Nachname muss eingegeben werden"),
+      firstName,
+      lastName,
       redirectTo: z.string(),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
@@ -47,6 +58,20 @@ export const adminRegisterValidator = withZod(
       password: password,
       passwordConfirmation: password,
       redirectTo: z.string(),
+    })
+    .refine((data) => data.password === data.passwordConfirmation, {
+      message: "Passwörter stimmen nicht überein",
+      path: ["passwordConfirmation"],
+    })
+);
+
+export const resetPasswordValidator = withZod(
+  z
+    .object({
+      _userId: z.string(),
+      oldPassword: z.string().nonempty("Altes Passwort muss eingegeben werden"),
+      password,
+      passwordConfirmation: password,
     })
     .refine((data) => data.password === data.passwordConfirmation, {
       message: "Passwörter stimmen nicht überein",

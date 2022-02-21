@@ -1,10 +1,4 @@
-import {
-  Alert,
-  AlertIcon,
-  Button,
-  Flex,
-  Stack,
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, Button, Flex, Stack } from "@chakra-ui/react";
 import React, { ReactNode, PropsWithoutRef } from "react";
 
 import {
@@ -34,7 +28,6 @@ export function Form<DataType>({
       validator={validator}
       method={method}
       formRef={formRef}
-      resetAfterSubmit={true}
       {...props}
     >
       <ExtendedForm
@@ -84,6 +77,28 @@ export const ExtendedForm = ({
         >
           {submitText}
         </Button>
+      </Flex>
+    </Stack>
+  );
+};
+
+type HeadlessFormProps = {
+  renderForm: () => React.ReactNode;
+  renderButton: () => React.ReactNode;
+};
+
+export const HeadlessForm = ({
+  renderForm,
+  renderButton,
+}: HeadlessFormProps) => {
+  const form = renderForm();
+  const button = renderButton();
+
+  return (
+    <Stack spacing={6}>
+      <Stack spacing={4}>{form}</Stack>
+      <Flex justifyContent={"flex-end"} alignItems={"center"} gap={8}>
+        {button}
       </Flex>
     </Stack>
   );
