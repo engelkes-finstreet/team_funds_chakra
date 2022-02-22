@@ -1,4 +1,3 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { ActionFunction, useLoaderData } from "remix";
 import { getPlayer } from "~/backend/player/getPlayer";
@@ -78,7 +77,7 @@ export default function PlayerPaymentRoute() {
   const [payments, setPayments] = useState([0]);
 
   return (
-    <PageWrapper heading={`Bezahlung von ${getPlayerName(player)} hinzufügen`}>
+    <>
       <Form
         submitText={"Bezahlung hinzufügen"}
         validator={paymentValidator}
@@ -136,6 +135,6 @@ export default function PlayerPaymentRoute() {
           </Flex>
         </VStack>
       </Form>
-    </PageWrapper>
+    </>
   );
 }

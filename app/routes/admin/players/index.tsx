@@ -1,34 +1,9 @@
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useCatch,
-  useFetcher,
-  useLoaderData,
-  useNavigate,
-} from "remix";
-import { Player, Prisma } from "@prisma/client";
+import { ActionFunction, useCatch, useLoaderData } from "remix";
+import { Prisma } from "@prisma/client";
 import { db } from "~/utils/db.server";
-import {
-  Button,
-  Center,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useBreakpointValue,
-  VStack,
-} from "@chakra-ui/react";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { validationError } from "remix-validated-form";
-import { withZod } from "@remix-validated-form/with-zod";
-import * as z from "zod";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
-import { DeletePlayer } from "~/components/player/DeletePlayer";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import {
   getAllPlayers,
@@ -85,15 +60,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function PlayerIndexRoute() {
   const { players } = useLoaderData<GetAllPlayersType>();
 
-  return (
-    <PageWrapper
-      heading={"Alle Spieler"}
-      buttonText={"Neuen Spieler erstellen"}
-      linkTo={"new"}
-    >
-      <AllPlayersTable isAdmin={true} players={players} />
-    </PageWrapper>
-  );
+  return <AllPlayersTable isAdmin={true} players={players} />;
 }
 
 export function CatchBoundary() {

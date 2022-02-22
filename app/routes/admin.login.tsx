@@ -1,16 +1,10 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Box } from "@chakra-ui/react";
-import { ActionFunction, Outlet } from "remix";
+import { ActionFunction } from "remix";
 import { LoginPage } from "~/components/auth/LoginPage";
 import React from "react";
 import { loginValidator } from "~/utils/validations/authValidations";
 import { validationError } from "remix-validated-form";
-import {
-  createAdminSession,
-  createUserSession,
-  login,
-  loginAdminUser,
-} from "~/utils/session.server";
+import { createAdminSession, loginAdminUser } from "~/utils/session.server";
 import { badRequest } from "~/utils/requests";
 
 export const action: ActionFunction = async ({ request }) => {

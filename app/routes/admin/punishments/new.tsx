@@ -1,12 +1,9 @@
 import { Form } from "~/components/form/Form";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { punishmentValidator } from "~/utils/validations/punishmentValidation";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
-import { ActionFunction, redirect, useLoaderData } from "remix";
+import { ActionFunction } from "remix";
 import { validationError } from "remix-validated-form";
 import { requireUserId } from "~/utils/session.server";
-import { db } from "~/utils/db.server";
-import { setFlashContent } from "~/utils/flashMessage.server";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getAllSeasons } from "~/backend/season/getAllSeasons";
 import { useResetForm } from "~/hooks/useResetForm";
@@ -61,7 +58,7 @@ export default function NewPunishmentRoute() {
   const { formRef, inputRef } = useResetForm();
 
   return (
-    <PageWrapper heading={"Neue Strafe erstellen"}>
+    <>
       <Form
         submitText={"Erstellen"}
         validator={punishmentValidator}
@@ -77,6 +74,6 @@ export default function NewPunishmentRoute() {
       >
         <PunishmentForm firstInputRef={inputRef} />
       </Form>
-    </PageWrapper>
+    </>
   );
 }

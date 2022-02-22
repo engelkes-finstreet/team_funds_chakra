@@ -1,7 +1,6 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getPlayerDetails } from "~/backend/player/getPlayerDetails";
 import { useLoaderData } from "remix";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { getPlayerName } from "~/utils/functions";
 import { PlayerProfilePage } from "~/components/player/PlayerProfilePage";
 import { TFHandle } from "~/utils/types/handle.types";
@@ -18,9 +17,5 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 export default function PlayerDetailsRoute() {
   const playerDetails = useLoaderData<LoaderData>();
 
-  return (
-    <PageWrapper heading={getPlayerName(playerDetails.player)}>
-      <PlayerProfilePage playerDetails={playerDetails} />
-    </PageWrapper>
-  );
+  return <PlayerProfilePage playerDetails={playerDetails} />;
 }

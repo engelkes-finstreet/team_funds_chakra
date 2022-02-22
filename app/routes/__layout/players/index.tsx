@@ -1,4 +1,3 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { AllPlayersTable } from "~/components/player/AllPlayersTable";
 import { useLoaderData } from "remix";
 import {
@@ -14,9 +13,5 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 export default function PlayerIndexRouter() {
   const { players } = useLoaderData<GetAllPlayersType>();
 
-  return (
-    <PageWrapper heading={"Alle Spieler"}>
-      <AllPlayersTable isAdmin={false} players={players} />
-    </PageWrapper>
-  );
+  return <AllPlayersTable isAdmin={false} players={players} />;
 }

@@ -1,4 +1,3 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
 import { ActionFunction, useLoaderData } from "remix";
 import { requireUserId } from "~/utils/session.server";
@@ -54,10 +53,8 @@ export const action: ActionFunction = async ({ request }) => {
 export default function NewSeasonRoute() {
   useLoaderData();
   return (
-    <PageWrapper heading={"Neue Saison erstellen"}>
-      <Form submitText={"Erstelen"} validator={seasonValidator} method={"post"}>
-        <SeasonForm />
-      </Form>
-    </PageWrapper>
+    <Form submitText={"Erstelen"} validator={seasonValidator} method={"post"}>
+      <SeasonForm />
+    </Form>
   );
 }

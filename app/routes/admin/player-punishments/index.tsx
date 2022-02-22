@@ -1,10 +1,8 @@
 import { useLoaderData, useNavigate } from "remix";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Table, Tbody, Td, Text, Tr } from "@chakra-ui/react";
 import { getPlayerName } from "~/utils/functions";
 import { getAllPlayers } from "~/backend/player/getAllPlayers";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { TFHandle } from "~/utils/types/handle.types";
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
@@ -16,7 +14,7 @@ export default function () {
   const navigate = useNavigate();
 
   return (
-    <PageWrapper heading={"Spieler bestrafen"}>
+    <>
       <Text fontSize={"md"} mb={4}>
         Klicke einen Spieler an um eine Strafe hinzuzufügen
       </Text>
@@ -33,6 +31,6 @@ export default function () {
           ))}
         </Tbody>
       </Table>
-    </PageWrapper>
+    </>
   );
 }

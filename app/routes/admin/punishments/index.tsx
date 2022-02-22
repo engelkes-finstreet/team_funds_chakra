@@ -1,14 +1,10 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { db } from "~/utils/db.server";
 import { ActionFunction, useLoaderData } from "remix";
-import * as z from "zod";
-import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { Prisma } from "@prisma/client";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { AllPunishmentsTable } from "~/components/punishment/AllPunishmentsTable";
-import { TFHandle } from "~/utils/types/handle.types";
 import { deletePunishmentValidator } from "~/utils/validations/punishmentValidation";
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
@@ -64,13 +60,5 @@ export const action: ActionFunction = async ({ request }) => {
 export default function PunishmentsIndexRoute() {
   const data = useLoaderData<LoaderData>();
 
-  return (
-    <PageWrapper
-      heading={"Alle Strafen"}
-      buttonText={"Strafe erstellen"}
-      linkTo={"new"}
-    >
-      <AllPunishmentsTable isAdmin={true} punishments={data.punishments} />
-    </PageWrapper>
-  );
+  return <AllPunishmentsTable isAdmin={true} punishments={data.punishments} />;
 }

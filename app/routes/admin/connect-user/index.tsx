@@ -1,4 +1,3 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import {
   getAllConnectedPlayers,
@@ -35,7 +34,7 @@ export default function ConnectUserRoute() {
     useLoaderData<Awaited<ReturnType<typeof loader>>>();
 
   return (
-    <PageWrapper heading={"User mit Spieler verbinden"}>
+    <>
       <Flex flexDirection={"column"} gap={8}>
         <Flex flexDirection={"column"} gap={4}>
           <Heading size={"sm"} fontWeight={"bold"}>
@@ -59,7 +58,7 @@ export default function ConnectUserRoute() {
           ))}
         </Flex>
       </Flex>
-    </PageWrapper>
+    </>
   );
 }
 

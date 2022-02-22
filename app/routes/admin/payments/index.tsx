@@ -1,4 +1,3 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Table, Tbody, Td, Text, Tr } from "@chakra-ui/react";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { useLoaderData, useNavigate } from "remix";
@@ -14,7 +13,7 @@ export default function PaymentsIndexRoute() {
   const navigate = useNavigate();
 
   return (
-    <PageWrapper heading={"Bezahlen"}>
+    <>
       <Text fontSize={"md"} mb={4}>
         Klicke einen Spieler an um Bezahlungen hinzuzufügen
       </Text>
@@ -33,6 +32,6 @@ export default function PaymentsIndexRoute() {
           ))}
         </Tbody>
       </Table>
-    </PageWrapper>
+    </>
   );
 }

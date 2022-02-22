@@ -1,15 +1,12 @@
-import { Player } from "@prisma/client";
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from "remix";
+import { ActionFunction, LoaderFunction, useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
 import { playerValidator } from "~/utils/validations/playerValidations";
 import { validationError } from "remix-validated-form";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
 import { TFHandle } from "~/utils/types/handle.types";
-import { getPlayerDetails } from "~/backend/player/getPlayerDetails";
 import { getPlayer } from "~/backend/player/getPlayer";
 
 export const handle: TFHandle<LoaderData> = {
@@ -53,15 +50,13 @@ export default function PlayerEditRoute() {
   } = useLoaderData<LoaderData>();
 
   return (
-    <PageWrapper heading={`Spieler ${firstName} bearbeiten`}>
-      <Form
-        submitText={"Bearbeiten"}
-        validator={playerValidator}
-        method={"post"}
-        defaultValues={{ firstName, lastName, position }}
-      >
-        <PlayerForm />
-      </Form>
-    </PageWrapper>
+    <Form
+      submitText={"Bearbeiten"}
+      validator={playerValidator}
+      method={"post"}
+      defaultValues={{ firstName, lastName, position }}
+    >
+      <PlayerForm />
+    </Form>
   );
 }

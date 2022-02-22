@@ -1,18 +1,13 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Box } from "@chakra-ui/react";
-import { LoginPage } from "~/components/auth/LoginPage";
 import React from "react";
 import { RegisterPage } from "~/components/auth/RegisterPage";
 import { ActionFunction } from "remix";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/requests";
-import {
-  createUserSession,
-  register,
-  registerAdminUser,
-} from "~/utils/session.server";
+import { registerAdminUser } from "~/utils/session.server";
 import { adminRegisterValidator } from "~/utils/validations/authValidations";
+import { RegisterAdminForm } from "~/components/auth/RegisterForm";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await adminRegisterValidator.validate(await request.formData());
@@ -50,6 +45,7 @@ export default function AdminRegisterRoute() {
           heading={"Registriere deinen Admin-Account"}
           loginRoute={"/admin/login"}
           validator={adminRegisterValidator}
+          renderRegisterForm={() => <RegisterAdminForm />}
         />
       </Box>
     </Box>

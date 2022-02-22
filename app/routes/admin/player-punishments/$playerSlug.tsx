@@ -1,13 +1,11 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { requireUserId } from "~/utils/session.server";
 import { db } from "~/utils/db.server";
 import { ActionFunction, useLoaderData } from "remix";
-import { ValidatedForm, validationError } from "remix-validated-form";
+import { validationError } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
-import { PunishmentType } from "@prisma/client";
 import { stringToNumberValidation } from "~/utils/validations/utils";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
@@ -81,7 +79,7 @@ export default function PlayerPunishmentRoute() {
   const [playerPunishments, setPlayerPunishments] = useState([0]);
 
   return (
-    <PageWrapper heading={getPlayerName(player)}>
+    <>
       <Form
         validator={playerPunishmentValidator}
         method={"post"}
@@ -155,6 +153,6 @@ export default function PlayerPunishmentRoute() {
           </Flex>
         </VStack>
       </Form>
-    </PageWrapper>
+    </>
   );
 }

@@ -1,4 +1,3 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { Button, Divider, Heading } from "@chakra-ui/react";
 import { HeadlessForm } from "~/components/form/Form";
@@ -67,7 +66,7 @@ export default function MeRoute() {
   const { formRef } = useResetForm();
 
   return (
-    <PageWrapper heading={"Profile"}>
+    <>
       <ValidatedForm
         validator={updateProfileValidator}
         defaultValues={{
@@ -115,6 +114,6 @@ export default function MeRoute() {
           )}
         />
       </ValidatedForm>
-    </PageWrapper>
+    </>
   );
 }

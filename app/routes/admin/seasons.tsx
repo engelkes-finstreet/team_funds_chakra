@@ -1,10 +1,4 @@
-import { Season } from "@prisma/client";
-import {
-  ActionFunction,
-  LoaderFunction,
-  useLoaderData,
-  useNavigate,
-} from "remix";
+import { ActionFunction, useLoaderData, useNavigate } from "remix";
 import { db } from "~/utils/db.server";
 import {
   Button,
@@ -16,10 +10,8 @@ import {
   Th,
   Thead,
   Tr,
-  useBreakpointValue,
   VStack,
 } from "@chakra-ui/react";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import * as React from "react";
 import * as z from "zod";
 import { withZod } from "@remix-validated-form/with-zod";
@@ -76,11 +68,7 @@ export default function SeasonsIndexRoute() {
   const navigate = useNavigate();
 
   return (
-    <PageWrapper
-      heading={"Alle Saisons"}
-      buttonText={"Neue Saison erstellen"}
-      linkTo={"new"}
-    >
+    <>
       {data.seasons.length > 0 ? (
         <Table
           variant={"striped"}
@@ -119,6 +107,6 @@ export default function SeasonsIndexRoute() {
           </VStack>
         </Center>
       )}
-    </PageWrapper>
+    </>
   );
 }

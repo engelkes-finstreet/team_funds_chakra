@@ -1,5 +1,4 @@
 import { ActionFunction } from "remix";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
 import { playerValidator } from "~/utils/validations/playerValidations";
@@ -44,22 +43,20 @@ export default function NewPlayerRoute() {
   const { formRef, inputRef } = useResetForm();
 
   return (
-    <PageWrapper heading={"Neuen Spieler erstellen"}>
-      <Form
-        submitText={"Erstellen"}
-        validator={playerValidator}
-        method={"post"}
-        formRef={formRef}
-        additionalSubmits={
-          <Checkbox
-            label={"Weiteren Spieler hinzufügen"}
-            name={"createOtherPlayer"}
-            value={"createOtherPlayer"}
-          />
-        }
-      >
-        <PlayerForm firstInputRef={inputRef} />
-      </Form>
-    </PageWrapper>
+    <Form
+      submitText={"Erstellen"}
+      validator={playerValidator}
+      method={"post"}
+      formRef={formRef}
+      additionalSubmits={
+        <Checkbox
+          label={"Weiteren Spieler hinzufügen"}
+          name={"createOtherPlayer"}
+          value={"createOtherPlayer"}
+        />
+      }
+    >
+      <PlayerForm firstInputRef={inputRef} />
+    </Form>
   );
 }

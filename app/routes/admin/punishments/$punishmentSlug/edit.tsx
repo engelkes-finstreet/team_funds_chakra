@@ -1,7 +1,6 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { db } from "~/utils/db.server";
-import { ActionFunction, redirect, useLoaderData } from "remix";
+import { ActionFunction, useLoaderData } from "remix";
 import { punishmentValidator } from "~/utils/validations/punishmentValidation";
 import { validationError } from "remix-validated-form";
 import { Form } from "~/components/form/Form";
@@ -62,19 +61,17 @@ export default function EditPunishmentRoute() {
   } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
 
   return (
-    <PageWrapper heading={"Strafe bearbeiten"}>
-      <Form
-        method={"post"}
-        validator={punishmentValidator}
-        submitText={"Bearbeiten"}
-        defaultValues={{
-          amount,
-          punishmentName: name,
-          punishmentType: type,
-        }}
-      >
-        <PunishmentForm />
-      </Form>
-    </PageWrapper>
+    <Form
+      method={"post"}
+      validator={punishmentValidator}
+      submitText={"Bearbeiten"}
+      defaultValues={{
+        amount,
+        punishmentName: name,
+        punishmentType: type,
+      }}
+    >
+      <PunishmentForm />
+    </Form>
   );
 }

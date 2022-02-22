@@ -1,9 +1,5 @@
-import { PageWrapper } from "~/components/Layout/PageWrapper";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import {
-  getPlayerDetails,
-  PlayerDetailsType,
-} from "~/backend/player/getPlayerDetails";
+import { getPlayerDetails } from "~/backend/player/getPlayerDetails";
 import { requireAndReturnUser } from "~/utils/session.server";
 import { useLoaderData } from "remix";
 import { PlayerProfilePage } from "~/components/player/PlayerProfilePage";
@@ -24,17 +20,13 @@ export default function MeIndexRoute() {
   const playerDetails = useLoaderData<LoaderData>();
 
   if (playerDetails) {
-    return (
-      <PageWrapper heading={"Me"}>
-        <PlayerProfilePage playerDetails={playerDetails} />
-      </PageWrapper>
-    );
+    return <PlayerProfilePage playerDetails={playerDetails} />;
   }
 
   return (
-    <PageWrapper heading={"me"}>
+    <>
       <Text>Dieser User ist noch mit keinem Spieler verknüpft</Text>
       <Text>Sprich einen Administrator an um deinen Account zu verknüpfen</Text>
-    </PageWrapper>
+    </>
   );
 }
