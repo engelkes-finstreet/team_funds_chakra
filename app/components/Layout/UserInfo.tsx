@@ -22,21 +22,5 @@ type Props = {
 };
 
 export const UserInfo = ({ email }: Props) => {
-  return (
-    <Menu>
-      <UserInfoButton email={email} />
-      <MenuList
-        shadow="lg"
-        py="4"
-        color={useColorModeValue("gray.600", "gray.200")}
-        px="3"
-      >
-        <Form action="/logout" method="post">
-          <MenuItem rounded={"md"}>
-            <button type={"submit"}>Logout</button>
-          </MenuItem>
-        </Form>
-      </MenuList>
-    </Menu>
-  );
+  return <UserInfoButton email={email} />;
 };

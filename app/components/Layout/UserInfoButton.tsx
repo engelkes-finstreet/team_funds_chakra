@@ -13,11 +13,9 @@ type Props = {
 };
 
 export const UserInfoButton = ({ email }: Props) => {
-  const buttonProps = useMenuButton();
   return (
     <HStack
       as={"button"}
-      {...buttonProps}
       w="full"
       gap={2}
       rounded="lg"
@@ -28,9 +26,6 @@ export const UserInfoButton = ({ email }: Props) => {
       userSelect="none"
       cursor="pointer"
       outline="0"
-      transition="all 0.2s"
-      _active={{ bg: "gray.600" }}
-      _focus={{ shadow: "outline" }}
     >
       <Avatar size="sm" name={email} />
       <Box lineHeight="1">

@@ -65,8 +65,9 @@ const Shell = ({ email, children }: ShellProps) => {
         px="3"
         color="gray.200"
         position="fixed"
+        height="100vh"
       >
-        <Box fontSize="sm" lineHeight="tall">
+        <Box fontSize="sm" lineHeight="tall" height={"100vh"}>
           <UserInfo email={email} />
           <Navigation>{children}</Navigation>
         </Box>
