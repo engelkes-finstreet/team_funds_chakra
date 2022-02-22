@@ -3,11 +3,13 @@ import { useLoaderData } from "remix";
 import { loader } from "~/routes/admin/players/$playerSlug";
 import { formatCurrency, toLocaleDate } from "~/utils/functions";
 import { getPunishmentTypeMapping } from "~/utils/enumMappings";
+import { AllPaymentsByPlayerType } from "~/backend/player/getPlayerDetails";
 
-export function PlayerPaymentsTable() {
-  const { allPaymentsByPlayer } =
-    useLoaderData<Awaited<ReturnType<typeof loader>>>();
+type Props = {
+  allPaymentsByPlayer: AllPaymentsByPlayerType;
+};
 
+export function PlayerPaymentsTable({ allPaymentsByPlayer }: Props) {
   return (
     <Table>
       <Thead>

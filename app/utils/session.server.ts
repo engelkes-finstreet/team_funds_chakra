@@ -180,7 +180,10 @@ export async function requireAndReturnUser(
     throw redirect(`/login?${searchParams}`);
   }
 
-  const user = await db.user.findUnique({ where: { id: userId } });
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    include: { player: true },
+  });
 
   if (!user) {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);

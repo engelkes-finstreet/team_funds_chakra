@@ -1,17 +1,27 @@
 import { useLoaderData } from "remix";
-import { GetPlayerDetailsType } from "~/backend/player/getPlayerDetails";
+import {
+  PlayerDetailsType,
+  MostCommonPunishmentType,
+  OpenPunishmentsType,
+} from "~/backend/player/getPlayerDetails";
 import { Stat } from "~/components/player/Stat";
 import { formatCurrency, getPlayerName } from "~/utils/functions";
 import { SimpleGrid, useColorModeValue } from "@chakra-ui/react";
+import { Player } from "@prisma/client";
 
-export function PlayerStats() {
-  const {
-    openMoneyPunishments,
-    openBeerPunishments,
-    player,
-    mostCommonPunishment,
-  } = useLoaderData<GetPlayerDetailsType>();
+type Props = {
+  openMoneyPunishments: OpenPunishmentsType;
+  openBeerPunishments: OpenPunishmentsType;
+  player: Player;
+  mostCommonPunishment: MostCommonPunishmentType;
+};
 
+export function PlayerStats({
+  openMoneyPunishments,
+  openBeerPunishments,
+  player,
+  mostCommonPunishment,
+}: Props) {
   return (
     <SimpleGrid
       mx="auto"

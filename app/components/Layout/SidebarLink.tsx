@@ -19,7 +19,7 @@ interface SidebarLinkProps extends BoxProps {
 export const SidebarLink = (props: SidebarLinkProps) => {
   const { children, icon = <ArrowRight />, to, ...rest } = props;
   const resolved = useResolvedPath(to);
-  const match = useMatch({ path: resolved.pathname, end: false });
+  const match = useMatch({ path: resolved.pathname, end: true });
 
   return (
     <Link to={to} prefetch={"intent"}>

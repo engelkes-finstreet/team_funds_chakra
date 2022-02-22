@@ -3,11 +3,27 @@ import { db } from "~/utils/db.server";
 import { Player, Prisma, Punishment, PunishmentType } from "@prisma/client";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 
-export async function getPlayerDetails(params: Params) {
-  console.log({ slug: params.playerSlug });
+//types
+export type PlayerDetailsType = Awaited<ReturnType<typeof getPlayerDetails>>;
+export type OpenPunishmentsType = Awaited<ReturnType<typeof getOpenPayments>>;
+export type MostCommonPunishmentType = Awaited<
+  ReturnType<typeof getMostCommonPunishment>
+>;
+export type AllPunishmentsByPlayerType = Awaited<
+  ReturnType<typeof getAllPunishmentsByPlayer>
+>;
+export type AllPaymentsByPlayerType = Awaited<
+  ReturnType<typeof getAllPaymentsByPlayer>
+>;
+type GroupedPunishmentsType = Awaited<
+  ReturnType<typeof getPunishmentsByPlayer>
+>;
+
+//functions
+export async function getPlayerDetails(slug: string | undefined) {
   const season = await getCurrentSeason();
   const player = await db.player.findUnique({
-    where: { slug: params.playerSlug },
+    where: { slug },
   });
 
   if (!player) {
@@ -92,7 +108,7 @@ async function getMostCommonPunishment(
     },
   });
 
-  if (mostCommonPunishment) {
+  if (mostCommonPunishment.length > 0) {
     return {
       amount: mostCommonPunishment[0]._max.amount,
       punishment: allPunishments.filter(
@@ -133,8 +149,6 @@ async function getOpenPayments(
   return undefined;
 }
 
-export type GetPlayerDetailsType = Awaited<ReturnType<typeof getPlayerDetails>>;
-
 async function getPunishmentsByPlayer(
   playerId: string,
   seasonId: string,
@@ -155,12 +169,8 @@ async function getPunishmentsByPlayer(
   });
 }
 
-type GroupedPunishments = Prisma.PromiseReturnType<
-  typeof getPunishmentsByPlayer
->;
-
 function getTotalCostFromPunishments(
-  playerPunishments: GroupedPunishments,
+  playerPunishments: GroupedPunishmentsType,
   allPunishments: Array<Punishment>
 ) {
   let result = 0;

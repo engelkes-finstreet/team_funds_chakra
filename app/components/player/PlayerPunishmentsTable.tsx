@@ -1,12 +1,12 @@
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { useLoaderData } from "remix";
-import { loader as playerLoader } from "~/routes/admin/players/$playerSlug";
 import { formatCurrency, toLocaleDate } from "~/utils/functions";
+import { AllPunishmentsByPlayerType } from "~/backend/player/getPlayerDetails";
 
-export function PlayerPunishmentsTable() {
-  const { allPunishmentsByPlayer } =
-    useLoaderData<Awaited<ReturnType<typeof playerLoader>>>();
+type Props = {
+  allPunishmentsByPlayer: AllPunishmentsByPlayerType;
+};
 
+export function PlayerPunishmentsTable({ allPunishmentsByPlayer }: Props) {
   return (
     <Table>
       <Thead>
