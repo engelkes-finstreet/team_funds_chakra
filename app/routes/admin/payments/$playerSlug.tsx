@@ -18,7 +18,13 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { stringToNumberValidation } from "~/utils/validations/utils";
 import { PunishmentType } from "@prisma/client";
 import * as z from "zod";
+import { TFHandle } from "~/utils/types/handle.types";
 
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => getPlayerName(data.player),
+};
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const userId = await requireUserId(request);
   const { player } = await getPlayer(params);
@@ -68,8 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function PlayerPaymentRoute() {
-  const { player, userId, season } =
-    useLoaderData<Awaited<ReturnType<typeof loader>>>();
+  const { player, userId, season } = useLoaderData<LoaderData>();
   const [payments, setPayments] = useState([0]);
 
   return (

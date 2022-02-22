@@ -17,7 +17,7 @@ import { useIsDesktop } from "~/hooks/useIsDesktop";
 import { Punishment } from "@prisma/client";
 import { ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
-import { deletePunishmentValidator } from "~/routes/admin/punishments";
+import { deletePunishmentValidator } from "~/utils/validations/punishmentValidation";
 
 type Props = {
   isAdmin: boolean;
@@ -68,13 +68,23 @@ export function AllPunishmentsTable({ punishments, isAdmin }: Props) {
     );
   }
 
+  if (!isAdmin) {
+    return (
+      <Center>
+        <VStack>
+          <Text>Es wurde noch keine Strafe angelegt</Text>
+          <Button as={Link} colorScheme={"blue"} to={"new"}>
+            Neue Strafe anlegen
+          </Button>
+        </VStack>
+      </Center>
+    );
+  }
+
   return (
     <Center>
       <VStack>
-        <Text>Es wurde noch keine Strafe angelegt</Text>
-        <Button as={Link} colorScheme={"blue"} to={"new"}>
-          Neue Strafe anlegen
-        </Button>
+        <Text>Es wurden noch keine Strafen angelegt</Text>
       </VStack>
     </Center>
   );

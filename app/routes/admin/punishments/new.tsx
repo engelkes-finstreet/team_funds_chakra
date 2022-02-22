@@ -11,7 +11,13 @@ import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getAllSeasons } from "~/backend/season/getAllSeasons";
 import { useResetForm } from "~/hooks/useResetForm";
 import { Checkbox } from "~/components/form/Checkbox";
+import { TFHandle } from "~/utils/types/handle.types";
 
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => "Erstellen",
+};
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   return await getAllSeasons();
 };

@@ -12,3 +12,10 @@ export const punishmentValidator = withZod(
     createOtherPunishment: checkbox(),
   })
 );
+
+export const deletePunishmentValidator = withZod(
+  z.object({
+    _punishmentId: z.string(),
+    _method: z.string(),
+  })
+);

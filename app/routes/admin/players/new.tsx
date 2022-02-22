@@ -10,6 +10,11 @@ import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
 import { Checkbox } from "~/components/form/Checkbox";
 import { useResetForm } from "~/hooks/useResetForm";
+import { TFHandle } from "~/utils/types/handle.types";
+
+export const handle: TFHandle<any> = {
+  breadcrumb: (data) => "Erstellen",
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const adminUserId = await requireUserId(request);

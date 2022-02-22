@@ -61,13 +61,23 @@ export function AllPlayersTable({ isAdmin, players }: Props) {
     );
   }
 
+  if (isAdmin) {
+    return (
+      <Center>
+        <VStack>
+          <Text>Es wurde noch kein Spieler angelegt</Text>
+          <Button colorScheme={"blue"} onClick={() => navigate("new")}>
+            Neuen Spieler erstellen
+          </Button>
+        </VStack>
+      </Center>
+    );
+  }
+
   return (
     <Center>
       <VStack>
-        <Text>Es wurde noch kein Spieler angelegt</Text>
-        <Button colorScheme={"blue"} onClick={() => navigate("new")}>
-          Neuen Spieler erstellen
-        </Button>
+        <Text>Es wurden noch keine Spieler angelegt</Text>
       </VStack>
     </Center>
   );

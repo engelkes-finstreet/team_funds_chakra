@@ -4,13 +4,15 @@ import { Table, Tbody, Td, Text, Tr } from "@chakra-ui/react";
 import { getPlayerName } from "~/utils/functions";
 import { getAllPlayers } from "~/backend/player/getAllPlayers";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { TFHandle } from "~/utils/types/handle.types";
 
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   return getAllPlayers();
 };
 
 export default function () {
-  const data = useLoaderData<Awaited<ReturnType<typeof loader>>>();
+  const data = useLoaderData<LoaderData>();
   const navigate = useNavigate();
 
   return (

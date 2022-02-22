@@ -1,11 +1,17 @@
 import { PageWrapper } from "~/components/Layout/PageWrapper";
-import { LoaderFunction, useLoaderData } from "remix";
+import { useLoaderData } from "remix";
 import { db } from "~/utils/db.server";
-import { Season } from "@prisma/client";
 import { SeasonDisplay } from "~/components/season/SeasonDisplay";
+import { TFHandle } from "~/utils/types/handle.types";
+import { capitalize } from "~/utils/functions";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
 
-type LoaderData = { season: Season };
-export let loader: LoaderFunction = async ({ request, params }) => {
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => capitalize(data.season.slug),
+};
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+export let loader = async ({ request, params }: DataFunctionArgs) => {
   const season = await db.season.findUnique({
     where: { slug: params.seasonSlug },
   });
@@ -15,9 +21,8 @@ export let loader: LoaderFunction = async ({ request, params }) => {
       status: 404,
     });
   }
-  const data: LoaderData = { season };
 
-  return data;
+  return { season };
 };
 
 export default function SeasonRoute() {

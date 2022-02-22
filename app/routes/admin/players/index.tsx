@@ -35,13 +35,7 @@ import {
   GetAllPlayersType,
 } from "~/backend/player/getAllPlayers";
 import { AllPlayersTable } from "~/components/player/AllPlayersTable";
-
-export const deletePlayerValidator = withZod(
-  z.object({
-    _playerId: z.string(),
-    _method: z.string(),
-  })
-);
+import { deletePlayerValidator } from "~/utils/validations/playerValidations";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   return await getAllPlayers();

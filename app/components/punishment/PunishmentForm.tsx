@@ -2,7 +2,7 @@ import { TextField } from "~/components/form/TextField";
 import { PunishmentTypeComponent } from "~/components/punishment/PunishmentTypeSelect";
 import React from "react";
 import { useLoaderData } from "remix";
-import { GetAllSeasonsType } from "~/backend/season/getAllSeasons";
+import { AllSeasonsType } from "~/backend/season/getAllSeasons";
 import { Select } from "~/components/form/Select";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function PunishmentForm({ firstInputRef }: Props) {
-  const { seasons } = useLoaderData<GetAllSeasonsType>();
+  const { seasons } = useLoaderData<AllSeasonsType>();
 
   return (
     <>

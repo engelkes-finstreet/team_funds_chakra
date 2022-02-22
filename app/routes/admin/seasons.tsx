@@ -25,6 +25,12 @@ import * as z from "zod";
 import { withZod } from "@remix-validated-form/with-zod";
 import { validationError } from "remix-validated-form";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { TFHandle } from "~/utils/types/handle.types";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
+
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => "Saison",
+};
 
 const deleteValidator = withZod(
   z.object({
@@ -33,13 +39,11 @@ const deleteValidator = withZod(
   })
 );
 
-type LoaderData = { seasons: Season[] };
-export let loader: LoaderFunction = async ({ request, params }) => {
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+export let loader = async ({ request, params }: DataFunctionArgs) => {
   const seasons = await db.season.findMany();
 
-  const data: LoaderData = { seasons };
-
-  return data;
+  return { seasons };
 };
 
 export let action: ActionFunction = async ({ request }) => {
@@ -70,7 +74,6 @@ export let action: ActionFunction = async ({ request }) => {
 export default function SeasonsIndexRoute() {
   const data = useLoaderData<LoaderData>();
   const navigate = useNavigate();
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
 
   return (
     <PageWrapper

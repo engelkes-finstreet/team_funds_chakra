@@ -2,7 +2,7 @@ import { useFetcher } from "remix";
 import { Button, Td } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
-import { deletePlayerValidator } from "~/routes/admin/players";
+import { deletePlayerValidator } from "~/utils/validations/playerValidations";
 
 export function DeletePlayer({ playerId }: { playerId: string }) {
   const fetcher = useFetcher();

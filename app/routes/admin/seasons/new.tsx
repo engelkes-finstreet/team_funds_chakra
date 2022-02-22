@@ -8,6 +8,11 @@ import { seasonValidator } from "~/utils/validations/seasonValidations";
 import { SeasonForm } from "~/components/season/SeasonForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { Prisma } from "@prisma/client";
+import { TFHandle } from "~/utils/types/handle.types";
+
+export const handle: TFHandle<any> = {
+  breadcrumb: (data) => "Erstellen",
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const adminUserId = await requireUserId(request);

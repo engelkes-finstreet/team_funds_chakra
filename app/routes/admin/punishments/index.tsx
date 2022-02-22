@@ -8,14 +8,10 @@ import { validationError } from "remix-validated-form";
 import { Prisma } from "@prisma/client";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { AllPunishmentsTable } from "~/components/punishment/AllPunishmentsTable";
+import { TFHandle } from "~/utils/types/handle.types";
+import { deletePunishmentValidator } from "~/utils/validations/punishmentValidation";
 
-export const deletePunishmentValidator = withZod(
-  z.object({
-    _punishmentId: z.string(),
-    _method: z.string(),
-  })
-);
-
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const punishments = await db.punishment.findMany();
 
@@ -66,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function PunishmentsIndexRoute() {
-  const data = useLoaderData<Awaited<ReturnType<typeof loader>>>();
+  const data = useLoaderData<LoaderData>();
 
   return (
     <PageWrapper

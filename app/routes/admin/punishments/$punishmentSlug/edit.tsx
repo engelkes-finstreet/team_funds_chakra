@@ -7,7 +7,11 @@ import { validationError } from "remix-validated-form";
 import { Form } from "~/components/form/Form";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
-import { getPlayerName } from "~/utils/functions";
+import { TFHandle } from "~/utils/types/handle.types";
+
+export const handle: TFHandle<any> = {
+  breadcrumb: (data) => "Bearbeiten",
+};
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const punishment = await db.punishment.findUnique({

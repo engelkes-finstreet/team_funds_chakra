@@ -18,7 +18,13 @@ import { HiX } from "react-icons/hi";
 import { Form } from "~/components/form/Form";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { useState } from "react";
+import { TFHandle } from "~/utils/types/handle.types";
 
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => getPlayerName(data.player),
+};
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const season = await getCurrentSeason();
   const userId = await requireUserId(request);
@@ -71,12 +77,11 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function PlayerPunishmentRoute() {
-  const { player, userId, season, punishments } =
-    useLoaderData<Awaited<ReturnType<typeof loader>>>();
+  const { player, userId, season, punishments } = useLoaderData<LoaderData>();
   const [playerPunishments, setPlayerPunishments] = useState([0]);
 
   return (
-    <PageWrapper heading={"Test"}>
+    <PageWrapper heading={getPlayerName(player)}>
       <Form
         validator={playerPunishmentValidator}
         method={"post"}

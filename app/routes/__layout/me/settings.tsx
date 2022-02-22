@@ -17,6 +17,11 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { ResetPasswordForm } from "~/components/me/ResetPasswordForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { useResetForm } from "~/hooks/useResetForm";
+import { TFHandle } from "~/utils/types/handle.types";
+
+export const handle: TFHandle<any> = {
+  breadcrumb: (data) => "Settings",
+};
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const user = await requireAndReturnUser(request);

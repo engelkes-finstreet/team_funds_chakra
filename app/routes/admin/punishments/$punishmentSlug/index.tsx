@@ -1,26 +1,26 @@
-import { PunishmentStats } from "~/components/punishment/PunishmentStats";
-import { Divider, Heading } from "@chakra-ui/react";
-import { PunishmentsTable } from "~/components/punishment/PunishmentsTable";
 import { PageWrapper } from "~/components/Layout/PageWrapper";
-import { useLoaderData } from "remix";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { useLoaderData } from "remix";
+import { db } from "~/utils/db.server";
+import { Stat } from "~/components/player/Stat";
+import { capitalize, getPlayerName } from "~/utils/functions";
 import {
-  getPunishmentDetails,
-  GetPunishmentDetailsType,
-} from "~/backend/punishment/getPunishmentDetails";
+  Divider,
+  Heading,
+  SimpleGrid,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { PunishmentsTable } from "~/components/punishment/PunishmentsTable";
+import { getPunishmentDetails } from "~/backend/punishment/getPunishmentDetails";
+import { PunishmentStats } from "~/components/punishment/PunishmentStats";
 import { TFHandle } from "~/utils/types/handle.types";
-import { capitalize } from "~/utils/functions";
-
-export const handle: TFHandle<LoaderData> = {
-  breadcrumb: (data) => capitalize(data.punishment.name),
-};
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   return await getPunishmentDetails(params);
 };
 
-export default function PunishmentDetailRoute() {
+export default function PunishmentRoute() {
   const { punishment } = useLoaderData<LoaderData>();
 
   return (

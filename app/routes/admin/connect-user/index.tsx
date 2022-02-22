@@ -12,6 +12,11 @@ import { getPlayerName } from "~/utils/functions";
 import { VscDebugDisconnect } from "react-icons/vsc";
 import { Player, User } from "@prisma/client";
 import { AiOutlineDelete } from "react-icons/ai";
+import { TFHandle } from "~/utils/types/handle.types";
+
+export const handle: TFHandle<any> = {
+  breadcrumb: (data) => "User verbinden",
+};
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const { unconnectedPlayers } = await getAllUnconnectedPlayers();

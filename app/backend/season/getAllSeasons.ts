@@ -6,4 +6,4 @@ export async function getAllSeasons() {
   return { seasons };
 }
 
-export type GetAllSeasonsType = Awaited<ReturnType<typeof getAllSeasons>>;
+export type AllSeasonsType = Awaited<ReturnType<typeof getAllSeasons>>;

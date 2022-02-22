@@ -8,20 +8,17 @@ import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
+import { TFHandle } from "~/utils/types/handle.types";
+import { getPlayerDetails } from "~/backend/player/getPlayerDetails";
+import { getPlayer } from "~/backend/player/getPlayer";
 
-type LoaderData = { player: Player };
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => "Bearbeiten",
+};
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader: LoaderFunction = async ({ request, params }) => {
-  const player = await db.player.findUnique({
-    where: { slug: params.playerSlug },
-  });
-
-  if (!player) {
-    throw new Response("Spieler wurde nicht gefunden", { status: 404 });
-  }
-
-  const data: LoaderData = { player };
-
-  return data;
+  return await getPlayer(params);
 };
 
 export const action: ActionFunction = async ({ request, params }) => {

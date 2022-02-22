@@ -11,3 +11,10 @@ export const playerValidator = withZod(
     createOtherPlayer: checkbox(),
   })
 );
+
+export const deletePlayerValidator = withZod(
+  z.object({
+    _playerId: z.string(),
+    _method: z.string(),
+  })
+);

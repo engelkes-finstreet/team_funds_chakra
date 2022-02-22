@@ -26,6 +26,14 @@ import ClientStyleContext from "./chakra/context.client";
 import { theme } from "./chakra/theme";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getFlashContent } from "~/utils/flashMessage.server";
+import { TFHandle } from "~/utils/types/handle.types";
+import { HiHome } from "react-icons/hi";
+
+export const handle: TFHandle<any> = {
+  breadcrumb: (match) => {
+    return "Home";
+  },
+};
 
 export const meta: MetaFunction = () => {
   return { title: "Mannschaftskasse SkiClub" };

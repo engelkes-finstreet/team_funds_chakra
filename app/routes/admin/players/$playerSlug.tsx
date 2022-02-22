@@ -1,24 +1,18 @@
-import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { useLoaderData } from "remix";
-import { PageWrapper } from "~/components/Layout/PageWrapper";
+import { Outlet } from "remix";
+import { TFHandle } from "~/utils/types/handle.types";
 import { getPlayerName } from "~/utils/functions";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { getPlayer } from "~/backend/player/getPlayer";
 
-import {
-  getPlayerDetails,
-  PlayerDetailsType,
-} from "~/backend/player/getPlayerDetails";
-import { PlayerProfilePage } from "~/components/player/PlayerProfilePage";
-
-export let loader = async ({ request, params }: DataFunctionArgs) => {
-  return await getPlayerDetails(params.playerSlug);
+export const handle: TFHandle<LoaderData> = {
+  breadcrumb: (data) => getPlayerName(data.player),
 };
 
-export default function PlayerDetailRoute() {
-  const playerDetails = useLoaderData<PlayerDetailsType>();
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+export let loader = async ({ request, params }: DataFunctionArgs) => {
+  return await getPlayer(params);
+};
 
-  return (
-    <PageWrapper heading={getPlayerName(playerDetails.player)}>
-      <PlayerProfilePage playerDetails={playerDetails} />
-    </PageWrapper>
-  );
+export default function PlayersLayoutRoute() {
+  return <Outlet />;
 }

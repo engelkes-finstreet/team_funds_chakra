@@ -9,6 +9,7 @@ import { useLoaderData } from "remix";
 import { PlayerProfilePage } from "~/components/player/PlayerProfilePage";
 import { Text } from "@chakra-ui/react";
 
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const user = await requireAndReturnUser(request);
 
@@ -20,7 +21,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export default function MeIndexRoute() {
-  const playerDetails = useLoaderData<Awaited<ReturnType<typeof loader>>>();
+  const playerDetails = useLoaderData<LoaderData>();
 
   if (playerDetails) {
     return (
