@@ -1,6 +1,11 @@
 import { createCookieSessionStorage, redirect } from "remix";
 import { getPlayerName } from "~/utils/functions";
 import { AlertStatus } from "@chakra-ui/react";
+import {
+  DESCRIPTION,
+  STATUS,
+  TITLE,
+} from "~/utils/session-keys/flashMessageKeys";
 
 export const {
   getSession: getFlashSession,
@@ -22,9 +27,9 @@ export const {
 
 export const getFlashContent = async (request: Request) => {
   const session = await getFlashSession(request.headers.get("Cookie"));
-  const title = session.get("title") || null;
-  const description = session.get("description") || null;
-  const status = session.get("status") || null;
+  const title = session.get(TITLE) || null;
+  const description = session.get(DESCRIPTION) || null;
+  const status = session.get(STATUS) || null;
   const header = {
     headers: {
       // only necessary with cookieSessionStorage
@@ -43,9 +48,9 @@ export const setFlashContent = async (
   description?: string
 ) => {
   const session = await getFlashSession(request.headers.get("Cookie"));
-  session.flash("title", title);
-  session.flash("description", description);
-  session.flash("status", status);
+  session.flash(TITLE, title);
+  session.flash(DESCRIPTION, description);
+  session.flash(STATUS, status);
 
   const headers = {
     headers: {

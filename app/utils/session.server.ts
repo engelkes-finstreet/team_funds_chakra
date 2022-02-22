@@ -3,6 +3,7 @@ import { db } from "~/utils/db.server";
 import { createCookieSessionStorage, redirect } from "remix";
 import { AdminUser, User } from "@prisma/client";
 import { URLSearchParams } from "url";
+import { IS_ADMIN, USER_ID } from "~/utils/session-keys/userSessionKeys";
 
 export async function register(
   email: string,
@@ -112,7 +113,7 @@ export function getUserSession(request: Request) {
 
 export async function getUserId(request: Request) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
+  const userId = session.get(USER_ID);
   if (!userId || typeof userId !== "string") return null;
   return userId;
 }
@@ -122,7 +123,7 @@ export async function requireUserId(
   redirectTo: string = new URL(request.url).pathname
 ): Promise<string> {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
+  const userId = session.get(USER_ID);
   if (!userId || typeof userId !== "string") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
     throw redirect(`/login?${searchParams}`);
@@ -135,7 +136,7 @@ export async function requireUser(
   redirectTo: string = new URL(request.url).pathname
 ) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
+  const userId = session.get(USER_ID);
 
   if (!userId || typeof userId !== "string") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
@@ -148,7 +149,7 @@ export async function requireAndReturnAdminUser(
   redirectTo: string = new URL(request.url).pathname
 ) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
+  const userId = session.get(USER_ID);
 
   if (!userId || typeof userId !== "string") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
@@ -173,7 +174,7 @@ export async function requireAndReturnUser(
   redirectTo: string = new URL(request.url).pathname
 ) {
   const session = await getUserSession(request);
-  const userId = session.get("userId");
+  const userId = session.get(USER_ID);
 
   if (!userId || typeof userId !== "string") {
     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
@@ -219,7 +220,7 @@ export async function getUser(request: Request) {
 
 export async function logout(request: Request) {
   const session = await storage.getSession(request.headers.get("Cookie"));
-  if (session.get("isAdmin")) {
+  if (session.get(IS_ADMIN)) {
     return redirect("/admin/login", {
       headers: {
         "Set-Cookie": await storage.destroySession(session),
@@ -236,8 +237,8 @@ export async function logout(request: Request) {
 
 export async function createUserSession(userId: string, redirectTo: string) {
   const session = await storage.getSession();
-  session.set("userId", userId);
-  session.set("isAdmin", false);
+  session.set(USER_ID, userId);
+  session.set(IS_ADMIN, false);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
@@ -251,8 +252,8 @@ export async function createAdminSession(
 ) {
   const session = await storage.getSession();
 
-  session.set("userId", adminUserId);
-  session.set("isAdmin", true);
+  session.set(USER_ID, adminUserId);
+  session.set(IS_ADMIN, true);
 
   return redirect(redirectTo, {
     headers: {

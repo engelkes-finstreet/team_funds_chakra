@@ -26,7 +26,6 @@ import ClientStyleContext from "./chakra/context.client";
 import { theme } from "./chakra/theme";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getFlashContent } from "~/utils/flashMessage.server";
-import { getUserSession, requireAndReturnUser } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => {
   return { title: "Mannschaftskasse SkiClub" };
