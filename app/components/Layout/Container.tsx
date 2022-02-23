@@ -35,7 +35,13 @@ export function Container() {
               <ActionButtons />
             </Flex>
           </Flex>
-          <Flex direction="column" flex="1" overflow="auto" px="10" pt="4">
+          <Flex
+            direction="column"
+            flex="1"
+            overflow="auto"
+            px={{ base: 4, md: 10 }}
+            pt="4"
+          >
             <Outlet />
           </Flex>
         </Flex>
