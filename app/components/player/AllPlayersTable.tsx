@@ -26,7 +26,11 @@ export function AllPlayersTable({ isAdmin, players }: Props) {
   const navigate = useNavigate();
 
   function handleClick(player: Player) {
-    navigate(`${player.slug}`);
+    if (isAdmin) {
+      navigate(`${player.slug}/edit`);
+    } else {
+      navigate(`${player.slug}`);
+    }
   }
 
   if (players.length > 0) {
@@ -91,8 +95,7 @@ function AdminHead({ doRender }: AdminHeadProps) {
   if (doRender) {
     return (
       <>
-        <Th>Bearbeiten</Th>
-        <Th>Löschen</Th>
+        <Th w={"20%"}>Löschen</Th>
       </>
     );
   }
@@ -106,16 +109,9 @@ type AdminColumnProps = {
 };
 
 function AdminColumns({ doRender, player }: AdminColumnProps) {
-  const navigate = useNavigate();
-
   if (doRender) {
     return (
       <>
-        <Td>
-          <Button onClick={() => navigate(`${player.slug}/edit`)}>
-            Bearbeiten
-          </Button>
-        </Td>
         <DeletePlayer playerId={player.id} />
       </>
     );

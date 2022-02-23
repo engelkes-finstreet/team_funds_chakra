@@ -1,4 +1,3 @@
-import { LoaderData } from "~/routes/__layout/punishments";
 import {
   Button,
   Center,
@@ -18,10 +17,11 @@ import { Punishment } from "@prisma/client";
 import { ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
 import { deletePunishmentValidator } from "~/utils/validations/punishmentValidation";
+import { GetAllPunishmentsType } from "~/backend/punishment/getAllPunishments";
 
 type Props = {
   isAdmin: boolean;
-} & LoaderData;
+} & GetAllPunishmentsType;
 
 export function AllPunishmentsTable({ punishments, isAdmin }: Props) {
   const isDesktop = useIsDesktop();
@@ -29,7 +29,11 @@ export function AllPunishmentsTable({ punishments, isAdmin }: Props) {
   const navigate = useNavigate();
 
   function handleClick(punishment: Punishment) {
-    navigate(`${punishment.slug}`);
+    if (isAdmin) {
+      navigate(`${punishment.slug}/edit`);
+    } else {
+      navigate(`${punishment.slug}`);
+    }
   }
 
   if (punishments.length > 0) {
@@ -68,12 +72,12 @@ export function AllPunishmentsTable({ punishments, isAdmin }: Props) {
     );
   }
 
-  if (!isAdmin) {
+  if (isAdmin) {
     return (
       <Center>
         <VStack>
           <Text>Es wurde noch keine Strafe angelegt</Text>
-          <Button as={Link} colorScheme={"blue"} to={"new"}>
+          <Button as={Link} colorScheme={"blue"} to={"new"} prefetch={"intent"}>
             Neue Strafe anlegen
           </Button>
         </VStack>
@@ -98,8 +102,7 @@ function AdminHead({ doRender }: AdminHeadProps) {
   if (doRender) {
     return (
       <>
-        <Th>Bearbeiten</Th>
-        <Th>Löschen</Th>
+        <Th w={"20%"}>Löschen</Th>
       </>
     );
   }
@@ -118,11 +121,6 @@ function AdminColumns({ doRender, punishment }: AdminColumnProps) {
   if (doRender) {
     return (
       <>
-        <Td>
-          <Button onClick={() => navigate(`${punishment.slug}/edit`)}>
-            Bearbeiten
-          </Button>
-        </Td>
         <DeletePunishment punishmentId={punishment.id} />
       </>
     );
@@ -137,7 +135,7 @@ function DeletePunishment({ punishmentId }: { punishmentId: string }) {
     fetcher.submission?.formData.get("_punishmentId") === punishmentId;
 
   return (
-    <Td hidden={isDeleting}>
+    <Td hidden={isDeleting} w={"20%"}>
       <ValidatedForm
         fetcher={fetcher}
         validator={deletePunishmentValidator}

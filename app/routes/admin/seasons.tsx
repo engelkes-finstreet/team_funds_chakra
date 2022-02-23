@@ -1,6 +1,7 @@
 import { ActionFunction, useLoaderData, useNavigate } from "remix";
 import { db } from "~/utils/db.server";
 import {
+  Box,
   Button,
   Center,
   Table,
@@ -19,9 +20,18 @@ import { validationError } from "remix-validated-form";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { TFHandle } from "~/utils/types/handle.types";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { AiOutlinePlus } from "react-icons/ai";
+import { IconLinkButton } from "~/components/buttons";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => "Saison",
+  actionButtons: (data) => (
+    <IconLinkButton
+      to={"/admin/seasons/new"}
+      aria-label={"Neue Saison erstellen"}
+      icon={<AiOutlinePlus />}
+    />
+  ),
 };
 
 const deleteValidator = withZod(

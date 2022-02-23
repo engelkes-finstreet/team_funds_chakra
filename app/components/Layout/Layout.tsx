@@ -124,9 +124,6 @@ const AdminNavigationLinks = () => {
         <SidebarLink icon={<Gi3DHammer />} to={"/admin/punishments"}>
           Strafen
         </SidebarLink>
-        <SidebarLink icon={<AiOutlineUser />} to={"/admin/users"}>
-          Users
-        </SidebarLink>
         <SidebarLink icon={<AiOutlineContacts />} to={"/admin/connect-user"}>
           User verbinden
         </SidebarLink>

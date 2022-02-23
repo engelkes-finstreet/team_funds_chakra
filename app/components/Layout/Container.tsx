@@ -4,6 +4,7 @@ import { Breadcrumb } from "~/components/Layout/Breadcrumb";
 import { Outlet } from "remix";
 import * as React from "react";
 import { useMobileMenuState } from "~/components/Layout/useMobileMenuState";
+import { ActionButtons } from "~/components/Layout/ActionButtons";
 
 export function Container() {
   const { isOpen, toggle } = useMobileMenuState();
@@ -26,15 +27,12 @@ export function Container() {
       >
         <Flex direction="column" height="full">
           <Flex w="full" py="4" justify="space-between" align="center" px="10">
-            <Flex
-              align="center"
-              minH="8"
-              justifyContent={"space-between"}
-              w={"full"}
-            >
-              <MobileMenuButton onClick={toggle} isOpen={isOpen} />
-              <Breadcrumb />
-              <div />
+            <Flex align={"center"} justifyContent={"space-between"} w={"full"}>
+              <Flex align="center" minH="8" w={"full"}>
+                <MobileMenuButton onClick={toggle} isOpen={isOpen} />
+                <Breadcrumb />
+              </Flex>
+              <ActionButtons />
             </Flex>
           </Flex>
           <Flex direction="column" flex="1" overflow="auto" px="10" pt="4">

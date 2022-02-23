@@ -1,4 +1,4 @@
-import { ActionFunction, useCatch, useLoaderData } from "remix";
+import { ActionFunction, Link, useCatch, useLoaderData } from "remix";
 import { Prisma } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { validationError } from "remix-validated-form";
@@ -11,6 +11,20 @@ import {
 } from "~/backend/player/getAllPlayers";
 import { AllPlayersTable } from "~/components/player/AllPlayersTable";
 import { deletePlayerValidator } from "~/utils/validations/playerValidations";
+import { TFHandle } from "~/utils/types/handle.types";
+import { IconButton } from "@chakra-ui/react";
+import { AiOutlinePlus } from "react-icons/ai";
+import { IconLinkButton } from "~/components/buttons";
+
+export const handle: TFHandle<any> = {
+  actionButtons: (data) => (
+    <IconLinkButton
+      to={"/admin/players/new"}
+      aria-label={"Neuen Spieler anlegen"}
+      icon={<AiOutlinePlus />}
+    />
+  ),
+};
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   return await getAllPlayers();

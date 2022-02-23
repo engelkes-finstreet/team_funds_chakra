@@ -1,11 +1,24 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { db } from "~/utils/db.server";
-import { ActionFunction, useLoaderData } from "remix";
+import { ActionFunction, Link, useLoaderData } from "remix";
 import { validationError } from "remix-validated-form";
 import { Prisma } from "@prisma/client";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { AllPunishmentsTable } from "~/components/punishment/AllPunishmentsTable";
 import { deletePunishmentValidator } from "~/utils/validations/punishmentValidation";
+import { TFHandle } from "~/utils/types/handle.types";
+import { AiOutlinePlus } from "react-icons/ai";
+import { IconLinkButton } from "~/components/buttons";
+
+export const handle: TFHandle<LoaderData> = {
+  actionButtons: (data) => (
+    <IconLinkButton
+      to={"/admin/punishments/new"}
+      aria-label={"Neue Strafe anlegen"}
+      icon={<AiOutlinePlus />}
+    />
+  ),
+};
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
