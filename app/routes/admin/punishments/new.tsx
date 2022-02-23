@@ -9,6 +9,8 @@ import { getAllSeasons } from "~/backend/season/getAllSeasons";
 import { useResetForm } from "~/hooks/useResetForm";
 import { Checkbox } from "~/components/form/Checkbox";
 import { TFHandle } from "~/utils/types/handle.types";
+import { setFlashContent } from "~/utils/flashMessage.server";
+import { db } from "~/utils/db.server";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => "Erstellen",
@@ -20,7 +22,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
+  const adminUserId = await requireUserId(request);
   const data = await punishmentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const {
@@ -31,27 +33,23 @@ export const action: ActionFunction = async ({ request }) => {
     createOtherPunishment,
   } = data.data;
 
-  // const punishment = await db.punishment.create({
-  //   data: {
-  //     name: punishmentName,
-  //     type: punishmentType,
-  //     amount: amount,
-  //     slug: punishmentName,
-  //     userId,
-  //     seasonId,
-  //   },
-  // });
+  const punishment = await db.punishment.create({
+    data: {
+      name: punishmentName,
+      type: punishmentType,
+      amount: amount,
+      slug: punishmentName,
+      adminUserId,
+      seasonId,
+    },
+  });
 
-  // return await setFlashContent(
-  //   createOtherPunishment
-  //     ? "/admin/punishments/new"
-  //     : `/admin/punishments/${punishment.slug}`,
-  //   request,
-  //   `Strafe ${punishment.name} erfolgreich angelegt`,
-  //   "success"
-  // );
-
-  return null;
+  return await setFlashContent(
+    createOtherPunishment ? "/admin/punishments/new" : `/admin/punishments`,
+    request,
+    `Strafe ${punishment.name} erfolgreich angelegt`,
+    "success"
+  );
 };
 
 export default function NewPunishmentRoute() {

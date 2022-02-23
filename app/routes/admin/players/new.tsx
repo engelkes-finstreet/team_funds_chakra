@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
   });
 
   return await setFlashContent(
-    createOtherPlayer ? "/admin/players/new" : `/admin/players/${player.slug}`,
+    createOtherPlayer ? "/admin/players/new" : `/admin/players`,
     request,
     `Spieler ${getPlayerName(player)} erfolgreich angelegt`,
     "success"

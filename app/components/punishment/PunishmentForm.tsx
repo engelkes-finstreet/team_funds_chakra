@@ -4,14 +4,14 @@ import React from "react";
 import { useLoaderData } from "remix";
 import { AllSeasonsType } from "~/backend/season/getAllSeasons";
 import { Select } from "~/components/form/Select";
+import { Season } from "@prisma/client";
 
 type Props = {
   firstInputRef?: React.RefObject<HTMLInputElement>;
+  seasons: Array<Season>;
 };
 
-export default function PunishmentForm({ firstInputRef }: Props) {
-  const { seasons } = useLoaderData<AllSeasonsType>();
-
+export default function PunishmentForm({ firstInputRef, seasons }: Props) {
   return (
     <>
       <TextField

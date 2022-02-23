@@ -7,12 +7,14 @@ import { Form } from "~/components/form/Form";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { TFHandle } from "~/utils/types/handle.types";
+import { getAllSeasons } from "~/backend/season/getAllSeasons";
 
 export const handle: TFHandle<any> = {
   breadcrumb: (data) => "Bearbeiten",
 };
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
+  const { seasons } = await getAllSeasons();
   const punishment = await db.punishment.findUnique({
     where: { slug: params.punishmentSlug },
   });
@@ -21,7 +23,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
     throw new Response("Strafe wurde nicht gefunden", { status: 404 });
   }
 
-  return { punishment };
+  return { punishment, seasons };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -58,6 +60,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function EditPunishmentRoute() {
   const {
     punishment: { name, amount, type },
+    seasons,
   } = useLoaderData<Awaited<ReturnType<typeof loader>>>();
 
   return (
@@ -71,7 +74,7 @@ export default function EditPunishmentRoute() {
         punishmentType: type,
       }}
     >
-      <PunishmentForm />
+      <PunishmentForm seasons={seasons} />
     </Form>
   );
 }
