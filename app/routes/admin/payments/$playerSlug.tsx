@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request }) => {
   for (let payment of payments) {
     await db.playerPayments.create({
       data: {
-        userId: _userId,
+        adminUserId: _userId,
         playerId: _playerId,
         seasonId: _seasonId,
         amount: payment.amount,

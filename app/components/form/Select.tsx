@@ -13,6 +13,7 @@ export type SelectProps = {
   name: string;
   children: React.ReactNode;
   label?: string;
+  autoFocus: boolean;
 } & FormControlProps;
 
 export const Select = ({ name, label, children, ...rest }: SelectProps) => {

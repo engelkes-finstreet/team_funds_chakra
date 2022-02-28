@@ -57,7 +57,7 @@ export const action: ActionFunction = async ({ request }) => {
   for (let punishment of punishments) {
     await db.playerPunishments.create({
       data: {
-        userId: _userId,
+        adminUserId: _userId,
         playerId: _playerId,
         seasonId: _seasonId,
         amount: punishment.amount,

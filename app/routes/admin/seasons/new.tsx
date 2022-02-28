@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request }) => {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
         return await setFlashContent(
-          "/admin/seasons/new",
+          "/admin/seasons",
           request,
           "Zeitraum belegt",
           "error",

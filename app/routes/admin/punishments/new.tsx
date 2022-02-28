@@ -1,7 +1,7 @@
 import { Form } from "~/components/form/Form";
 import { punishmentValidator } from "~/utils/validations/punishmentValidation";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
-import { ActionFunction } from "remix";
+import { ActionFunction, useLoaderData } from "remix";
 import { validationError } from "remix-validated-form";
 import { requireUserId } from "~/utils/session.server";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
@@ -53,6 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function NewPunishmentRoute() {
+  const { seasons } = useLoaderData<LoaderData>();
   const { formRef, inputRef } = useResetForm();
 
   return (
@@ -70,7 +71,7 @@ export default function NewPunishmentRoute() {
           />
         }
       >
-        <PunishmentForm firstInputRef={inputRef} />
+        <PunishmentForm firstInputRef={inputRef} seasons={seasons} />
       </Form>
     </>
   );
