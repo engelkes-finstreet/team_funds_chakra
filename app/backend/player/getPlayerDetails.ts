@@ -2,10 +2,10 @@ import { Params } from "react-router";
 import { db } from "~/utils/db.server";
 import { Player, Prisma, Punishment, PunishmentType } from "@prisma/client";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
+import { getOpenPaymentsByPlayer } from "./getOpenPaymentsByPlayer";
 
 //types
 export type PlayerDetailsType = Awaited<ReturnType<typeof getPlayerDetails>>;
-export type OpenPunishmentsType = Awaited<ReturnType<typeof getOpenPayments>>;
 export type MostCommonPunishmentType = Awaited<
   ReturnType<typeof getMostCommonPunishment>
 >;
@@ -14,9 +14,6 @@ export type AllPunishmentsByPlayerType = Awaited<
 >;
 export type AllPaymentsByPlayerType = Awaited<
   ReturnType<typeof getAllPaymentsByPlayer>
->;
-type GroupedPunishmentsType = Awaited<
-  ReturnType<typeof getPunishmentsByPlayer>
 >;
 
 //functions
@@ -48,17 +45,15 @@ export async function getPlayerDetails(slug: string | undefined) {
     season.id,
     allPunishments
   );
-  const openBeerPunishments = await getOpenPayments(
+  const openBeerPunishments = await getOpenPaymentsByPlayer(
     player.id,
     season.id,
-    "BEER",
-    allPunishments
+    "BEER"
   );
-  const openMoneyPunishments = await getOpenPayments(
+  const openMoneyPunishments = await getOpenPaymentsByPlayer(
     player.id,
     season.id,
-    "MONEY",
-    allPunishments
+    "MONEY"
   );
 
   return {
@@ -118,71 +113,4 @@ async function getMostCommonPunishment(
   }
 
   return undefined;
-}
-
-async function getOpenPayments(
-  playerId: string,
-  seasonId: string,
-  type: PunishmentType,
-  allPunishments: Array<Punishment>
-) {
-  const payments = await db.playerPayments.aggregate({
-    where: {
-      playerId,
-      seasonId,
-      type,
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  if (payments._sum) {
-    const punishments = await getPunishmentsByPlayer(playerId, seasonId, type);
-    const totalMoneyPunishments = getTotalCostFromPunishments(
-      punishments,
-      allPunishments
-    );
-    return totalMoneyPunishments - (payments._sum.amount ?? 0);
-  }
-
-  return undefined;
-}
-
-async function getPunishmentsByPlayer(
-  playerId: string,
-  seasonId: string,
-  type: PunishmentType
-) {
-  return await db.playerPunishments.groupBy({
-    by: ["punishmentId"],
-    where: {
-      playerId,
-      seasonId,
-      punishment: {
-        type: type,
-      },
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-}
-
-function getTotalCostFromPunishments(
-  playerPunishments: GroupedPunishmentsType,
-  allPunishments: Array<Punishment>
-) {
-  let result = 0;
-
-  playerPunishments.forEach(({ punishmentId, _sum }) => {
-    const cost = allPunishments.filter(
-      (punishment) => punishment.id === punishmentId
-    )[0].amount;
-    if (_sum && _sum.amount) {
-      result += cost * _sum.amount;
-    }
-  });
-
-  return result;
 }

@@ -17,11 +17,13 @@
     "@emotion/react": "^11.7.1",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.6.0",
+    "@paypal/paypal-js": "^5.0.2",
+    "@paypal/react-paypal-js": "^7.6.0",
     "@prisma/client": "^3.7.0",
     "@remix-run/react": "^1.1.3",
     "@remix-run/serve": "^1.1.3",
     "@remix-run/vercel": "^1.1.3",
-    "@remix-validated-form/with-zod": "^1.0.2",
+    "@remix-validated-form/with-zod": "^2.0.1",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "framer-motion": "^5.5.5",
@@ -29,9 +31,9 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "remix": "^1.1.1",
-    "remix-validated-form": "3.4.2",
+    "remix-validated-form": "^4.1.7",
     "zod": "^3.11.6",
-    "zod-form-data": "^1.1.1"
+    "zod-form-data": "^1.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.1.3",

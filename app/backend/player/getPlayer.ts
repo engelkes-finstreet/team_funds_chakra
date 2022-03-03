@@ -1,14 +1,14 @@
-import { Params } from "react-router";
 import { db } from "~/utils/db.server";
+import { Prisma } from "@prisma/client";
 
-export async function getPlayer(params: Params) {
-  const player = await db.player.findUnique({
-    where: {
-      slug: params.playerSlug,
-    },
-  });
+export async function getPlayer(args: Prisma.PlayerFindUniqueArgs) {
+  const player = await db.player.findUnique({ ...args });
 
-  return { player };
+  if (!player) {
+    throw new Response("Ein Spieler muss vorhanden sein", { status: 404 });
+  }
+
+  return player;
 }
 
 export type GetPlayerType = Awaited<ReturnType<typeof getPlayer>>;
