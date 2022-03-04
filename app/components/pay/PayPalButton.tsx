@@ -1,16 +1,12 @@
-import { FUNDING, PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 type Props = {
   value: string | undefined;
-  isValid: boolean;
 };
 
-export function PayPalButton({ value, isValid }: Props) {
+export function PayPalButton({ value }: Props) {
   return (
     <PayPalButtons
-      disabled={!isValid}
-      forceReRender={[value]}
-      fundingSource={FUNDING.PAYPAL}
       createOrder={(data, actions) => {
         return actions.order.create({
           purchase_units: [
