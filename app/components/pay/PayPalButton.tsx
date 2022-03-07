@@ -1,10 +1,12 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import { useFetcher } from "remix";
 
 type Props = {
   value: string | undefined;
 };
 
 export function PayPalButton({ value }: Props) {
+  const fetcher = useFetcher();
   return (
     <PayPalButtons
       createOrder={(data, actions) => {
@@ -12,17 +14,25 @@ export function PayPalButton({ value }: Props) {
           purchase_units: [
             {
               amount: {
-                value: `${value}`,
+                value: "20.00",
               },
             },
           ],
         });
       }}
+      onError={(err) => {
+        console.log(err);
+      }}
       onApprove={(data1, actions) => {
+        console.log("onApprove called");
         if (actions.order) {
           return actions.order.capture().then((details) => {
             const name = details.payer.name.given_name;
             console.log(`Transaction completed by ${name}`);
+            fetcher.submit(
+              { details: JSON.stringify(details) },
+              { method: "post", action: "/me/acceptPayment" }
+            );
           });
         }
 

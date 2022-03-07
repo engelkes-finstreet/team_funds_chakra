@@ -12,6 +12,7 @@ import * as z from "zod";
 import { stringToNumberValidation } from "~/utils/validations/utils";
 import { PayTextField } from "~/components/pay/PayTextField";
 import { PayPalButton } from "~/components/pay/PayPalButton";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 const validator = (maxAmount: number) =>
   z.object({
@@ -45,17 +46,18 @@ enum Screens {
 
 export default function PayRoute() {
   const data = useLoaderData<LoaderData>();
-  const [screen, setScreen] = useState(Screens.PAY);
+  const [screen, setScreen] = useState(Screens.CHECKOUT);
   const [value, setValue] = useState("");
 
-  switch (screen) {
-    case Screens.PAY:
-      return (
-        <Pay data={data} setScreen={setScreen} setPayPalValue={setValue} />
-      );
-    case Screens.CHECKOUT:
-      return <Checkout value={value} />;
-  }
+  // switch (screen) {
+  //   case Screens.PAY:
+  //     return (
+  //       <Pay data={data} setScreen={setScreen} setPayPalValue={setValue} />
+  //     );
+  //   case Screens.CHECKOUT:
+  //     return <Checkout value={"20.00"} />;
+  // }
+  return <PayPalButton value={"20.00"} />;
 }
 
 type CheckoutProps = {
