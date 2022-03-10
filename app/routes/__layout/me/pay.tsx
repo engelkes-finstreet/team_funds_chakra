@@ -2,7 +2,6 @@ import { TFHandle } from "~/utils/types/handle.types";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { requireUserId } from "~/utils/session.server";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
-import { getOpenPaymentsByPlayer } from "~/backend/player/getOpenPaymentsByPlayer";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { useCatch, useLoaderData } from "remix";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
@@ -13,6 +12,7 @@ import { stringToNumberValidation } from "~/utils/validations/utils";
 import { PayTextField } from "~/components/pay/PayTextField";
 import { PayPalButton } from "~/components/pay/PayPalButton";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import { getOpenPaymentsByPlayer } from "~/backend/player/punishments/getOpenPaymentsByPlayer";
 
 const validator = (maxAmount: number) =>
   z.object({

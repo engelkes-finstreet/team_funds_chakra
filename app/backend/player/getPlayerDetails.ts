@@ -2,7 +2,7 @@ import { Params } from "react-router";
 import { db } from "~/utils/db.server";
 import { Player, Prisma, Punishment, PunishmentType } from "@prisma/client";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
-import { getOpenPaymentsByPlayer } from "./getOpenPaymentsByPlayer";
+import { getOpenPaymentsByPlayer } from "./punishments/getOpenPaymentsByPlayer";
 
 //types
 export type PlayerDetailsType = Awaited<ReturnType<typeof getPlayerDetails>>;
