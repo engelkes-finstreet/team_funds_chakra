@@ -18,7 +18,7 @@ const validator = (maxAmount: number) =>
   z.object({
     maxAmount: stringToNumberValidation(
       "Es muss eine Zahl angegeben werden"
-    ).refine((value) => Number(value) < maxAmount, {
+    ).refine((value) => Number(value) <= maxAmount, {
       message: `Muss geringer als ${maxAmount} sein`,
     }),
   });
@@ -46,18 +46,22 @@ enum Screens {
 
 export default function PayRoute() {
   const data = useLoaderData<LoaderData>();
-  const [screen, setScreen] = useState(Screens.CHECKOUT);
+  const [screen, setScreen] = useState(Screens.PAY);
   const [value, setValue] = useState("");
 
-  // switch (screen) {
-  //   case Screens.PAY:
-  //     return (
-  //       <Pay data={data} setScreen={setScreen} setPayPalValue={setValue} />
-  //     );
-  //   case Screens.CHECKOUT:
-  //     return <Checkout value={"20.00"} />;
-  // }
-  return <PayPalButton value={"20.00"} />;
+  switch (screen) {
+    case Screens.PAY:
+      return (
+        <Pay
+          data={data}
+          setScreen={setScreen}
+          setPayPalValue={setValue}
+          value={value}
+        />
+      );
+    case Screens.CHECKOUT:
+      return <Checkout value={value} />;
+  }
 }
 
 type CheckoutProps = {
@@ -89,9 +93,10 @@ type PayProps = {
   data: LoaderData;
   setScreen: (screen: Screens) => void;
   setPayPalValue: (value: string) => void;
+  value: string;
 };
 
-const Pay = ({ data, setScreen, setPayPalValue }: PayProps) => {
+const Pay = ({ data, setScreen, setPayPalValue, value }: PayProps) => {
   const [isValid, setValid] = useState(false);
 
   if (!data) {

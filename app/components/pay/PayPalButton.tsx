@@ -14,7 +14,7 @@ export function PayPalButton({ value }: Props) {
           purchase_units: [
             {
               amount: {
-                value: "20.00",
+                value: value ?? "0",
               },
             },
           ],

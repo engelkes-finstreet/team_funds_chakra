@@ -10,6 +10,7 @@ async function seed() {
       email: "test@test.de",
       passwordHash: password,
       slug: "test@test.de",
+      isApproved: true,
     },
   });
 

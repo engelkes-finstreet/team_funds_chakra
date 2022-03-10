@@ -3,6 +3,8 @@ import { OrderResponseBody } from "@paypal/paypal-js";
 import { requireUserId } from "~/utils/session.server";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { createPayment } from "~/backend/payments/createPayment";
+import { setFlashContent } from "~/utils/flashMessage.server";
+import { getPlayerName } from "~/utils/functions";
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -21,6 +23,13 @@ export const action: ActionFunction = async ({ request }) => {
       amount: Number(amount),
       type: "MONEY",
     });
+
+    return await setFlashContent(
+      "me/pay",
+      request,
+      `Deine Zahlung über ${amount}EUR war erfolgreich.`,
+      "success"
+    );
   }
 
   return null;
