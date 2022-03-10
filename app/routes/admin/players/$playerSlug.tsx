@@ -4,7 +4,8 @@ import { getPlayer } from "~/backend/player/getPlayer";
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
-  return await getPlayer(params);
+  const player = await getPlayer({ where: { slug: params.playerSlug } });
+  return { player };
 };
 
 export default function PlayersLayoutRoute() {

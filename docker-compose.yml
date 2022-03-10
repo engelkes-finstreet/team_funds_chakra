@@ -8,6 +8,15 @@ services:
     env_file: ./.env.db
     ports:
       - "5432:5432"
+  test_db:
+    image: postgres:13
+    restart: always
+    container_name: integration_tests_team_funds
+    ports:
+      - "5433:5432"
+    env_file: ./.env.db
+    environment:
+      POSTGRES_DB: team_funds_integration
 
 
 volumes:

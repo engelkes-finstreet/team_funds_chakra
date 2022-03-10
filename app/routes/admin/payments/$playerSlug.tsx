@@ -14,7 +14,7 @@ import { Form } from "~/components/form/Form";
 import { db } from "~/utils/db.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { withZod } from "@remix-validated-form/with-zod";
-import { stringToNumberValidation } from "~/utils/validations/utils";
+import { stringToNumberValidationAndTransformation } from "~/utils/validations/utils";
 import { PunishmentType } from "@prisma/client";
 import * as z from "zod";
 import { TFHandle } from "~/utils/types/handle.types";
@@ -26,7 +26,7 @@ export const handle: TFHandle<LoaderData> = {
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const userId = await requireUserId(request);
-  const { player } = await getPlayer(params);
+  const player = await getPlayer({ where: { slug: params.playerSlug } });
   const season = await getCurrentSeason();
 
   return { userId, player, season };
@@ -41,7 +41,7 @@ const paymentValidator = withZod(
     payments: z.array(
       z.object({
         paymentType: z.nativeEnum(PunishmentType),
-        amount: stringToNumberValidation("Erforderlich"),
+        amount: stringToNumberValidationAndTransformation("Erforderlich"),
       })
     ),
   })

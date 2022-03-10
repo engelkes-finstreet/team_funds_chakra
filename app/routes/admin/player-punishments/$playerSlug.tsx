@@ -6,7 +6,7 @@ import { ActionFunction, useLoaderData } from "remix";
 import { validationError } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
-import { stringToNumberValidation } from "~/utils/validations/utils";
+import { stringToNumberValidationAndTransformation } from "~/utils/validations/utils";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getPlayerName } from "~/utils/functions";
 import { TextField } from "~/components/form/TextField";
@@ -26,7 +26,7 @@ type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const season = await getCurrentSeason();
   const userId = await requireUserId(request);
-  const { player } = await getPlayer(params);
+  const player = await getPlayer({ where: { slug: params.playerSlug } });
   const punishments = await db.punishment.findMany();
 
   return { player, punishments, userId, season };
@@ -41,7 +41,7 @@ export const playerPunishmentValidator = withZod(
     punishments: z.array(
       z.object({
         punishmentId: z.string(),
-        amount: stringToNumberValidation("Erforderlich"),
+        amount: stringToNumberValidationAndTransformation("Erforderlich"),
       })
     ),
   })

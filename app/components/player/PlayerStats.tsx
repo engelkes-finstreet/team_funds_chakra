@@ -2,7 +2,7 @@ import { useLoaderData } from "remix";
 import {
   PlayerDetailsType,
   MostCommonPunishmentType,
-  OpenPunishmentsType,
+  OpenPaymentsType,
 } from "~/backend/player/getPlayerDetails";
 import { Stat } from "~/components/player/Stat";
 import { formatCurrency, getPlayerName } from "~/utils/functions";
@@ -10,8 +10,8 @@ import { SimpleGrid, useColorModeValue } from "@chakra-ui/react";
 import { Player } from "@prisma/client";
 
 type Props = {
-  openMoneyPunishments: OpenPunishmentsType;
-  openBeerPunishments: OpenPunishmentsType;
+  openMoneyPunishments: OpenPaymentsType;
+  openBeerPunishments: OpenPaymentsType;
   player: Player;
   mostCommonPunishment: MostCommonPunishmentType;
 };

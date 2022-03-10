@@ -28,6 +28,7 @@ import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getFlashContent } from "~/utils/flashMessage.server";
 import { TFHandle } from "~/utils/types/handle.types";
 import { HiHome } from "react-icons/hi";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export const handle: TFHandle<any> = {
   breadcrumb: (match) => {
@@ -142,12 +143,20 @@ const Document = withEmotionCache(
         </head>
         <body>
           <ChakraProvider theme={theme}>
-            <Toast
-              title={data?.title}
-              description={data?.description}
-              status={data?.status}
-            />
-            {children}
+            <PayPalScriptProvider
+              options={{
+                "client-id":
+                  "AaqrYkBySj6rJHhqnfaJ7asP0JrZ-MNTri-dPQbk_zCFy8an0eBisZjiIoruYwAjebOukzmX8CS2tUQD",
+                currency: "EUR",
+              }}
+            >
+              <Toast
+                title={data?.title}
+                description={data?.description}
+                status={data?.status}
+              />
+              {children}
+            </PayPalScriptProvider>
           </ChakraProvider>
           <ScrollRestoration />
           <Scripts />

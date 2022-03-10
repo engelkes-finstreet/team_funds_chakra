@@ -15,7 +15,8 @@ export const handle: TFHandle<LoaderData> = {
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader: LoaderFunction = async ({ request, params }) => {
-  return await getPlayer(params);
+  const player = await getPlayer({ where: { slug: params.playerSlug } });
+  return { player };
 };
 
 export const action: ActionFunction = async ({ request, params }) => {

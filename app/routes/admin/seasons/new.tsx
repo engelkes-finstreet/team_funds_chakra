@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
     const season = await db.season.create({
       data: {
         startDate: new Date(Number(startYear), 5, 30),
-        endDate: new Date(2022, 6, 1),
+        endDate: new Date(Number(startYear) + 1, 6, 1),
         slug: `${startYear}-${Number(startYear) + 1}`,
         adminUserId,
       },

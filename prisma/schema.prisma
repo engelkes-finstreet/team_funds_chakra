@@ -17,9 +17,9 @@ model AdminUser {
   isApproved        Boolean             @default(false)
   seasons           Season[]
   players           Player[]
-  Punishment        Punishment[]
-  PlayerPayments    PlayerPayments[]
-  PlayerPunishments PlayerPunishments[]
+  punishment        Punishment[]
+  playerPayments    PlayerPayments[]
+  playerPunishments PlayerPunishments[]
 }
 
 model User {
@@ -44,8 +44,8 @@ model Season {
   createdBy         AdminUser           @relation(fields: [adminUserId], references: [id])
   slug              String              @unique
   punishments       Punishment[]
-  PlayerPayments    PlayerPayments[]
-  PlayerPunishments PlayerPunishments[]
+  playerPayments    PlayerPayments[]
+  playerPunishments PlayerPunishments[]
 }
 
 enum Position {
@@ -66,8 +66,8 @@ model Player {
   createdBy         AdminUser           @relation(fields: [adminUserId], references: [id])
   userId            String?             @unique
   connectedUser     User?               @relation(fields: [userId], references: [id])
-  PlayerPayments    PlayerPayments[]
-  PlayerPunishments PlayerPunishments[]
+  playerPayments    PlayerPayments[]
+  playerPunishments PlayerPunishments[]
 }
 
 enum PunishmentType {
@@ -90,12 +90,18 @@ model Punishment {
   playerPunishments PlayerPunishments[]
 }
 
+enum PaymentType {
+  ADMIN
+  PAYPAL
+}
+
 model PlayerPayments {
   id          String         @id @default(uuid())
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  adminUserId String
-  createdBy   AdminUser      @relation(fields: [adminUserId], references: [id])
+  adminUserId String?
+  createdBy   AdminUser?     @relation(fields: [adminUserId], references: [id])
+  paymentType PaymentType
   playerId    String
   player      Player         @relation(fields: [playerId], references: [id])
   amount      Int
