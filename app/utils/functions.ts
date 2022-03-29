@@ -29,3 +29,14 @@ export function playerNameFromSlug(slug: string) {
     .map((name) => capitalize(name))
     .join(" ");
 }
+
+export function randomInt(max: number) {
+  return Math.floor(Math.random() * (max + 1));
+}
+
+export function randomDate() {
+  const startDate = new Date(2021, 5, 30).getTime();
+  const endDate = new Date(2022, 6, 1).getTime();
+
+  return new Date(startDate + Math.random() * (endDate - startDate));
+}

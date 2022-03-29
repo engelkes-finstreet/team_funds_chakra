@@ -20,7 +20,7 @@ export function Container() {
     >
       <Box
         maxW="2560px"
-        bg={useColorModeValue("white", "gray.700")}
+        bg={useColorModeValue("white", "gray.800")}
         height="100%"
         pb="6"
         rounded={{ md: "lg" }}

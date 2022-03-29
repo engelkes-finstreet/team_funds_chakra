@@ -21,7 +21,7 @@ export const SidebarLink = (props: SidebarLinkProps) => {
   const resolved = useResolvedPath(to);
   const match = useMatch({
     path: resolved.pathname,
-    end: resolved.pathname.indexOf("me") !== -1 ? true : false,
+    end: resolved.pathname.indexOf("me") !== -1,
   });
 
   return (

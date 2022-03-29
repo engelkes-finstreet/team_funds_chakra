@@ -13,6 +13,7 @@
     "postinstall": "remix setup node",
     "start": "remix-serve build",
     "seed": "node --require esbuild-register prisma/seed.ts",
+    "reset": "npx prisma migrate reset",
     "db-push-and-format": "npx prisma format && npx prisma db push",
     "test": "jest --watch",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev"
@@ -33,6 +34,8 @@
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "framer-motion": "^5.5.5",
+    "highcharts": "^10.0.0",
+    "highcharts-react-official": "^3.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",

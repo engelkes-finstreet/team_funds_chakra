@@ -51,7 +51,7 @@ const Shell = ({ email, children }: ShellProps) => {
   return (
     <Flex
       height="100vh"
-      bg={useColorModeValue("blue.800", "gray.800")}
+      bg={useColorModeValue("blue.800", "gray.700")}
       overflow="hidden"
       sx={{ "--sidebar-width": "16rem" }}
     >
