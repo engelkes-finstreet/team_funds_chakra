@@ -1,4 +1,5 @@
 import { Player } from "@prisma/client";
+import { UserWithoutPassword } from "~/utils/session.server";
 
 export function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -10,6 +11,14 @@ export function getPlayerName(player: Player | undefined | null): string {
   }
 
   return "";
+}
+
+export function getUserName(user: UserWithoutPassword): string {
+  if (user.firstName && user.lastName) {
+    return `${capitalize(user.firstName)} ${capitalize(user.lastName)}`;
+  }
+
+  return user.email;
 }
 
 export function formatCurrency(value: number) {

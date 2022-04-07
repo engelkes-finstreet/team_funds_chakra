@@ -17,6 +17,7 @@ import { AiOutlineContacts, AiOutlineUser } from "react-icons/ai";
 import { NavGroup } from "~/components/Layout/NavGroup";
 import { Navigation } from "./Navigation";
 import { Container } from "~/components/Layout/Container";
+import { getUserName } from "~/utils/functions";
 
 type Props = {
   user: UserWithoutPassword;
@@ -24,7 +25,7 @@ type Props = {
 
 export function Layout({ user }: Props) {
   return (
-    <Shell email={user.email}>
+    <Shell userName={getUserName(user)}>
       <UserNavigationLinks />
     </Shell>
   );
@@ -36,18 +37,18 @@ type AdminLayoutProps = {
 
 export function AdminLayout({ admin }: AdminLayoutProps) {
   return (
-    <Shell email={admin.email}>
+    <Shell userName={admin.email}>
       <AdminNavigationLinks />
     </Shell>
   );
 }
 
 type ShellProps = {
-  email: string;
+  userName: string;
   children: React.ReactNode;
 };
 
-const Shell = ({ email, children }: ShellProps) => {
+const Shell = ({ userName, children }: ShellProps) => {
   return (
     <Flex
       height="100vh"
@@ -68,7 +69,7 @@ const Shell = ({ email, children }: ShellProps) => {
         height="100vh"
       >
         <Box fontSize="sm" lineHeight="tall" height={"100vh"}>
-          <UserInfo email={email} />
+          <UserInfo email={userName} />
           <Navigation>{children}</Navigation>
         </Box>
       </Box>
