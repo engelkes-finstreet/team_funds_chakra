@@ -1,21 +1,20 @@
-import {
-  requireAndReturnUser,
-  UserWithoutPassword,
-} from "~/utils/session.server";
-import { LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction, redirect, useLoaderData } from "remix";
 import { Layout } from "~/components/Layout/Layout";
+import { requireAndReturnUser } from "~/utils/auth/session-utils.server";
 
-type LoaderData = { user: UserWithoutPassword };
+type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader: LoaderFunction = async ({ request, params }) => {
-  const user = await requireAndReturnUser(request);
+  const user = await requireAndReturnUser({ request });
 
-  const data: LoaderData = { user };
+  if (!user.isConfirmed) {
+    return redirect("/confirm");
+  }
 
-  return data;
+  return { user };
 };
 
 export default function AdminRoute() {
-  const data = useLoaderData<LoaderData>();
+  const { user } = useLoaderData<LoaderData>();
 
-  return <Layout user={data.user} />;
+  return <Layout user={user} />;
 }

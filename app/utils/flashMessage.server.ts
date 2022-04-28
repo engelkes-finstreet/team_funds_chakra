@@ -60,3 +60,24 @@ export const setFlashContent = async (
 
   return redirect(redirectTo, headers);
 };
+
+type FlashHeaderProps = {
+  request: Request;
+  title: string;
+  status: AlertStatus;
+  description?: string;
+};
+
+export const getFlashCookie = async ({
+  request,
+  title,
+  status,
+  description,
+}: FlashHeaderProps) => {
+  const session = await getFlashSession(request.headers.get("Cookie"));
+  session.flash(TITLE, title);
+  session.flash(DESCRIPTION, description);
+  session.flash(STATUS, status);
+
+  return commitFlashSession(session);
+};

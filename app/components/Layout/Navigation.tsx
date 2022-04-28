@@ -1,9 +1,4 @@
 import { Button, Flex, Stack } from "@chakra-ui/react";
-import { NavGroup } from "~/components/Layout/NavGroup";
-import { SidebarLink } from "~/components/Layout/SidebarLink";
-import { Gi3DHammer, GiPayMoney, GiSoccerKick } from "react-icons/gi";
-import { BiTimeFive } from "react-icons/bi";
-import { AiOutlineContacts, AiOutlineUser } from "react-icons/ai";
 import { ScrollArea } from "~/components/Layout/ScrollArea";
 import * as React from "react";
 import { Form } from "remix";

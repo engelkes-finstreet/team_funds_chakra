@@ -1,17 +1,10 @@
 import * as React from "react";
 import { PasswordField } from "../form/PasswordField";
 import { TextField } from "~/components/form/TextField";
-import { useSearchParams } from "remix";
 
 export const RegisterAdminForm = () => {
-  const [searchParams] = useSearchParams();
   return (
     <>
-      <input
-        type="hidden"
-        name="redirectTo"
-        value={searchParams.get("redirectTo") ?? "/"}
-      />
       <TextField name={"email"} label={"E-Mail"} autoFocus={true} />
       <PasswordField label={"Passwort"} name={"password"} />
       <PasswordField
@@ -23,15 +16,8 @@ export const RegisterAdminForm = () => {
 };
 
 export const RegisterForm = () => {
-  const [searchParams] = useSearchParams();
-
   return (
     <>
-      <input
-        type="hidden"
-        name="redirectTo"
-        value={searchParams.get("redirectTo") ?? "/"}
-      />
       <TextField name={"email"} label={"E-Mail"} autoFocus={true} />
       <TextField name={"firstName"} label={"Vorname"} />
       <TextField name={"lastName"} label={"Nachname"} />

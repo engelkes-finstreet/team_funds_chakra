@@ -9,7 +9,7 @@ export function ResetPasswordForm() {
       <PasswordField label={"altes Passwort"} name={"oldPassword"} />
       <PasswordField label={"neues Passwort"} name={"password"} />
       <PasswordField
-        label={"Passwort Bestätigen"}
+        label={"Passwort bestätigen"}
         name={"passwordConfirmation"}
       />
     </>

@@ -47,8 +47,6 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
-
   return (
     <Document title="Error!">
       <Box>

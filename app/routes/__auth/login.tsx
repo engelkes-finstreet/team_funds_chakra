@@ -1,28 +1,28 @@
-import { ActionFunction } from "remix";
+import { ActionFunction, redirect } from "remix";
 import { validationError } from "remix-validated-form";
-import {
-  createAdminSession,
-  createUserSession,
-  login,
-} from "~/utils/session.server";
-import { badRequest } from "~/utils/requests";
 import React from "react";
 import { loginValidator } from "~/utils/validations/authValidations";
 import { LoginPage } from "~/components/auth/LoginPage";
+import { login } from "~/utils/auth/login.server";
+import { DataFunctionArgs } from "@remix-run/server-runtime";
+import { isUserLoggedIn } from "~/utils/auth/session-utils.server";
+
+type LoaderData = Awaited<ReturnType<typeof loader>>;
+export let loader = async ({ request, params }: DataFunctionArgs) => {
+  const isLoggedIn = await isUserLoggedIn({ request });
+  if (isLoggedIn) {
+    return redirect("/");
+  }
+
+  return null;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await loginValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { email, password, redirectTo } = data.data;
 
-  const user = await login(email, password);
-  if (!user) {
-    return badRequest({
-      formError: `Username/Password combination is incorrect`,
-    });
-  }
-
-  return createUserSession(user.id, redirectTo);
+  return await login({ email, password, redirectTo });
 };
 
 export default function LoginRoute() {

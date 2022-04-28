@@ -5,11 +5,6 @@ import {
   resetPasswordValidator,
   updateProfileValidator,
 } from "~/utils/validations/authValidations";
-import {
-  requireAndReturnUser,
-  resetPassword,
-  updateUser,
-} from "~/utils/session.server";
 import { ActionFunction, useLoaderData } from "remix";
 import { ProfileForm } from "~/components/me/ProfileForm";
 import { ValidatedForm, validationError } from "remix-validated-form";
@@ -17,13 +12,16 @@ import { ResetPasswordForm } from "~/components/me/ResetPasswordForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { useResetForm } from "~/hooks/useResetForm";
 import { TFHandle } from "~/utils/types/handle.types";
+import { resetPassword } from "~/utils/auth/reset-password.server";
+import { updateUser } from "~/backend/user/updateUser";
+import { requireAndReturnUser } from "~/utils/auth/session-utils.server";
 
 export const handle: TFHandle<any> = {
   breadcrumb: (data) => "Settings",
 };
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
-  const user = await requireAndReturnUser(request);
+  const user = await requireAndReturnUser({ request });
 
   return { user };
 };
@@ -33,8 +31,8 @@ export const action: ActionFunction = async ({ request }) => {
   if (data.get("_action") === "profile") {
     const profileData = await updateProfileValidator.validate(data);
     if (profileData.error) return validationError(profileData.error);
-    const { firstName, lastName, _userId } = profileData.data;
-    await updateUser(_userId, firstName, lastName);
+    const { firstName, lastName, _userId: userId } = profileData.data;
+    await updateUser({ firstName, lastName, userId });
 
     return setFlashContent(
       "/me",
@@ -47,15 +45,9 @@ export const action: ActionFunction = async ({ request }) => {
   if (data.get("_action") === "password") {
     const passwordData = await resetPasswordValidator.validate(data);
     if (passwordData.error) return validationError(passwordData.error);
-    const { _userId, oldPassword, password } = passwordData.data;
-    await resetPassword(_userId, oldPassword, password);
+    const { _userId: userId, oldPassword, password } = passwordData.data;
 
-    return setFlashContent(
-      "/me",
-      request,
-      "Passwort erfolgreich zurückgesetzt",
-      "success"
-    );
+    return resetPassword({ userId, oldPassword, password, request });
   }
 
   return null;

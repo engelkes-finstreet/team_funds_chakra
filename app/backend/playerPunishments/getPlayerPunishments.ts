@@ -46,8 +46,6 @@ export async function getTotalPunishmentAmountBySeason({
     timeline.push({ date: playerPunishment.createdAt, amount });
   });
 
-  console.log({ payments });
-
   payments.forEach((payment) => {
     timeline.push({ date: payment.createdAt, amount: -payment.amount });
   });

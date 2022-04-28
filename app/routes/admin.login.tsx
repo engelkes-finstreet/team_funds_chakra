@@ -4,22 +4,14 @@ import { LoginPage } from "~/components/auth/LoginPage";
 import React from "react";
 import { loginValidator } from "~/utils/validations/authValidations";
 import { validationError } from "remix-validated-form";
-import { createAdminSession, loginAdminUser } from "~/utils/session.server";
-import { badRequest } from "~/utils/requests";
+import { loginAdminUser } from "~/utils/auth/login.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await loginValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { email, password, redirectTo } = data.data;
 
-  const admin = await loginAdminUser(email, password);
-  if (!admin) {
-    return badRequest({
-      formError: `Username/Password combination is incorrect`,
-    });
-  }
-
-  return createAdminSession(admin.id, redirectTo);
+  return await loginAdminUser({ email, password, redirectTo });
 };
 
 export default function AdminLoginRoute() {

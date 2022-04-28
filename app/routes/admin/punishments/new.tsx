@@ -3,7 +3,6 @@ import { punishmentValidator } from "~/utils/validations/punishmentValidation";
 import PunishmentForm from "~/components/punishment/PunishmentForm";
 import { ActionFunction, useLoaderData } from "remix";
 import { validationError } from "remix-validated-form";
-import { requireUserId } from "~/utils/session.server";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getAllSeasons } from "~/backend/season/getAllSeasons";
 import { useResetForm } from "~/hooks/useResetForm";
@@ -11,6 +10,7 @@ import { Checkbox } from "~/components/form/Checkbox";
 import { TFHandle } from "~/utils/types/handle.types";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { db } from "~/utils/db.server";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => "Erstellen",
@@ -22,7 +22,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const adminUserId = await requireUserId(request);
+  const adminUserId = await getUserId({ request });
   const data = await punishmentValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const {

@@ -1,6 +1,5 @@
 import { TFHandle } from "~/utils/types/handle.types";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { requireUserId } from "~/utils/session.server";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { useCatch, useLoaderData } from "remix";
@@ -13,6 +12,7 @@ import { PayTextField } from "~/components/pay/PayTextField";
 import { PayPalButton } from "~/components/pay/PayPalButton";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { getOpenPaymentsByPlayer } from "~/backend/player/punishments/getOpenPaymentsByPlayer";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 const validator = (maxAmount: number) =>
   z.object({
@@ -29,7 +29,7 @@ export const handle: TFHandle<any> = {
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
-  const userId = await requireUserId(request);
+  const userId = await getUserId({ request });
   const player = await getPlayer({
     where: {
       userId,

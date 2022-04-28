@@ -1,6 +1,5 @@
 import { Form } from "~/components/form/Form";
 import { ActionFunction, useLoaderData } from "remix";
-import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
 import { seasonValidator } from "~/utils/validations/seasonValidations";
@@ -8,13 +7,14 @@ import { SeasonForm } from "~/components/season/SeasonForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { Prisma } from "@prisma/client";
 import { TFHandle } from "~/utils/types/handle.types";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 export const handle: TFHandle<any> = {
   breadcrumb: (data) => "Erstellen",
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const adminUserId = await requireUserId(request);
+  const adminUserId = await getUserId({ request });
   const data = await seasonValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { startYear } = data.data;

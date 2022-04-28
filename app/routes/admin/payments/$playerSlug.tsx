@@ -9,7 +9,6 @@ import { HiX } from "react-icons/hi";
 import { validationError } from "remix-validated-form";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { useState } from "react";
-import { requireUserId } from "~/utils/session.server";
 import { Form } from "~/components/form/Form";
 import { db } from "~/utils/db.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
@@ -18,6 +17,7 @@ import { stringToNumberValidationAndTransformation } from "~/utils/validations/u
 import { PunishmentType } from "@prisma/client";
 import * as z from "zod";
 import { TFHandle } from "~/utils/types/handle.types";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => getPlayerName(data.player),
@@ -25,7 +25,7 @@ export const handle: TFHandle<LoaderData> = {
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
-  const userId = await requireUserId(request);
+  const userId = await getUserId({ request });
   const player = await getPlayer({ where: { slug: params.playerSlug } });
   const season = await getCurrentSeason();
 
@@ -40,7 +40,7 @@ const paymentValidator = withZod(
     _seasonId: z.string(),
     payments: z.array(
       z.object({
-        paymentType: z.nativeEnum(PunishmentType),
+        punishmentType: z.nativeEnum(PunishmentType),
         amount: stringToNumberValidationAndTransformation("Erforderlich"),
       })
     ),
@@ -59,7 +59,8 @@ export const action: ActionFunction = async ({ request }) => {
         playerId: _playerId,
         seasonId: _seasonId,
         amount: payment.amount,
-        type: payment.paymentType,
+        type: payment.punishmentType,
+        paymentType: "ADMIN",
       },
     });
   }
@@ -104,7 +105,7 @@ export default function PlayerPaymentRoute() {
               alignItems={"flex-end"}
             >
               <PunishmentTypeComponent
-                selectName={`payments[${index}].paymentType`}
+                selectName={`payments[${index}].punishmentType`}
                 selectLabel={"Strafe"}
                 textFieldName={`payments[${index}].amount`}
                 textFieldLabel={"Zahlhöhe"}

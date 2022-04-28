@@ -1,6 +1,5 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
-import { requireUserId } from "~/utils/session.server";
 import { db } from "~/utils/db.server";
 import { ActionFunction, useLoaderData } from "remix";
 import { validationError } from "remix-validated-form";
@@ -17,6 +16,7 @@ import { Form } from "~/components/form/Form";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { useState } from "react";
 import { TFHandle } from "~/utils/types/handle.types";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => getPlayerName(data.player),
@@ -25,7 +25,7 @@ export const handle: TFHandle<LoaderData> = {
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const season = await getCurrentSeason();
-  const userId = await requireUserId(request);
+  const userId = await getUserId({ request });
   const player = await getPlayer({ where: { slug: params.playerSlug } });
   const punishments = await db.punishment.findMany();
 

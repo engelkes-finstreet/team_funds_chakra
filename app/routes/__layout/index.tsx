@@ -1,7 +1,6 @@
 import HighchartsReact from "highcharts-react-official";
-import Highcharts, { dateFormat } from "highcharts";
+import Highcharts from "highcharts";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { db } from "~/utils/db.server";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { useLoaderData } from "remix";
 import { useConst, useToken } from "@chakra-ui/react";
@@ -9,7 +8,7 @@ import { formatCurrency } from "~/utils/functions";
 import { getTotalPunishmentAmountBySeason } from "~/backend/playerPunishments/getPlayerPunishments";
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
-export let loader = async ({ request, params }: DataFunctionArgs) => {
+export let loader = async ({}: DataFunctionArgs) => {
   const season = await getCurrentSeason();
 
   const moneyPunishments = await getTotalPunishmentAmountBySeason({
@@ -52,10 +51,12 @@ export default function Index() {
       },
       series: [
         {
+          //@ts-ignore
           data: moneyData,
           name: "Geldstrafen",
         },
         {
+          //@ts-ignore
           data: beerData,
           name: "Bierstrafen",
         },

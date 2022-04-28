@@ -6,17 +6,24 @@ import {
   Select as ChakraSelect,
   SelectProps as ChakraSelectProps,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { ChangeEventHandler } from "react";
 import { FormError } from "~/components/form/FormError";
 
 export type SelectProps = {
   name: string;
   children: React.ReactNode;
   label?: string;
-  autoFocus: boolean;
-} & FormControlProps;
+  autoFocus?: boolean;
+  onChange?: ChangeEventHandler<HTMLSelectElement>;
+} & Omit<FormControlProps, "onChange">;
 
-export const Select = ({ name, label, children, ...rest }: SelectProps) => {
+export const Select = ({
+  name,
+  label,
+  children,
+  onChange,
+  ...rest
+}: SelectProps) => {
   const { validate, clearError, defaultValue, error } = useField(name);
 
   return (
@@ -24,7 +31,10 @@ export const Select = ({ name, label, children, ...rest }: SelectProps) => {
       {label ? <FormLabel>{label}</FormLabel> : null}
       <ChakraSelect
         name={name}
-        onChange={clearError}
+        onChange={(event) => {
+          clearError();
+          onChange && onChange(event);
+        }}
         onBlur={validate}
         defaultValue={defaultValue}
       >

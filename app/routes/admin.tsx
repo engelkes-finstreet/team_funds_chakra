@@ -1,28 +1,16 @@
 import { AdminLayout } from "~/components/Layout/Layout";
-import { useLoaderData } from "remix";
-import {
-  getUserSession,
-  requireAndReturnAdminUser,
-} from "~/utils/session.server";
-import { setFlashContent } from "~/utils/flashMessage.server";
+import { redirect, useLoaderData } from "remix";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { IS_ADMIN } from "~/utils/session-keys/userSessionKeys";
+import { requireAndReturnAdminUser } from "~/utils/auth/session-utils.server";
 
 export let loader = async ({ request, params }: DataFunctionArgs) => {
-  const session = await getUserSession(request);
-  const isAdmin = session.get(IS_ADMIN);
+  const admin = await requireAndReturnAdminUser({ request });
 
-  if (!isAdmin) {
-    throw await setFlashContent(
-      "/",
-      request,
-      "Fehlende Berechtigung",
-      "error",
-      "Du musst ein Admin sein um auf diese Seite zugreifen zu dürfen"
-    );
+  if (!admin.isConfirmed) {
+    throw redirect("/confirm-admin");
   }
 
-  return await requireAndReturnAdminUser(request);
+  return { admin };
 };
 
 export default function AdminRoute() {

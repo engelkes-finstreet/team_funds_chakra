@@ -1,17 +1,5 @@
 import * as z from "zod";
-import { Position, PunishmentType, Role } from "@prisma/client";
-
-export const RoleEnum = z.nativeEnum(Role);
-export type RoleType = z.infer<typeof RoleEnum>;
-
-const roleMapping: Record<RoleType, string> = {
-  ADMIN: "Admin",
-  USER: "User",
-};
-
-export function getRoleMapping(role: RoleType) {
-  return roleMapping[role];
-}
+import { Position, PunishmentType } from "@prisma/client";
 
 export const PositionEnum = z.nativeEnum(Position);
 export type PositionType = z.infer<typeof PositionEnum>;

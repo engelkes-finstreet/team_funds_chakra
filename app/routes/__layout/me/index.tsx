@@ -1,13 +1,13 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getPlayerDetails } from "~/backend/player/getPlayerDetails";
-import { requireAndReturnUser } from "~/utils/session.server";
 import { useLoaderData } from "remix";
 import { PlayerProfilePage } from "~/components/player/PlayerProfilePage";
 import { Text } from "@chakra-ui/react";
+import { requireAndReturnUser } from "~/utils/auth/session-utils.server";
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
-  const user = await requireAndReturnUser(request);
+  const user = await requireAndReturnUser({ request });
 
   if (user.player) {
     return await getPlayerDetails(user.player?.slug);

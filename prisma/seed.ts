@@ -1,10 +1,11 @@
+//@ts-ignore
+import bcrypt from "bcrypt";
 import {
   Player,
   PrismaClient,
   Punishment,
   PunishmentType,
 } from "@prisma/client";
-import bcrypt from "bcrypt";
 import { randomDate, randomInt } from "~/utils/functions";
 const db = new PrismaClient();
 

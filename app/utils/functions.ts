@@ -1,5 +1,5 @@
 import { Player } from "@prisma/client";
-import { UserWithoutPassword } from "~/utils/session.server";
+import { UserWithoutPassword } from "./auth/session-utils.server";
 
 export function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);

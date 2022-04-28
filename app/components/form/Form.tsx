@@ -63,6 +63,13 @@ export const ExtendedForm = ({
         </Alert>
       )}
 
+      {data?.formInfo && (
+        <Alert status={"info"} variant={"top-accent"}>
+          <AlertIcon />
+          {data.formInfo}
+        </Alert>
+      )}
+
       <Stack spacing={4}>{children}</Stack>
 
       <Flex justifyContent={"flex-end"} alignItems={"center"} gap={8}>

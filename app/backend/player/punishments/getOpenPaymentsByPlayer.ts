@@ -2,6 +2,10 @@ import { Punishment, PunishmentType } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { getTotalCostsFromPlayerPunishments } from "~/backend/player/punishments/getTotalCostsFromPlayerPunishments";
 
+export type OpenPaymentsType = Awaited<
+  ReturnType<typeof getOpenPaymentsByPlayer>
+>;
+
 /**
  *
  * @param playerId - player who received the punishments

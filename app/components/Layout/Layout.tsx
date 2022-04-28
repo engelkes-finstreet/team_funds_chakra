@@ -3,10 +3,6 @@ import * as React from "react";
 import { SidebarLink } from "./SidebarLink";
 import { UserInfo } from "./UserInfo";
 import {
-  AdminWithoutPassword,
-  UserWithoutPassword,
-} from "~/utils/session.server";
-import {
   Gi3DHammer,
   GiPayMoney,
   GiSettingsKnobs,
@@ -18,6 +14,10 @@ import { NavGroup } from "~/components/Layout/NavGroup";
 import { Navigation } from "./Navigation";
 import { Container } from "~/components/Layout/Container";
 import { getUserName } from "~/utils/functions";
+import {
+  AdminWithoutPassword,
+  UserWithoutPassword,
+} from "~/utils/auth/session-utils.server";
 
 type Props = {
   user: UserWithoutPassword;

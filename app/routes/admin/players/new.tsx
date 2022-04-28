@@ -2,7 +2,6 @@ import { ActionFunction } from "remix";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
 import { playerValidator } from "~/utils/validations/playerValidations";
-import { requireUserId } from "~/utils/session.server";
 import { validationError } from "remix-validated-form";
 import { db } from "~/utils/db.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
@@ -10,13 +9,14 @@ import { getPlayerName } from "~/utils/functions";
 import { Checkbox } from "~/components/form/Checkbox";
 import { useResetForm } from "~/hooks/useResetForm";
 import { TFHandle } from "~/utils/types/handle.types";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 export const handle: TFHandle<any> = {
   breadcrumb: (data) => "Erstellen",
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const adminUserId = await requireUserId(request);
+  const adminUserId = await getUserId({ request });
   const data = await playerValidator.validate(await request.formData());
   if (data.error) return validationError(data.error);
   const { firstName, lastName, position, createOtherPlayer } = data.data;

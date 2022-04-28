@@ -29,7 +29,9 @@ export function PunishmentTypeSelect({
       name={name}
       label={label}
       {...rest}
-      onChange={(event) => setPunishmentType(event.currentTarget.value)}
+      onChange={(event) => {
+        setPunishmentType(event.currentTarget.value);
+      }}
     >
       {Object.keys(PunishmentType).map((punishmentType) => (
         <option key={punishmentType} value={punishmentType}>

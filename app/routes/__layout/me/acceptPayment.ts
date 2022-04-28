@@ -1,13 +1,12 @@
 import { ActionFunction, LoaderFunction, redirect } from "remix";
 import { OrderResponseBody } from "@paypal/paypal-js";
-import { requireUserId } from "~/utils/session.server";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { createPayment } from "~/backend/payments/createPayment";
 import { setFlashContent } from "~/utils/flashMessage.server";
-import { getPlayerName } from "~/utils/functions";
+import { getUserId } from "~/utils/auth/session-utils.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
+  const userId = await getUserId({ request });
   const player = await getPlayer({ where: { userId } });
   const data = await request.formData();
   const detailsFormDataEntryValue = data.get("details");

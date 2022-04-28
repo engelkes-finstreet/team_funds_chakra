@@ -8,30 +8,65 @@ datasource db {
 }
 
 model AdminUser {
-  id                String              @id @default(uuid())
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  email             String              @unique
-  slug              String              @unique
-  passwordHash      String
-  isApproved        Boolean             @default(false)
-  seasons           Season[]
-  players           Player[]
-  punishment        Punishment[]
-  playerPayments    PlayerPayments[]
-  playerPunishments PlayerPunishments[]
+  id                          String                       @id @default(uuid())
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @updatedAt
+  email                       String                       @unique
+  slug                        String                       @unique
+  passwordHash                String
+  isApproved                  Boolean                      @default(false)
+  isConfirmed                 Boolean                      @default(false)
+  seasons                     Season[]
+  players                     Player[]
+  punishment                  Punishment[]
+  playerPayments              PlayerPayments[]
+  playerPunishments           PlayerPunishments[]
+  confirmToken                ConfirmAdminUserToken?
+  resetAdminUserPasswordToken ResetAdminUserPasswordToken?
+
 }
 
 model User {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  email        String   @unique
-  firstName    String
-  lastName     String
-  slug         String   @unique
-  passwordHash String
-  player       Player?
+  id                     String                  @id @default(uuid())
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  email                  String                  @unique
+  isConfirmed            Boolean                 @default(false)
+  firstName              String
+  lastName               String
+  slug                   String                  @unique
+  passwordHash           String
+  player                 Player?
+  confirmToken           ConfirmUserToken?
+  resetUserPasswordToken ResetUserPasswordToken?
+}
+
+model ConfirmUserToken {
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+}
+
+model ResetUserPasswordToken {
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+}
+
+model ConfirmAdminUserToken {
+  adminId   String    @unique
+  admin     AdminUser @relation(fields: [adminId], references: [id])
+  token     String    @unique
+  expiresAt DateTime
+}
+
+model ResetAdminUserPasswordToken {
+  adminId   String    @unique
+  admin     AdminUser @relation(fields: [adminId], references: [id])
+  token     String    @unique
+  expiresAt DateTime
 }
 
 model Season {
