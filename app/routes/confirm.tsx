@@ -7,7 +7,6 @@ import {
 import {
   Alert,
   AlertIcon,
-  Box,
   Divider,
   Flex,
   Heading,
@@ -34,6 +33,7 @@ import {
 import { ResendMailForm } from "~/components/auth/confirm/ResendMailForm";
 import React from "react";
 import { Button } from "~/components/chakra/Button";
+import { AuthContainer } from "~/components/auth/AuthContainer";
 
 export enum ConfirmAction {
   RESEND_MAIL = "RESEND_MAIL",
@@ -80,44 +80,42 @@ export default function ConfirmRoute() {
   const data = useActionData();
 
   return (
-    <Box minH="100vh" py="12" px={{ base: "4", lg: "8" }}>
-      <Box maxW="md" mx="auto">
-        <Logo mx="auto" h="8" mb={{ base: "10", md: "20" }} />
-        <ChangeMailModal isOpen={isOpen} onClose={onClose} />
-        <Card>
-          <CardContent>
-            {data?.formError && (
-              <Alert status={"error"} variant={"top-accent"} mb={4}>
-                <AlertIcon />
-                {data.formError}
-              </Alert>
-            )}
-            <Heading mb={4} size={"md"}>
-              Bitte bestätige deine E-Mail Adresse
-            </Heading>
-            <Text>
-              Wir haben eine E-Mail an <strong>{user.email}</strong> gesendet.{" "}
-              <br /> Klicke auf den Link in der Mail um deinen Account zu
-              bestätigen. Falls du keine E-Mail erhalten hast kannst du sie hier
-              erneut senden lassen oder korrigieren falls du dich vertippt hast.
-            </Text>
-          </CardContent>
-          <Divider />
-          <CardButtons>
-            <ResendMailForm email={user.email} />
-            <CardButton name={"_action"} variant={"outline"} onClick={onOpen}>
-              E-Mail ändern
-            </CardButton>
-          </CardButtons>
-        </Card>
-        <Flex justifyContent={"center"} mt={2}>
-          <Form method={"post"} action={"/logout"}>
-            <Button variant={"ghost"} type={"submit"}>
-              Logout
-            </Button>
-          </Form>
-        </Flex>
-      </Box>
-    </Box>
+    <AuthContainer>
+      <Logo mx="auto" h="8" mb={{ base: "10", md: "20" }} />
+      <ChangeMailModal isOpen={isOpen} onClose={onClose} />
+      <Card>
+        <CardContent>
+          {data?.formError && (
+            <Alert status={"error"} variant={"top-accent"} mb={4}>
+              <AlertIcon />
+              {data.formError}
+            </Alert>
+          )}
+          <Heading mb={4} size={"md"}>
+            Bitte bestätige deine E-Mail Adresse
+          </Heading>
+          <Text>
+            Wir haben eine E-Mail an <strong>{user.email}</strong> gesendet.{" "}
+            <br /> Klicke auf den Link in der Mail um deinen Account zu
+            bestätigen. Falls du keine E-Mail erhalten hast kannst du sie hier
+            erneut senden lassen oder korrigieren falls du dich vertippt hast.
+          </Text>
+        </CardContent>
+        <Divider />
+        <CardButtons>
+          <ResendMailForm email={user.email} />
+          <CardButton name={"_action"} variant={"outline"} onClick={onOpen}>
+            E-Mail ändern
+          </CardButton>
+        </CardButtons>
+      </Card>
+      <Flex justifyContent={"center"} mt={2}>
+        <Form method={"post"} action={"/logout"}>
+          <Button variant={"ghost"} type={"submit"}>
+            Logout
+          </Button>
+        </Form>
+      </Flex>
+    </AuthContainer>
   );
 }
