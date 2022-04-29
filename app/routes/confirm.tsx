@@ -8,7 +8,6 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Button,
   Divider,
   Flex,
   Heading,
@@ -34,6 +33,7 @@ import {
 } from "~/components/auth/Card";
 import { ResendMailForm } from "~/components/auth/confirm/ResendMailForm";
 import React from "react";
+import { Button } from "~/components/chakra/Button";
 
 export enum ConfirmAction {
   RESEND_MAIL = "RESEND_MAIL",
@@ -112,7 +112,7 @@ export default function ConfirmRoute() {
         </Card>
         <Flex justifyContent={"center"} mt={2}>
           <Form method={"post"} action={"/logout"}>
-            <Button colorScheme={"blue"} variant={"ghost"} type={"submit"}>
+            <Button variant={"ghost"} type={"submit"}>
               Logout
             </Button>
           </Form>

@@ -1,5 +1,5 @@
 import { DataFunctionArgs } from "@remix-run/server-runtime";
-import { Button, Divider, Heading } from "@chakra-ui/react";
+import { Divider, Heading } from "@chakra-ui/react";
 import { HeadlessForm } from "~/components/form/Form";
 import {
   resetPasswordValidator,
@@ -15,6 +15,7 @@ import { TFHandle } from "~/utils/types/handle.types";
 import { resetPassword } from "~/utils/auth/reset-password.server";
 import { updateUser } from "~/backend/user/updateUser";
 import { requireAndReturnUser } from "~/utils/auth/session-utils.server";
+import { Button } from "~/components/chakra/Button";
 
 export const handle: TFHandle<any> = {
   breadcrumb: (data) => "Settings",
@@ -71,12 +72,7 @@ export default function MeRoute() {
         <HeadlessForm
           renderForm={() => <ProfileForm />}
           renderButton={() => (
-            <Button
-              colorScheme={"blue"}
-              type={"submit"}
-              name={"_action"}
-              value={"profile"}
-            >
+            <Button type={"submit"} name={"_action"} value={"profile"}>
               Profile bearbeiten
             </Button>
           )}
@@ -95,12 +91,7 @@ export default function MeRoute() {
         <HeadlessForm
           renderForm={() => <ResetPasswordForm />}
           renderButton={() => (
-            <Button
-              colorScheme={"blue"}
-              type={"submit"}
-              name={"_action"}
-              value={"password"}
-            >
+            <Button type={"submit"} name={"_action"} value={"password"}>
               Passwort ändern
             </Button>
           )}

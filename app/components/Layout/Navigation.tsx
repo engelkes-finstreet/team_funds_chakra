@@ -1,7 +1,8 @@
-import { Button, Flex, Stack } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 import { ScrollArea } from "~/components/Layout/ScrollArea";
 import * as React from "react";
 import { Form } from "remix";
+import { Button } from "../chakra/Button";
 
 type Props = {
   children: React.ReactNode;
@@ -17,12 +18,7 @@ export function Navigation({ children }: Props) {
       >
         <Stack pb="6">{children}</Stack>
         <Form method={"post"} action={"/logout"}>
-          <Button
-            variant={"outline"}
-            colorScheme={"blue"}
-            type={"submit"}
-            isFullWidth={true}
-          >
+          <Button variant={"outline"} type={"submit"} isFullWidth={true}>
             Logout
           </Button>
         </Form>

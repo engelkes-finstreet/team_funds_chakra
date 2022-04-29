@@ -3,13 +3,11 @@ import { ActionFunction, Form, redirect, useLoaderData } from "remix";
 import {
   AdminWithoutPassword,
   requireAndReturnAdminUser,
-  UserWithoutPassword,
 } from "~/utils/auth/session-utils.server";
 import {
   Alert,
   AlertIcon,
   Box,
-  Button,
   Divider,
   Flex,
   Heading,
@@ -35,6 +33,7 @@ import {
   changeAdminConfirmationMail,
   resendAdminConfirmationMail,
 } from "~/utils/auth/register-admin.server";
+import { Button } from "~/components/chakra/Button";
 
 export enum ConfirmAction {
   RESEND_MAIL = "RESEND_MAIL",
@@ -112,7 +111,7 @@ export default function ConfirmAdminRoute() {
         </Card>
         <Flex justifyContent={"center"} mt={2}>
           <Form method={"post"} action={"/logout"}>
-            <Button colorScheme={"blue"} variant={"ghost"} type={"submit"}>
+            <Button variant={"ghost"} type={"submit"}>
               Logout
             </Button>
           </Form>

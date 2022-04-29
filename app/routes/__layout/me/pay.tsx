@@ -3,16 +3,16 @@ import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { useCatch, useLoaderData } from "remix";
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { formatCurrency } from "~/utils/functions";
 import { useState } from "react";
 import * as z from "zod";
 import { stringToNumberValidation } from "~/utils/validations/utils";
 import { PayTextField } from "~/components/pay/PayTextField";
 import { PayPalButton } from "~/components/pay/PayPalButton";
-import { PayPalButtons } from "@paypal/react-paypal-js";
 import { getOpenPaymentsByPlayer } from "~/backend/player/punishments/getOpenPaymentsByPlayer";
 import { getUserId } from "~/utils/auth/session-utils.server";
+import { Button } from "~/components/chakra/Button";
 
 const validator = (maxAmount: number) =>
   z.object({
@@ -130,7 +130,6 @@ const Pay = ({ data, setScreen, setPayPalValue, value }: PayProps) => {
       />
       <Flex mt={4} justifyContent={"flex-end"}>
         <Button
-          colorScheme={"blue"}
           disabled={!isValid}
           onClick={() => {
             setScreen(Screens.CHECKOUT);

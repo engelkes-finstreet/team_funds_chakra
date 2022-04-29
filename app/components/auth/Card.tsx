@@ -1,13 +1,12 @@
 import {
   Box,
   BoxProps,
-  Button,
   ButtonProps,
-  Divider,
   Flex,
   useColorModeValue,
 } from "@chakra-ui/react";
 import * as React from "react";
+import { Button } from "../chakra/Button";
 
 type Props = {
   children: React.ReactNode;
@@ -68,7 +67,7 @@ type CardButtonProps = Pick<
 >;
 export const CardButton = ({ children, ...rest }: ButtonProps) => {
   return (
-    <Button colorScheme={"blue"} px={4} {...rest}>
+    <Button px={4} {...rest}>
       {children}
     </Button>
   );

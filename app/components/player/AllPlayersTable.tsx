@@ -1,9 +1,8 @@
 import { GetAllPlayersType } from "~/backend/player/getAllPlayers";
-import { useLoaderData, useNavigate } from "remix";
+import { useNavigate } from "remix";
 import { useIsDesktop } from "~/hooks/useIsDesktop";
 import { Player } from "@prisma/client";
 import {
-  Button,
   Center,
   Table,
   Tbody,
@@ -15,6 +14,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { DeletePlayer } from "~/components/player/DeletePlayer";
+import { Button } from "../chakra/Button";
 
 type Props = {
   isAdmin: boolean;
@@ -70,7 +70,7 @@ export function AllPlayersTable({ isAdmin, players }: Props) {
       <Center>
         <VStack>
           <Text>Es wurde noch kein Spieler angelegt</Text>
-          <Button colorScheme={"blue"} onClick={() => navigate("new")}>
+          <Button onClick={() => navigate("new")}>
             Neuen Spieler erstellen
           </Button>
         </VStack>

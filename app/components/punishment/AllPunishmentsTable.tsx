@@ -1,5 +1,4 @@
 import {
-  Button,
   Center,
   Table,
   Tbody,
@@ -11,13 +10,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { getPunishmentTypeMapping } from "~/utils/enumMappings";
-import { Link, useFetcher, useNavigate } from "remix";
+import { useFetcher, useNavigate } from "remix";
 import { useIsDesktop } from "~/hooks/useIsDesktop";
 import { Punishment } from "@prisma/client";
 import { ValidatedForm } from "remix-validated-form";
 import { TextField } from "~/components/form/TextField";
 import { deletePunishmentValidator } from "~/utils/validations/punishmentValidation";
 import { GetAllPunishmentsType } from "~/backend/punishment/getAllPunishments";
+import { Button, ButtonType } from "../chakra/Button";
 
 type Props = {
   isAdmin: boolean;
@@ -77,9 +77,7 @@ export function AllPunishmentsTable({ punishments, isAdmin }: Props) {
       <Center>
         <VStack>
           <Text>Es wurde noch keine Strafe angelegt</Text>
-          <Button as={Link} colorScheme={"blue"} to={"new"} prefetch={"intent"}>
-            Neue Strafe anlegen
-          </Button>
+          <Button onClick={() => navigate("new")}>Neue Strafe anlegen</Button>
         </VStack>
       </Center>
     );
@@ -147,7 +145,7 @@ function DeletePunishment({ punishmentId }: { punishmentId: string }) {
       >
         <TextField hidden={true} name={"_method"} />
         <TextField hidden={true} name={"_punishmentId"} />
-        <Button type={"submit"} colorScheme={"red"}>
+        <Button type={"submit"} buttonType={ButtonType.DELETE}>
           Löschen
         </Button>
       </ValidatedForm>

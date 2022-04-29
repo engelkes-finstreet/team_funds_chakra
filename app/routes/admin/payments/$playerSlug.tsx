@@ -3,7 +3,7 @@ import { ActionFunction, useLoaderData } from "remix";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { getPlayerName } from "~/utils/functions";
 import { TextField } from "~/components/form/TextField";
-import { Button, Flex, IconButton, VStack } from "@chakra-ui/react";
+import { Flex, IconButton, VStack } from "@chakra-ui/react";
 import { PunishmentTypeComponent } from "~/components/punishment/PunishmentTypeSelect";
 import { HiX } from "react-icons/hi";
 import { validationError } from "remix-validated-form";
@@ -18,6 +18,7 @@ import { PunishmentType } from "@prisma/client";
 import * as z from "zod";
 import { TFHandle } from "~/utils/types/handle.types";
 import { getUserId } from "~/utils/auth/session-utils.server";
+import { Button } from "~/components/chakra/Button";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => getPlayerName(data.player),
@@ -128,7 +129,6 @@ export default function PlayerPaymentRoute() {
           <Flex w={"full"} justifyContent={"flex-end"}>
             <Button
               variant={"ghost"}
-              colorScheme={"blue"}
               onClick={() => setPayments((prev) => [...prev, payments.length])}
             >
               weitere Bezahlung hinzufügen

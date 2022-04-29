@@ -2,7 +2,6 @@ import { useFormContext, ValidatedForm } from "remix-validated-form";
 import { ConfirmAction } from "~/routes/confirm";
 import { useAfterTransition } from "~/hooks/useAfterTransition";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,6 +13,7 @@ import {
 import { changeMailValidator } from "~/utils/validations/authValidations";
 import { TextField } from "~/components/form/TextField";
 import React from "react";
+import { Button } from "~/components/chakra/Button";
 
 type Props = {
   isOpen: boolean;
@@ -48,13 +48,12 @@ export const ChangeMailModal = ({ isOpen, onClose }: Props) => {
           </ValidatedForm>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme={"blue"} variant={"ghost"} onClick={onClose}>
+          <Button variant={"ghost"} onClick={onClose}>
             Schließen
           </Button>
           <Button
             name={"_action"}
             value={ConfirmAction.CHANGE_MAIL}
-            colorScheme={"blue"}
             variant={"solid"}
             type={"submit"}
             form={ConfirmAction.CHANGE_MAIL}

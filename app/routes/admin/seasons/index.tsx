@@ -1,8 +1,6 @@
 import { ActionFunction, useLoaderData, useNavigate } from "remix";
 import { db } from "~/utils/db.server";
 import {
-  Box,
-  Button,
   Center,
   Table,
   Tbody,
@@ -22,6 +20,7 @@ import { TFHandle } from "~/utils/types/handle.types";
 import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IconLinkButton } from "~/components/buttons";
+import { Button } from "~/components/chakra/Button";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => "Saison",
@@ -108,10 +107,7 @@ export default function SeasonsIndexRoute() {
         <Center>
           <VStack>
             <Text>Es wurde noch keine Saison angelegt</Text>
-            <Button
-              colorScheme={"blue"}
-              onClick={() => navigate("/admin/seasons/new")}
-            >
+            <Button onClick={() => navigate("/admin/seasons/new")}>
               Neue Saison erstellen
             </Button>
           </VStack>

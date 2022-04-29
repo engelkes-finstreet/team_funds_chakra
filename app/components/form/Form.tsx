@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Button, Flex, Stack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Flex, Stack } from "@chakra-ui/react";
 import React, { ReactNode, PropsWithoutRef } from "react";
 
 import {
@@ -7,6 +7,7 @@ import {
 } from "remix-validated-form";
 import { useActionData } from "@remix-run/react";
 import { useFormContext } from "remix-validated-form";
+import { Button } from "../chakra/Button";
 
 export type FormProps<DataType> = {
   submitText: string;
@@ -76,7 +77,6 @@ export const ExtendedForm = ({
         {additionalSubmits}
         <Button
           type="submit"
-          colorScheme="blue"
           size="lg"
           fontSize="md"
           isLoading={isSubmitting}
