@@ -39,7 +39,7 @@ export async function register({
   password,
   firstName,
   lastName,
-    request
+  request,
 }: Register) {
   const userExists = await db.user.findFirst({
     where: { email },
@@ -63,7 +63,12 @@ export async function register({
   });
 
   const token = await createUserToken({ userId: user.id });
-  await sendConfirmationMail({ token, to: email, userType: UserType.USER, request });
+  await sendConfirmationMail({
+    token,
+    to: email,
+    userType: UserType.USER,
+    request,
+  });
 
   return await createUserSession(user.id, "/confirm");
 }
@@ -139,7 +144,7 @@ export async function changeConfirmationMail({
     token: newToken,
     to: newMail,
     userType: UserType.USER,
-    request
+    request,
   });
   await db.user.update({
     where: {
