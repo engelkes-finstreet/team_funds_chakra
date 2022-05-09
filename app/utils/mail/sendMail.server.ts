@@ -36,7 +36,7 @@ export async function sendMail<TemplateVars>({
     const htmlWithStylesInlined = juice(html);
 
     await transport.sendMail({
-      from: "manschaftskasse@skiclub68.de",
+      from: process.env.MAIL_FROM,
       to,
       subject: subject,
       html: htmlWithStylesInlined,

@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (data.error) return validationError(data.error);
   const { email, password, firstName, lastName } = data.data;
 
-  return register({ email, password, firstName, lastName });
+  return register({ email, password, firstName, lastName, request });
 };
 
 export default function RegisterRoute() {

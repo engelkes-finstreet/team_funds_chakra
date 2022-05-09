@@ -49,3 +49,13 @@ export function randomDate() {
 
   return new Date(startDate + Math.random() * (endDate - startDate));
 }
+
+type GetConnectionString = {
+  request: Request;
+};
+export function getConnectionString({ request }: GetConnectionString) {
+  const connection = process.env.NODE_ENV === "production" ? "https" : "http";
+  const host = request.headers.get("host");
+
+  return `${connection}://${host}`;
+}

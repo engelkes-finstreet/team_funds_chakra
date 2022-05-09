@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (data.error) return validationError(data.error);
   const { email } = data.data;
-  return requestResetPassword({ email });
+  return requestResetPassword({ email, request });
 };
 
 export default function RequestResetPasswordRoute() {

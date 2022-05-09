@@ -9,7 +9,7 @@ import {
   RequestResetPasswordType,
 } from "~/utils/mail/types";
 import { setFlashContent } from "~/utils/flashMessage.server";
-import { getUserName } from "~/utils/functions";
+import { getConnectionString, getUserName } from "~/utils/functions";
 import { createUserSession } from "~/utils/session.server";
 
 type ResetPasswordFromSettings = {
@@ -52,8 +52,13 @@ export async function resetPasswordFromSettings({
 type ResetPassword = {
   token: string;
   newPassword: string;
+  request: Request;
 };
-export async function resetPassword({ token, newPassword }: ResetPassword) {
+export async function resetPassword({
+  token,
+  newPassword,
+  request,
+}: ResetPassword) {
   const resetPasswordToken = await db.resetUserPasswordToken.findUnique({
     where: { token },
   });
@@ -79,10 +84,12 @@ export async function resetPassword({ token, newPassword }: ResetPassword) {
     },
   });
 
+  const loginLink = `${getConnectionString({ request })}/login`;
+
   await sendMail<ConfirmPasswordResetType>({
     templateVars: {
       name: getUserName(user),
-      loginLink: "http://localhost:3000/login",
+      loginLink,
     },
     templateFile: "confirm-password-reset.html",
     subject: "Passwort reset erfolgreich",
@@ -94,9 +101,13 @@ export async function resetPassword({ token, newPassword }: ResetPassword) {
 
 type RequestResetPassword = {
   email: string;
+  request: Request;
 };
 
-export async function requestResetPassword({ email }: RequestResetPassword) {
+export async function requestResetPassword({
+  email,
+  request,
+}: RequestResetPassword) {
   const user = await db.user.findUnique({ where: { email } });
 
   const formInfo =
@@ -120,12 +131,15 @@ export async function requestResetPassword({ email }: RequestResetPassword) {
     },
   });
 
+  const connectionString = getConnectionString({ request });
+  const requestResetPasswordLink = `${connectionString}/reset-password/${token}`;
+
   await sendMail<RequestResetPasswordType>({
     subject: "Passwort zurücksetzen",
     to: email,
     templateFile: "request-reset-password.html",
     templateVars: {
-      requestResetPasswordLink: `http://localhost:3000/reset-password/${token}`,
+      requestResetPasswordLink,
       name: getUserName(user),
     },
   });

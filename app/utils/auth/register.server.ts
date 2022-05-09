@@ -31,6 +31,7 @@ type Register = {
   password: string;
   firstName: string;
   lastName: string;
+  request: Request;
 };
 
 export async function register({
@@ -38,6 +39,7 @@ export async function register({
   password,
   firstName,
   lastName,
+    request
 }: Register) {
   const userExists = await db.user.findFirst({
     where: { email },
@@ -61,7 +63,7 @@ export async function register({
   });
 
   const token = await createUserToken({ userId: user.id });
-  await sendConfirmationMail({ token, to: email, userType: UserType.USER });
+  await sendConfirmationMail({ token, to: email, userType: UserType.USER, request });
 
   return await createUserSession(user.id, "/confirm");
 }
@@ -93,6 +95,7 @@ export async function resendConfirmationMail({
     token: newToken,
     to: user.email,
     userType: UserType.USER,
+    request,
   });
 
   return setFlashContent(
@@ -136,6 +139,7 @@ export async function changeConfirmationMail({
     token: newToken,
     to: newMail,
     userType: UserType.USER,
+    request
   });
   await db.user.update({
     where: {

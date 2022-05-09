@@ -12,6 +12,7 @@ import { UserType } from "~/utils/enums/UserType";
 type RegisterAdminUser = {
   email: string;
   password: string;
+  request: Request;
 };
 
 type CreateAdminUserToken = {
@@ -56,6 +57,7 @@ export async function resendAdminConfirmationMail({
     token: newToken,
     to: admin.email,
     userType: UserType.ADMIN,
+    request,
   });
 
   return setFlashContent(
@@ -99,6 +101,7 @@ export async function changeAdminConfirmationMail({
     token: newToken,
     to: newMail,
     userType: UserType.ADMIN,
+    request,
   });
   await db.adminUser.update({
     where: {
@@ -121,6 +124,7 @@ export async function changeAdminConfirmationMail({
 export async function registerAdminUser({
   email,
   password,
+  request,
 }: RegisterAdminUser) {
   const passwordHash = await bcrypt.hash(password, 10);
 
@@ -145,7 +149,12 @@ export async function registerAdminUser({
   }
 
   const token = await createAdminUserToken({ adminId: admin.id });
-  await sendConfirmationMail({ token, to: email, userType: UserType.ADMIN });
+  await sendConfirmationMail({
+    token,
+    to: email,
+    userType: UserType.ADMIN,
+    request,
+  });
 
   return json({
     formInfo:

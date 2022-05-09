@@ -12,7 +12,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (data.error) return validationError(data.error);
   const { email, password } = data.data;
 
-  return await registerAdminUser({ email, password });
+  return await registerAdminUser({ email, password, request });
 };
 
 export default function AdminRegisterRoute() {
