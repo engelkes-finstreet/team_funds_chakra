@@ -61,7 +61,7 @@ export async function register({
   });
 
   const token = await createUserToken({ userId: user.id });
-  await sendConfirmationMail({ token, to: email, userType: UserType.ADMIN });
+  await sendConfirmationMail({ token, to: email, userType: UserType.USER });
 
   return await createUserSession(user.id, "/confirm");
 }

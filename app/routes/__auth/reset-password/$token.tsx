@@ -7,6 +7,7 @@ import { Form } from "~/components/form/Form";
 import { withZod } from "@remix-validated-form/with-zod";
 import * as z from "zod";
 import { password } from "~/utils/validations/authValidations";
+import { ActionFunction } from "remix";
 
 const resetPasswordValidator = withZod(
   z
@@ -22,7 +23,12 @@ const resetPasswordValidator = withZod(
 
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
+  //TOOD: Check if token is valid
   return null;
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  //TODO: Call reset password action
 };
 
 export default function ResetPasswordRoute() {

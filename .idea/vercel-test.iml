@@ -13,5 +13,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="calculator-1.6-latest" level="application" />
+    <orderEntry type="module" module-name="team_funds_mjml_templates" />
   </component>
 </module>

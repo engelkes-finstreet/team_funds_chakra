@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../team_funds_mjml_templates/.idea/team_funds_mjml_templates.iml" filepath="$PROJECT_DIR$/../team_funds_mjml_templates/.idea/team_funds_mjml_templates.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/vercel-test.iml" filepath="$PROJECT_DIR$/.idea/vercel-test.iml" />
     </modules>
   </component>

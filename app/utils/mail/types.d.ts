@@ -2,10 +2,14 @@ export type ConfirmType = {
   confirmLink: string;
 };
 
-export type ConfirmPasswordResetType = {};
+export type ConfirmPasswordResetType = {
+  loginLink: string;
+  name: string;
+};
 
 export type RequestResetPasswordType = {
   requestResetPasswordLink: string;
+  name: string;
 };
 
 export type MailTemplates =

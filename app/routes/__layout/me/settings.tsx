@@ -12,7 +12,7 @@ import { ResetPasswordForm } from "~/components/me/ResetPasswordForm";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { useResetForm } from "~/hooks/useResetForm";
 import { TFHandle } from "~/utils/types/handle.types";
-import { resetPassword } from "~/utils/auth/reset-password.server";
+import { resetPasswordFromSettings } from "~/utils/auth/reset-password.server";
 import { updateUser } from "~/backend/user/updateUser";
 import { requireAndReturnUser } from "~/utils/auth/session-utils.server";
 import { Button } from "~/components/chakra/Button";
@@ -48,7 +48,12 @@ export const action: ActionFunction = async ({ request }) => {
     if (passwordData.error) return validationError(passwordData.error);
     const { _userId: userId, oldPassword, password } = passwordData.data;
 
-    return resetPassword({ userId, oldPassword, password, request });
+    return resetPasswordFromSettings({
+      userId,
+      oldPassword,
+      password,
+      request,
+    });
   }
 
   return null;

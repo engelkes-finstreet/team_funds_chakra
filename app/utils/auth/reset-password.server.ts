@@ -1,30 +1,30 @@
 //@ts-ignore
 import bcrypt from "bcrypt";
 import { db } from "~/utils/db.server";
-import {
-  requestResetPasswordValidator,
-  resetPasswordValidator,
-} from "~/utils/validations/authValidations";
-import { validationError } from "remix-validated-form";
 import { json } from "remix";
 import crypto from "crypto";
 import { sendMail } from "~/utils/mail/sendMail.server";
-import { RequestResetPasswordType } from "~/utils/mail/types";
+import {
+  ConfirmPasswordResetType,
+  RequestResetPasswordType,
+} from "~/utils/mail/types";
 import { setFlashContent } from "~/utils/flashMessage.server";
+import { getUserName } from "~/utils/functions";
+import { createUserSession } from "~/utils/session.server";
 
-type ResetPassword = {
+type ResetPasswordFromSettings = {
   userId: string;
   oldPassword: string;
   password: string;
   request: Request;
 };
 
-export async function resetPassword({
+export async function resetPasswordFromSettings({
   userId,
   oldPassword,
   password,
   request,
-}: ResetPassword) {
+}: ResetPasswordFromSettings) {
   const user = await db.user.findUnique({ where: { id: userId } });
   if (!user) return null;
   const isCorrectPassword = await bcrypt.compare(
@@ -47,6 +47,49 @@ export async function resetPassword({
     "Passwort erfolgreich zurückgesetzt",
     "success"
   );
+}
+
+type ResetPassword = {
+  token: string;
+  newPassword: string;
+};
+export async function resetPassword({ token, newPassword }: ResetPassword) {
+  const resetPasswordToken = await db.resetUserPasswordToken.findUnique({
+    where: { token },
+  });
+  if (!resetPasswordToken) {
+    return json({ formInfo: "Ungültiger Reset-Token" });
+  }
+
+  const user = await db.user.findUnique({
+    where: { id: resetPasswordToken.userId },
+  });
+  if (!user) {
+    return json({ formInfo: "User existiert nicht" });
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+
+  await db.user.update({
+    where: {
+      id: resetPasswordToken.userId,
+    },
+    data: {
+      passwordHash,
+    },
+  });
+
+  await sendMail<ConfirmPasswordResetType>({
+    templateVars: {
+      name: getUserName(user),
+      loginLink: "http://localhost:3000/login",
+    },
+    templateFile: "confirm-password-reset.html",
+    subject: "Passwort reset erfolgreich",
+    to: user.email,
+  });
+
+  return await createUserSession(user.id, "/");
 }
 
 type RequestResetPassword = {
@@ -83,6 +126,7 @@ export async function requestResetPassword({ email }: RequestResetPassword) {
     templateFile: "request-reset-password.html",
     templateVars: {
       requestResetPasswordLink: `http://localhost:3000/reset-password/${token}`,
+      name: getUserName(user),
     },
   });
 
