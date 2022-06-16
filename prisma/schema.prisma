@@ -1,12 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  provider        = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider             = "postgres"
+  url                  = env("DATABASE_URL")
 }
 
 model AdminUser {
@@ -48,8 +46,6 @@ model ConfirmUserToken {
   user      User     @relation(fields: [userId], references: [id])
   token     String   @unique
   expiresAt DateTime
-
-  @@index([userId])
 }
 
 model ResetUserPasswordToken {
@@ -57,8 +53,6 @@ model ResetUserPasswordToken {
   user      User     @relation(fields: [userId], references: [id])
   token     String   @unique
   expiresAt DateTime
-
-  @@index([userId])
 }
 
 model ConfirmAdminUserToken {
@@ -66,8 +60,6 @@ model ConfirmAdminUserToken {
   admin     AdminUser @relation(fields: [adminId], references: [id])
   token     String    @unique
   expiresAt DateTime
-
-  @@index([adminId])
 }
 
 model ResetAdminUserPasswordToken {
@@ -75,8 +67,6 @@ model ResetAdminUserPasswordToken {
   admin     AdminUser @relation(fields: [adminId], references: [id])
   token     String    @unique
   expiresAt DateTime
-
-  @@index([adminId])
 }
 
 model Season {
@@ -91,8 +81,6 @@ model Season {
   punishments       Punishment[]
   playerPayments    PlayerPayments[]
   playerPunishments PlayerPunishments[]
-
-  @@index([adminUserId])
 }
 
 enum Position {
@@ -115,9 +103,6 @@ model Player {
   connectedUser     User?               @relation(fields: [userId], references: [id])
   playerPayments    PlayerPayments[]
   playerPunishments PlayerPunishments[]
-
-  @@index([adminUserId])
-  @@index([userId])
 }
 
 enum PunishmentType {
@@ -138,9 +123,6 @@ model Punishment {
   seasonId          String
   season            Season              @relation(fields: [seasonId], references: [id])
   playerPunishments PlayerPunishments[]
-
-  @@index([adminUserId])
-  @@index([seasonId])
 }
 
 enum PaymentType {
@@ -161,9 +143,6 @@ model PlayerPayments {
   type        PunishmentType
   seasonId    String
   season      Season         @relation(fields: [seasonId], references: [id])
-
-  @@index([seasonId])
-  @@index([playerId])
 }
 
 model PlayerPunishments {
@@ -179,9 +158,4 @@ model PlayerPunishments {
   seasonId     String
   season       Season     @relation(fields: [seasonId], references: [id])
   amount       Int
-
-  @@index([adminUserId])
-  @@index([playerId])
-  @@index([punishmentId])
-  @@index([seasonId])
 }

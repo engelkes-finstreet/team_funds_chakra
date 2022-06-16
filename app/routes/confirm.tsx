@@ -43,7 +43,6 @@ export enum ConfirmAction {
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const user = await requireAndReturnUser({ request });
-  console.log({ user });
 
   if (user.isConfirmed) {
     return redirect("/");

@@ -2,12 +2,13 @@
 import bcrypt from "bcrypt";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/requests";
-import { json } from "remix";
+import {json, redirect} from "remix";
 import crypto from "crypto";
 import { sendConfirmationMail } from "../mail/send-confirmation-mail.server";
 import { setFlashContent } from "~/utils/flashMessage.server";
 import { getCurrentAdminUser } from "~/utils/auth/session-utils.server";
 import { UserType } from "~/utils/enums/UserType";
+import {createAdminSession} from "~/utils/session.server";
 
 type RegisterAdminUser = {
   email: string;
@@ -156,8 +157,5 @@ export async function registerAdminUser({
     request,
   });
 
-  return json({
-    formInfo:
-      "Dein Account wurde erfolgreich erstellt. Du kannst dich einloggen sobald er von einem Admin bestätigt wurde",
-  });
+  return createAdminSession(admin.id, "/confirm-admin");
 }

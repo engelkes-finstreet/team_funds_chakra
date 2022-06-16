@@ -22,11 +22,11 @@ export async function loginAdminUser({
     });
 
   const isCorrectPassword = await bcrypt.compare(password, admin.passwordHash);
-  if (!isCorrectPassword || !admin.isApproved)
+  if (!isCorrectPassword) {
     return badRequest({
-      formInfo:
-        "Dein Account wurde noch nicht bestätigt. Bitte wende dich an einen Administrator",
+      formError: `Kombination aus Benurtzername und Passwort ist falsch`,
     });
+  }
 
   return createAdminSession(admin.id, redirectTo);
 }

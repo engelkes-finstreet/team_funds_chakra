@@ -89,7 +89,7 @@ type RequireAndReturnAdminUser = {
 export async function requireAndReturnAdminUser({
   request,
   redirectTo = new URL(request.url).pathname,
-}: RequireAndReturnAdminUser) {
+}: RequireAndReturnAdminUser): Promise<AdminWithoutPassword> {
   const session = await getUserSession({ request });
   const userId = session.get(USER_ID);
 

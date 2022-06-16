@@ -16,12 +16,14 @@ export async function verifyUser({ request, token }: VerifyUser) {
     });
   }
 
+  console.log({userToken})
+  
   await db.user.update({
     where: {
-      id: userToken.userId,
+      id: '705d5594-4c50-44d3-b378-81b650a81565',
     },
     data: {
-      isConfirmed: true,
+      firstName: "Test",
     },
   });
 
@@ -37,17 +39,17 @@ export async function verifyUser({ request, token }: VerifyUser) {
 }
 
 export async function verifyAdminUser({ request, token }: VerifyUser) {
-  console.log({ token });
   const adminToken = await db.confirmAdminUserToken.findUnique({
     where: { token },
   });
+
   if (!adminToken) {
     throw new Response("Der angegebene Token wurde nicht gefunden", {
       status: 400,
     });
   }
 
-  await db.adminUser.update({
+  const updatedAdmin = await db.adminUser.update({
     where: {
       id: adminToken.adminId,
     },
@@ -55,6 +57,12 @@ export async function verifyAdminUser({ request, token }: VerifyUser) {
       isConfirmed: true,
     },
   });
+
+  if (!updatedAdmin) {
+    throw new Response('Es ist ein Fehler bei der Bestätigung aufgetreten. Versuche es noch einmal', {
+      status: 400
+    })
+  }
 
   await db.confirmAdminUserToken.delete({ where: { token } });
 

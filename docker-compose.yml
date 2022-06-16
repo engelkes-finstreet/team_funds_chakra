@@ -3,6 +3,7 @@ version: "3.7"
 services:
   db:
     image: postgres:10.7-alpine
+    container_name: db
     volumes:
       - data-team_funds_chakra:/var/lib/postgresql/data
     env_file: ./.env.db

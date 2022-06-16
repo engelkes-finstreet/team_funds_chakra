@@ -1,19 +1,4 @@
-# Welcome to Remix!
-
-- [Remix Docs](https://remix.run/docs)
-
-## Deployment
-
-After having run the `create-remix` command and selected "Vercel" as a deployment target, you only need to [import your Git repository](https://vercel.com/new) into Vercel, and it will be deployed.
-
-If you'd like to avoid using a Git repository, you can also deploy the directory by running [Vercel CLI](https://vercel.com/cli):
-
-```sh
-npm i -g vercel
-vercel
-```
-
-It is generally recommended to use a Git repository, because future commits will then automatically be deployed by Vercel, through its [Git Integration](https://vercel.com/docs/concepts/git).
+# Welcome to Team Funds!
 
 ## Development
 
@@ -23,6 +8,25 @@ To run your Remix app locally, make sure your project's local dependencies are i
 npm install
 ```
 
+We need to set some environment variables to get the app up and running. You can copy the .env.example file to .env and 
+start to fill in the variables:
+
+
+### Database
+* DATABASE_URL -> get your connection string from Planetscale
+
+### Mailing
+For development get your credentials from mailtrap with your Google Account. For Production use Mailersend
+* SMTP_HOST
+* SMTP_PORT
+* SMTP_USER
+* SMTP_PASS
+
+* MAIL_FROM -> In dev mode you can choose anything you want here
+
+### Authentication
+SESSION_SECRET -> Again choose anything you want. We do not have to secure our dev environment
+
 Afterwards, start the Remix development server like so:
 
 ```sh
@@ -30,5 +34,3 @@ npm run dev
 ```
 
 Open up [http://localhost:3000](http://localhost:3000) and you should be ready to go!
-
-If you're used to using the `vercel dev` command provided by [Vercel CLI](https://vercel.com/cli) instead, you can also use that, but it's not needed.
