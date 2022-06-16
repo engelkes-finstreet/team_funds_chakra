@@ -18,6 +18,7 @@ export function PlayerStats({
   player,
   mostCommonPunishment,
 }: Props) {
+  console.log({ mostCommonPunishment });
   return (
     <SimpleGrid
       mx="auto"

@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
 
     return await setFlashContent(
-      `/admin/seasons/${season.slug}`,
+      `/admin`,
       request,
       `Strafe ${season.slug} erfolgreich angelegt`,
       "success"
@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function NewSeasonRoute() {
   useLoaderData();
   return (
-    <Form submitText={"Erstelen"} validator={seasonValidator} method={"post"}>
+    <Form submitText={"Erstellen"} validator={seasonValidator} method={"post"}>
       <SeasonForm />
     </Form>
   );

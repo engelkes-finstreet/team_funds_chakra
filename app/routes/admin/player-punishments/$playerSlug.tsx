@@ -18,6 +18,7 @@ import { useState } from "react";
 import { TFHandle } from "~/utils/types/handle.types";
 import { getUserId } from "~/utils/auth/session-utils.server";
 import { Button } from "~/components/chakra/Button";
+import { getAllPunishmentsBySeason } from "~/backend/punishment/getAllPunishments";
 
 export const handle: TFHandle<LoaderData> = {
   breadcrumb: (data) => getPlayerName(data.player),
@@ -28,7 +29,9 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
   const season = await getCurrentSeason();
   const userId = await getUserId({ request });
   const player = await getPlayer({ where: { slug: params.playerSlug } });
-  const punishments = await db.punishment.findMany();
+  const { punishments } = await getAllPunishmentsBySeason({
+    seasonId: season.id,
+  });
 
   return { player, punishments, userId, season };
 };

@@ -1,4 +1,4 @@
-import { ActionFunction } from "remix";
+import { ActionFunction, redirect } from "remix";
 import { Form } from "~/components/form/Form";
 import { PlayerForm } from "~/components/player/PlayerForm";
 import { playerValidator } from "~/utils/validations/playerValidations";

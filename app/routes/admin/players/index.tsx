@@ -1,4 +1,4 @@
-import { ActionFunction, Link, useCatch, useLoaderData } from "remix";
+import { ActionFunction, useCatch, useLoaderData } from "remix";
 import { Prisma } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { validationError } from "remix-validated-form";
@@ -12,7 +12,6 @@ import {
 import { AllPlayersTable } from "~/components/player/AllPlayersTable";
 import { deletePlayerValidator } from "~/utils/validations/playerValidations";
 import { TFHandle } from "~/utils/types/handle.types";
-import { IconButton } from "@chakra-ui/react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IconLinkButton } from "~/components/buttons";
 

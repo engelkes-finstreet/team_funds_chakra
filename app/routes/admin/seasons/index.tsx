@@ -33,13 +33,6 @@ export const handle: TFHandle<LoaderData> = {
   ),
 };
 
-const deleteValidator = withZod(
-  z.object({
-    _seasonId: z.string(),
-    _method: z.string(),
-  })
-);
-
 type LoaderData = Awaited<ReturnType<typeof loader>>;
 export let loader = async ({ request, params }: DataFunctionArgs) => {
   const seasons = await db.season.findMany();
@@ -47,38 +40,13 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
   return { seasons };
 };
 
-export let action: ActionFunction = async ({ request }) => {
-  const data = await deleteValidator.validate(await request.formData());
-  if (data.error) return validationError(data.error);
-  const { _method, _seasonId } = data.data;
-
-  if (_method === "delete") {
-    const season = await db.season.findUnique({
-      where: { id: _seasonId },
-    });
-
-    if (!season) {
-      throw new Response("Can't delete what does not exist", { status: 404 });
-    }
-
-    await db.season.delete({ where: { id: _seasonId } });
-
-    return await setFlashContent(
-      "/admin/seasons",
-      request,
-      `Strafe ${season.slug} erfolgreich gelöscht`,
-      "success"
-    );
-  }
-};
-
 export default function SeasonsIndexRoute() {
-  const data = useLoaderData<LoaderData>();
+  const { seasons } = useLoaderData<LoaderData>();
   const navigate = useNavigate();
 
   return (
     <>
-      {data.seasons.length > 0 ? (
+      {seasons.length > 0 ? (
         <Table
           variant={"striped"}
           colorScheme={"blue"}
@@ -91,14 +59,9 @@ export default function SeasonsIndexRoute() {
             </Tr>
           </Thead>
           <Tbody>
-            {data.seasons.map((season) => (
+            {seasons.map((season) => (
               <Tr key={season.id}>
-                <Td
-                  onClick={() => navigate(`${season.slug}`)}
-                  cursor={"pointer"}
-                >
-                  {season.slug}
-                </Td>
+                <Td>{season.slug}</Td>
               </Tr>
             ))}
           </Tbody>

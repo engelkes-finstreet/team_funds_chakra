@@ -3,7 +3,16 @@ import { DataFunctionArgs } from "@remix-run/server-runtime";
 import { getCurrentSeason } from "~/backend/season/getCurrentSeason";
 import { getPlayer } from "~/backend/player/getPlayer";
 import { useCatch, useLoaderData } from "remix";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import { formatCurrency } from "~/utils/functions";
 import { useState } from "react";
 import * as z from "zod";
@@ -35,6 +44,7 @@ export let loader = async ({ request, params }: DataFunctionArgs) => {
       userId,
     },
   });
+
   const season = await getCurrentSeason();
   return await getOpenPaymentsByPlayer(player.id, season.id, "MONEY");
 };
@@ -100,7 +110,23 @@ const Pay = ({ data, setScreen, setPayPalValue, value }: PayProps) => {
   const [isValid, setValid] = useState(false);
 
   if (!data) {
-    return null;
+    return (
+      <Alert
+        status={"success"}
+        variant="subtle"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        height="220px"
+      >
+        <AlertIcon boxSize={"40px"} mr={0} mb={4} />
+        <AlertTitle>Du hast bisher noch keine Geldstrafen gesammelt</AlertTitle>
+        <AlertDescription>
+          Sobald du ein paar mal getunnelt wurdest komm zurück und bezahle hier!
+        </AlertDescription>
+      </Alert>
+    );
   }
 
   return (
@@ -147,11 +173,10 @@ export function CatchBoundary() {
 
   return (
     <div>
-      <h1>Caught</h1>
-      <p>Status: {caught.status}</p>
-      <pre>
-        <code>{JSON.stringify(caught.data, null, 2)}</code>
-      </pre>
+      <Alert status="error">
+        <AlertIcon />
+        <AlertTitle>{caught.data}</AlertTitle>
+      </Alert>
     </div>
   );
 }

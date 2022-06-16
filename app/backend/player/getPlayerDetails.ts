@@ -35,21 +35,25 @@ export async function getPlayerDetails(slug: string | undefined) {
     player.id,
     season.id
   );
+
   const allPunishments = await db.punishment.findMany({
     where: {
       seasonId: season.id,
     },
   });
+
   const mostCommonPunishment = await getMostCommonPunishment(
     player.id,
     season.id,
     allPunishments
   );
+
   const openBeerPunishments = await getOpenPaymentsByPlayer(
     player.id,
     season.id,
     "BEER"
   );
+
   const openMoneyPunishments = await getOpenPaymentsByPlayer(
     player.id,
     season.id,
@@ -104,6 +108,12 @@ async function getMostCommonPunishment(
   });
 
   if (mostCommonPunishment.length > 0) {
+    console.log({ allPunishments });
+    const punishment = allPunishments.filter(
+      (punishment) => punishment.id === mostCommonPunishment[0].punishmentId
+    )[0];
+    console.log({ punishment });
+
     return {
       amount: mostCommonPunishment[0]._max.amount,
       punishment: allPunishments.filter(
