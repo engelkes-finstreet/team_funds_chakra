@@ -35,6 +35,7 @@ export async function sendMail<TemplateVars>({
 
   const templatePath = `app/mail/${templateFile}`;
 
+  console.log({ filePathExists: fs.existsSync(templatePath) });
   if (templateFile && fs.existsSync(templatePath)) {
     const template = fs.readFileSync(templatePath, "utf-8");
     const html = ejs.render(template, templateVars);
