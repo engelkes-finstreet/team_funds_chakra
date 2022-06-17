@@ -18,6 +18,12 @@ export async function sendMail<TemplateVars>({
   subject,
   to,
 }: Props<TemplateVars>) {
+  console.log({ host: process.env.SMTP_HOST });
+  console.log({ port: process.env.SMTP_PORT });
+  console.log({ pass: process.env.SMTP_PASS });
+  console.log({ user: process.env.SMTP_USER });
+  console.log({ user: process.env.MAIL_FROM });
+
   const transport = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
@@ -35,12 +41,18 @@ export async function sendMail<TemplateVars>({
     const text = htmlToText(html);
     const htmlWithStylesInlined = juice(html);
 
-    await transport.sendMail({
-      from: process.env.MAIL_FROM,
-      to,
-      subject: subject,
-      html: htmlWithStylesInlined,
-      text: text,
-    });
+    try {
+      console.log("I was here to send mails");
+      await transport.sendMail({
+        from: process.env.MAIL_FROM,
+        to,
+        subject: subject,
+        html: htmlWithStylesInlined,
+        text: text,
+      });
+    } catch (e) {
+      console.log("I was here to report errors");
+      console.error(e);
+    }
   }
 }
