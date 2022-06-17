@@ -7,10 +7,10 @@
     "seed": "node --require esbuild-register prisma/seed.ts"
   },
   "scripts": {
-    "build": "prisma generate && prisma migrate deploy && remix build",
+    "build": "remix build",
     "docker": "docker-compose up -d",
     "dev": "dotenv -e .env.local remix dev",
-    "postinstall": "remix setup node",
+    "postinstall": "prisma generate && prisma migrate deploy && remix setup node",
     "start": "remix-serve build",
     "seed": "dotenv -e .env.local node --require esbuild-register prisma/seed.ts",
     "reset": "npx prisma migrate reset",
