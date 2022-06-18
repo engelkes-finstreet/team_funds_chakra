@@ -9,7 +9,7 @@
   "scripts": {
     "build": "remix build",
     "docker": "docker-compose up -d",
-    "dev": "dotenv -e .env.local remix dev",
+    "dev": "dotenv -e .env remix dev",
     "postinstall": "prisma generate && prisma migrate deploy && remix setup node",
     "start": "remix-serve build",
     "seed": "dotenv -e .env.local node --require esbuild-register prisma/seed.ts",

@@ -34,6 +34,7 @@ import {
 } from "~/utils/auth/register-admin.server";
 import { Button } from "~/components/chakra/Button";
 import { AuthContainer } from "~/components/auth/AuthContainer";
+import fs from "fs";
 
 export enum ConfirmAction {
   RESEND_MAIL = "RESEND_MAIL",
@@ -80,6 +81,7 @@ export default function ConfirmAdminRoute() {
 
   return (
     <AuthContainer>
+      <img src={"/images/boni-blur.jpg"} alt={"test"} />
       <Logo mx="auto" h="8" mb={{ base: "10", md: "20" }} />
       <ChangeMailModal isOpen={isOpen} onClose={onClose} />
       <Card>
