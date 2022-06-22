@@ -1,7 +1,7 @@
 import { sendMail } from "~/utils/mail/sendMail.server";
-import { ConfirmType } from "~/utils/mail/types";
 import { UserType } from "~/utils/enums/UserType";
 import { getConnectionString } from "~/utils/functions";
+import { confirmMail } from "~/mail/confirm";
 
 type SendConfirmationMail = {
   token: string;
@@ -19,9 +19,10 @@ export async function sendConfirmationMail({
 
   const connectionString = getConnectionString({ request });
   const confirmLink = `${connectionString}/${userRoute}/verify/${token}`;
-  await sendMail<ConfirmType>({
-    templateVars: { confirmLink },
-    templateFile: "confirm.html",
+  const html = confirmMail({ confirmLink });
+
+  await sendMail({
+    html,
     subject: "Account bestätigen",
     to,
   });

@@ -13,6 +13,6 @@ export type RequestResetPasswordType = {
 };
 
 export type MailTemplates =
-  | "confirm.html"
-  | "confirm-password-reset.html"
-  | "request-reset-password.html";
+  | "confirm.mjml"
+  | "confirm-password-reset.mjml"
+  | "request-reset-password.mjml";

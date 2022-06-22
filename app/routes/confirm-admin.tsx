@@ -81,7 +81,6 @@ export default function ConfirmAdminRoute() {
 
   return (
     <AuthContainer>
-      <img src={"/images/boni-blur.jpg"} alt={"test"} />
       <Logo mx="auto" h="8" mb={{ base: "10", md: "20" }} />
       <ChangeMailModal isOpen={isOpen} onClose={onClose} />
       <Card>

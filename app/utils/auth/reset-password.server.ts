@@ -91,7 +91,7 @@ export async function resetPassword({
       name: getUserName(user),
       loginLink,
     },
-    templateFile: "confirm-password-reset.html",
+    templateFile: "confirm-password-reset.mjml",
     subject: "Passwort reset erfolgreich",
     to: user.email,
   });
@@ -137,7 +137,7 @@ export async function requestResetPassword({
   await sendMail<RequestResetPasswordType>({
     subject: "Passwort zurücksetzen",
     to: email,
-    templateFile: "request-reset-password.html",
+    templateFile: "request-reset-password.mjml",
     templateVars: {
       requestResetPasswordLink,
       name: getUserName(user),
