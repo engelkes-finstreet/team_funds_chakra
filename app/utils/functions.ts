@@ -55,7 +55,9 @@ type GetConnectionString = {
 };
 export function getConnectionString({ request }: GetConnectionString) {
   const connection = process.env.NODE_ENV === "production" ? "https" : "http";
+  console.log({connection});
   const host = request.headers.get("host");
+  console.log({host})
 
   return `${connection}://${host}`;
 }
