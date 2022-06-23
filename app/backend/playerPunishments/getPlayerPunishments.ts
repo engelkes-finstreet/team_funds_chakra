@@ -38,24 +38,30 @@ export async function getTotalPunishmentAmountBySeason({
       type,
     },
   });
-  let totalAmount = 0;
-  const timeline: Array<{ date: Date; amount: number }> = [];
 
-  punishments.forEach((playerPunishment) => {
-    const amount = playerPunishment.amount * playerPunishment.punishment.amount;
-    timeline.push({ date: playerPunishment.createdAt, amount });
-  });
+  if (punishments.length > 0 || payments.length > 0) {
+    let totalAmount = 0;
+    const timeline: Array<{ date: Date; amount: number }> = [];
 
-  payments.forEach((payment) => {
-    timeline.push({ date: payment.createdAt, amount: -payment.amount });
-  });
+    punishments.forEach((playerPunishment) => {
+      const amount =
+        playerPunishment.amount * playerPunishment.punishment.amount;
+      timeline.push({ date: playerPunishment.createdAt, amount });
+    });
 
-  timeline.sort((a, b) => {
-    return a.date.getTime() - b.date.getTime();
-  });
+    payments.forEach((payment) => {
+      timeline.push({ date: payment.createdAt, amount: -payment.amount });
+    });
 
-  return timeline.map((data) => {
-    totalAmount += data.amount;
-    return [data.date, totalAmount];
-  });
+    timeline.sort((a, b) => {
+      return a.date.getTime() - b.date.getTime();
+    });
+
+    return timeline.map((data) => {
+      totalAmount += data.amount;
+      return [new Date(data.date).getTime(), totalAmount];
+    });
+  }
+
+  return undefined;
 }

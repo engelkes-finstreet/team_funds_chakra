@@ -18,6 +18,7 @@ async function seed() {
       passwordHash: password,
       slug: "test@test.de",
       isApproved: true,
+      isConfirmed: true,
     },
   });
 
@@ -28,6 +29,7 @@ async function seed() {
       firstName: "Patrick",
       lastName: "Engelkes",
       slug: "Patrick-Engelkes",
+      isConfirmed: true,
     },
   });
 

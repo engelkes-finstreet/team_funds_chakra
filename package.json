@@ -14,7 +14,7 @@
     "dev": "dotenv -e .env remix dev",
     "postinstall": "prisma generate && prisma migrate deploy && remix setup node",
     "start": "remix-serve build",
-    "seed": "dotenv -e .env.local node --require esbuild-register prisma/seed.ts",
+    "seed": "node --require esbuild-register prisma/seed.ts",
     "reset": "npx prisma migrate reset",
     "db-push-and-format": "npx prisma format && npx prisma db push",
     "test": "jest --watch",
